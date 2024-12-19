@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.31)
+
+project(sistema-domotico)
+set(CMAKE_CXX_STANDARD  17)
+
+file(GLOB_RECURSE MY_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc")
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+set(SOURCES ${MY_SOURCE_FILES}  ${CMAKE_CURRENT_SOURCE_DIR}/include/*h)
+
+add_executable(lab8 ${MY_SOURCE_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/include)
