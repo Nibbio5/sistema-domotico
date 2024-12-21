@@ -1,0 +1,3 @@
+C:/Users/dan04/projects/sistema-domotico/build/CMakeFiles/sistema-domotico.dir
+C:/Users/dan04/projects/sistema-domotico/build/CMakeFiles/edit_cache.dir
+C:/Users/dan04/projects/sistema-domotico/build/CMakeFiles/rebuild_cache.dir

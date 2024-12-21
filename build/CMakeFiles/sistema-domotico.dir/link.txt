@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\sistema-domotico.dir/objects.a
+C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\sistema-domotico.dir/objects.a @CMakeFiles\sistema-domotico.dir\objects1.rsp
+C:\msys64\ucrt64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\sistema-domotico.dir/objects.a -Wl,--no-whole-archive -o sistema-domotico.exe -Wl,--out-implib,libsistema-domotico.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\sistema-domotico.dir\linkLibs.rsp

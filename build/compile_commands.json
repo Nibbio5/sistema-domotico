@@ -1,0 +1,32 @@
+[
+{
+  "directory": "C:/Users/dan04/projects/sistema-domotico/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\sistema-domotico.dir\\src\\device.cc.obj -c C:\\Users\\dan04\\projects\\sistema-domotico\\src\\device.cc",
+  "file": "C:/Users/dan04/projects/sistema-domotico/src/device.cc",
+  "output": "CMakeFiles/sistema-domotico.dir/src/device.cc.obj"
+},
+{
+  "directory": "C:/Users/dan04/projects/sistema-domotico/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\sistema-domotico.dir\\src\\domotics_system.cc.obj -c C:\\Users\\dan04\\projects\\sistema-domotico\\src\\domotics_system.cc",
+  "file": "C:/Users/dan04/projects/sistema-domotico/src/domotics_system.cc",
+  "output": "CMakeFiles/sistema-domotico.dir/src/domotics_system.cc.obj"
+},
+{
+  "directory": "C:/Users/dan04/projects/sistema-domotico/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\sistema-domotico.dir\\src\\main.cc.obj -c C:\\Users\\dan04\\projects\\sistema-domotico\\src\\main.cc",
+  "file": "C:/Users/dan04/projects/sistema-domotico/src/main.cc",
+  "output": "CMakeFiles/sistema-domotico.dir/src/main.cc.obj"
+},
+{
+  "directory": "C:/Users/dan04/projects/sistema-domotico/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\sistema-domotico.dir\\src\\manual_device.cc.obj -c C:\\Users\\dan04\\projects\\sistema-domotico\\src\\manual_device.cc",
+  "file": "C:/Users/dan04/projects/sistema-domotico/src/manual_device.cc",
+  "output": "CMakeFiles/sistema-domotico.dir/src/manual_device.cc.obj"
+},
+{
+  "directory": "C:/Users/dan04/projects/sistema-domotico/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\sistema-domotico.dir\\src\\prefixed_cycle_device.cc.obj -c C:\\Users\\dan04\\projects\\sistema-domotico\\src\\prefixed_cycle_device.cc",
+  "file": "C:/Users/dan04/projects/sistema-domotico/src/prefixed_cycle_device.cc",
+  "output": "CMakeFiles/sistema-domotico.dir/src/prefixed_cycle_device.cc.obj"
+}
+]
