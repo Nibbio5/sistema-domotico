@@ -1,0 +1,3 @@
+S:/sistema-domotico/build/CMakeFiles/lab8.dir
+S:/sistema-domotico/build/CMakeFiles/edit_cache.dir
+S:/sistema-domotico/build/CMakeFiles/rebuild_cache.dir
