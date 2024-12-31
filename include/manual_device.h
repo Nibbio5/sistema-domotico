@@ -1,7 +1,7 @@
 #ifndef MANUALDEVICE_H
 #define MANUALDEVICE_H
 
-#include "device.h"
+#include "Device.h"
 #include <string>
 
 class ManulDevice : public Device{

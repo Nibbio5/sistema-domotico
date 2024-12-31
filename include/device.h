@@ -4,13 +4,8 @@
 #include <string>
 
 class Device{
-    protected:
-        int id;
-        bool isOn;
-
-        int getId();
-    
     public: 
+        const int id;
         const std::string name;
         const double power;
 
@@ -18,9 +13,18 @@ class Device{
         
         ~Device();
 
+        int isDeviceOn() const {return isOn;}
+
         void switchOn() {isOn = true;}
 
         void switchOff() {isOn = false;}
+    
+    protected:
+        bool isOn;
+
+        // Copy constructor and assignment operator disabled
+        Device(const Device&) = delete;
+        Device& operator=(const Device&) = delete;
 };
 
 #endif
