@@ -2,6 +2,7 @@
 #define DEVICE_H
 
 #include <string>
+#include <ostream>
 
 class Device{
     public: 
@@ -9,28 +10,24 @@ class Device{
         const std::string name;
         const double power;
 
-        Device(std::string, double);
-        
-        ~Device();
+        virtual ~Device() = default;
 
         int isDeviceOn() const {return isOn;}
 
         void switchOn() {isOn = true;}
 
         void switchOff() {isOn = false;}
-    
+
     protected:
         bool isOn;
+
+        Device(std::string, double);
 
         // Copy constructor and assignment operator disabled
         Device(const Device&) = delete;
         Device& operator=(const Device&) = delete;
 };
 
-#endif
+std::ostream& operator<<(std::ostream&, const Device&);
 
-/*
-Domande:
-1. La gestione dell'id unico a chi la facciamo fare? Pk se la faccio nella classe non posso mettere
-    l'id const.
-*/
+#endif

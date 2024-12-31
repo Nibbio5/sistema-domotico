@@ -1,19 +1,15 @@
-#include "..\include\device.h"
+#include "..\include\manual_device.h"
+#include "..\include\cp_device.h"
 #include <string>
 #include <iostream>
+#include <chrono>
 
 int main() {
-    Device d {"cacca", 12.3};
-    std::cout << d.id << std::endl;
-    std::cout << d.name << std::endl;
-    std::cout << d.power << std::endl;
-    std::cout << d.isDeviceOn() << std::endl << std::endl;
+    ManulDevice md {"cacca", 12.3, std::chrono::system_clock::now(), std::chrono::system_clock::now()};
+    std::cout << md << "\n\n";
     
-    Device d1 {"merda", 1.2};
-    std::cout << d1.id << std::endl;
-    std::cout << d1.name << std::endl;
-    std::cout << d1.power << std::endl;
-    std::cout << d1.isDeviceOn() << std::endl << std::endl;
+    CPDevice cpd {"merda", 1.2, std::chrono::duration_cast<std::chrono::seconds>(md.getStartTime() - md.getStopTime())};
+    std::cout << cpd << "\n\n";
 
     return 0;
 }

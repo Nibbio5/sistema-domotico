@@ -1,26 +1,32 @@
 #ifndef MANUALDEVICE_H
 #define MANUALDEVICE_H
 
-#include "Device.h"
+#include "device.h"
 #include <string>
+#include <chrono>
+#include <ostream>
 
 class ManulDevice : public Device{
-    private:
-        int startTime;
-        int stopTime;
-    
     public:
-        ManulDevice(std::string, double, int, int);
+        ManulDevice(std::string, double, std::chrono::system_clock::time_point, std::chrono::system_clock::time_point);
         
-        ~ManulDevice();
+        ~ManulDevice() = default;
 
-        int getStartTime();
+        std::chrono::system_clock::time_point getStartTime() const {return startTime;}
 
-        void setStartTime();
+        void setStartTime(std::chrono::system_clock::time_point newTime) {startTime = newTime;}
 
-        int getStopTime();
+        std::chrono::system_clock::time_point getStopTime() const {return stopTime;}
         
-        void setStopTime();
+        void setStopTime(std::chrono::system_clock::time_point newTime) {stopTime = newTime;}
+
+        std::chrono::seconds getActivityDurationInSeconds() {return std::chrono::duration_cast<std::chrono::seconds>(stopTime - startTime);}
+
+    private:
+        std::chrono::system_clock::time_point startTime;
+        std::chrono::system_clock::time_point stopTime;
 };
+
+std::ostream& operator<<(std::ostream&, const ManulDevice);
 
 #endif
