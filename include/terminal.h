@@ -4,10 +4,16 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "device.h"
+#include "domotics_system.h" // Include the header file for DomoticsSystem
 
 class Terminal {
 private:
+  DomoticsSystem domotics_system;
+
   void setTimeCommandPrompt(const std::string &arg);
+  Device* isDevice(const std::string &device_name);
+  void setDeviceCommandPrompt(const std::vector<std::string> &args, Device *device);
 public:
   Terminal();
   ~Terminal();

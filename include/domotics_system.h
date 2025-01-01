@@ -1,11 +1,13 @@
 
 //template <typename T>
+#include "device.h"
 #include <string>  // Aggiungi questo include
 #include <vector>
 #include <iostream>
 
 class DomoticsSystem {
     private:
+    std::vector<Device*> devices;
         /*
         * private variables that must be touched  only by the class methods
         * std::vector<T> all_devices;
@@ -14,7 +16,6 @@ class DomoticsSystem {
         * 
         *  std::vector<T> getDevices();
         */
-        std::string devices;
 
     public:
 
@@ -24,7 +25,7 @@ class DomoticsSystem {
    // void removeTimer(/*${DEVICENAME}*/);
 
     void setDevices();
-    std::string getDevices() const;
+    std::vector<Device*> getDevices() const;
 };
 
 

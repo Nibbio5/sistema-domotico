@@ -19,19 +19,6 @@
 */
 int main()
 {
-    time_t rawtime;
-    struct tm * timeinfo;
-    char buffer [80];
-
-    time(&rawtime); /* get current time; same as: timer = time(NULL)  */
-    timeinfo = localtime(&rawtime);
-
-    strftime(buffer, 80, "Now it's %T.", timeinfo);
-    puts(buffer);
-
-    DomoticsSystem domotic;
-    domotic.setDevices();
-    std::cout << domotic.getDevices() << std::endl;
     return 0;
 }
 
