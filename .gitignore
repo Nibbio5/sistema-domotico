@@ -3,6 +3,7 @@
 *.zsrc
 *.dSYM
 *.md
+build/
 # Compiled Object files
 *.slo
 *.lo

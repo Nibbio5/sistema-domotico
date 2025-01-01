@@ -4,30 +4,102 @@
 #include <string>
 #include <ostream>
 
+/**
+ * @brief Abstract class used to define the basic properties of a domotic device
+ * 
+ */
 class Device{
     public: 
+        /**
+         * @brief The id of the device, managed with a singleton in order to be an
+         * unique identifier
+         * 
+         */
         const int id;
+
+        /**
+         * @brief The name of the device
+         * 
+         */
         const std::string name;
+
+        /**
+         * @brief The power of the device measured in kW.
+         * 
+         * The value indicates a power consumption if negative, and a 
+         * 
+         */
         const double power;
 
+        /**
+         * @brief Destroy the Device object
+         * 
+         */
         virtual ~Device() = default;
 
-        int isDeviceOn() const {return isOn;}
+        /**
+         * @brief Checks whether the device is active
+         * 
+         * @return true if the device is on
+         * @return false if the device is off
+         */
+        bool isDeviceOn() const {return isOn;}
 
+        /**
+         * @brief Activate the device
+         * 
+         */
         void switchOn() {isOn = true;}
 
+        /**
+         * @brief Deactivate the device
+         * 
+         */
         void switchOff() {isOn = false;}
 
     protected:
+        /**
+         * @brief Stores the state of the device.
+         * 
+         * true (1) if the device is on, false (0) if the device is off.
+         * 
+         */
         bool isOn;
 
-        Device(std::string, double);
+        /**
+         * @brief Construct a new Device object
+         * 
+         * @param name the name of the device
+         * @param power the power consumption (negative) or production (positive) of the device
+         */
+        Device(std::string name, double power);
 
-        // Copy constructor and assignment operator disabled
-        Device(const Device&) = delete;
-        Device& operator=(const Device&) = delete;
+        /**
+         * @brief Copy constuctor disabled for base class
+         * 
+         * @param device the Device to use for the copy
+         */
+        Device(const Device& device) = delete;
+        
+        /**
+         * @brief Copy assigmnet disabled for base class
+         * 
+         * @param device the Device to use for the copy
+         * @return Device& the given device
+         */
+        Device& operator=(const Device& device) = delete;
 };
 
-std::ostream& operator<<(std::ostream&, const Device&);
+/**
+ * @brief Output the Device object to the output stream.
+ * 
+ * The data injected in the ostream object contains the class name and a list of all the
+ * class variables with the respective value. 
+ * 
+ * @param out the stream where the data are injected
+ * @param device the Device object which provides the data to inject
+ * @return std::ostream& the given output stream
+ */
+std::ostream& operator<<(std::ostream& out, const Device& device);
 
 #endif

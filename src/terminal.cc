@@ -36,6 +36,21 @@ void Terminal::setDeviceCommandPrompt(const std::vector<std::string> &args,
   }
 }
 
+void Terminal::rmCommandPrompt(const std::string &arg) {
+  if (arg.empty()) {
+    throw std::invalid_argument(
+        "Invalid arguments provided. Type 'help' for more information.");
+  }
+
+  Device *device = isDevice(arg);
+  if (device == nullptr) {
+    throw std::invalid_argument(
+        "Invalid device provided. Type 'help' for more information.");
+  }
+
+  device->remove();
+}
+
 void Terminal::setTimeCommandPrompt(const std::string &arg) {
   if (arg.empty()) {
     throw std::invalid_argument(

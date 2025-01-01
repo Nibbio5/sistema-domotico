@@ -2,31 +2,99 @@
 #define MANUALDEVICE_H
 
 #include "device.h"
+#include "time.h"
 #include <string>
-#include <chrono>
 #include <ostream>
 
-class ManulDevice : public Device{
+/**
+ * @brief Subclass of Device used to define a domotic device which has a timer that
+ * defines the time range in which it operates.
+ * 
+ */
+class ManualDevice : public Device{
     public:
-        ManulDevice(std::string, double, std::chrono::system_clock::time_point, std::chrono::system_clock::time_point);
+        /**
+         * @brief Construct a new Manual Device object.
+         * 
+         * Throws an exception if the start time is higher than the stop time.
+         * 
+         * @param name the name of the device
+         * @param power the power consumption (negative) or production (positive) of the device
+         * @param startTime the time point at which the devices turns on
+         * @param stopTime the time point at which the devices turns off
+         */
+        ManualDevice(std::string name, double power, Time startTime, Time stopTime);
         
-        ~ManulDevice() = default;
+        /**
+         * @brief Destroy the Manual Device object
+         * 
+         */
+        ~ManualDevice() = default;
 
-        std::chrono::system_clock::time_point getStartTime() const {return startTime;}
+        /**
+         * @brief Get the Time object which defines the activty start time
+         * 
+         * @return Time 
+         */
+        Time getStartTime() const {return startTime;}
 
-        void setStartTime(std::chrono::system_clock::time_point newTime) {startTime = newTime;}
+        /**
+         * @brief Get the Time object which defines the activty stop time
+         * 
+         * @return Time 
+         */
+        Time getStopTime() const {return stopTime;}
 
-        std::chrono::system_clock::time_point getStopTime() const {return stopTime;}
-        
-        void setStopTime(std::chrono::system_clock::time_point newTime) {stopTime = newTime;}
+        /**
+         * @brief Set a new timer for the ManualDevice, modifing both the start and stop Time.
+         * 
+         * Throws an exception if the start time is higher than the stop time. 
+         * 
+         * @param newStartTime the new time for the start Time object
+         * @param newStopTime the new time for the stop Time object
+         */
+        void setNewTimer(const Time& newStartTime, const Time& newStopTime);
 
-        std::chrono::seconds getActivityDurationInSeconds() {return std::chrono::duration_cast<std::chrono::seconds>(stopTime - startTime);}
+        /**
+         * @brief Get the total activity duration Time object.
+         *
+         * Throws an exception if the start time is higher than the stop time. 
+         *  
+         * @return Time the object which store the duration as a time point
+         */
+        Time getActivityDuration() const;
+
+        /**
+         * @brief Get the total activity duration in minutes
+         * 
+         * @return int the total minutes of activity
+         */
+        int getActivityDurationInMinutes() const;
 
     private:
-        std::chrono::system_clock::time_point startTime;
-        std::chrono::system_clock::time_point stopTime;
+        /**
+         * @brief The time point at which the devices turns on and starts its activity.
+         * 
+         */
+        Time startTime;
+
+        /**
+         * @brief The time point at which the devices turns off and stops its activity.
+         * 
+         */
+        Time stopTime;
 };
 
-std::ostream& operator<<(std::ostream&, const ManulDevice);
+/**
+ * @brief Output the ManualDevice object to the output stream.
+ * 
+ * The data injected in the ostream object contains the class name and a list of all the
+ * class variables with the respective value.
+ * 
+ * @param out the stream where the data are injected
+ * @param device the ManualDevice object which provides the data to inject
+ * @return std::ostream& the given output stream
+ */
+std::ostream& operator<<(std::ostream& out, const ManualDevice device);
 
 #endif
