@@ -1,32 +1,32 @@
 [
 {
-  "directory": "C:/Users/dan04/projects/sistema-domotico/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\sistema-domotico.dir\\src\\device.cc.obj -c C:\\Users\\dan04\\projects\\sistema-domotico\\src\\device.cc",
-  "file": "C:/Users/dan04/projects/sistema-domotico/src/device.cc",
-  "output": "CMakeFiles/sistema-domotico.dir/src/device.cc.obj"
+  "directory": "/Users/dan04piccolo/projects/github/sistema-domotico/build",
+  "command": "/usr/bin/clang++   -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -o CMakeFiles/sistema-domotico.dir/src/device.cc.o -c /Users/dan04piccolo/projects/github/sistema-domotico/src/device.cc",
+  "file": "/Users/dan04piccolo/projects/github/sistema-domotico/src/device.cc",
+  "output": "CMakeFiles/sistema-domotico.dir/src/device.cc.o"
 },
 {
-  "directory": "C:/Users/dan04/projects/sistema-domotico/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\sistema-domotico.dir\\src\\domotics_system.cc.obj -c C:\\Users\\dan04\\projects\\sistema-domotico\\src\\domotics_system.cc",
-  "file": "C:/Users/dan04/projects/sistema-domotico/src/domotics_system.cc",
-  "output": "CMakeFiles/sistema-domotico.dir/src/domotics_system.cc.obj"
+  "directory": "/Users/dan04piccolo/projects/github/sistema-domotico/build",
+  "command": "/usr/bin/clang++   -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -o CMakeFiles/sistema-domotico.dir/src/domotics_system.cc.o -c /Users/dan04piccolo/projects/github/sistema-domotico/src/domotics_system.cc",
+  "file": "/Users/dan04piccolo/projects/github/sistema-domotico/src/domotics_system.cc",
+  "output": "CMakeFiles/sistema-domotico.dir/src/domotics_system.cc.o"
 },
 {
-  "directory": "C:/Users/dan04/projects/sistema-domotico/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\sistema-domotico.dir\\src\\main.cc.obj -c C:\\Users\\dan04\\projects\\sistema-domotico\\src\\main.cc",
-  "file": "C:/Users/dan04/projects/sistema-domotico/src/main.cc",
-  "output": "CMakeFiles/sistema-domotico.dir/src/main.cc.obj"
+  "directory": "/Users/dan04piccolo/projects/github/sistema-domotico/build",
+  "command": "/usr/bin/clang++   -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -o CMakeFiles/sistema-domotico.dir/src/main.cc.o -c /Users/dan04piccolo/projects/github/sistema-domotico/src/main.cc",
+  "file": "/Users/dan04piccolo/projects/github/sistema-domotico/src/main.cc",
+  "output": "CMakeFiles/sistema-domotico.dir/src/main.cc.o"
 },
 {
-  "directory": "C:/Users/dan04/projects/sistema-domotico/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\sistema-domotico.dir\\src\\manual_device.cc.obj -c C:\\Users\\dan04\\projects\\sistema-domotico\\src\\manual_device.cc",
-  "file": "C:/Users/dan04/projects/sistema-domotico/src/manual_device.cc",
-  "output": "CMakeFiles/sistema-domotico.dir/src/manual_device.cc.obj"
+  "directory": "/Users/dan04piccolo/projects/github/sistema-domotico/build",
+  "command": "/usr/bin/clang++   -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -o CMakeFiles/sistema-domotico.dir/src/manual_device.cc.o -c /Users/dan04piccolo/projects/github/sistema-domotico/src/manual_device.cc",
+  "file": "/Users/dan04piccolo/projects/github/sistema-domotico/src/manual_device.cc",
+  "output": "CMakeFiles/sistema-domotico.dir/src/manual_device.cc.o"
 },
 {
-  "directory": "C:/Users/dan04/projects/sistema-domotico/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -o CMakeFiles\\sistema-domotico.dir\\src\\prefixed_cycle_device.cc.obj -c C:\\Users\\dan04\\projects\\sistema-domotico\\src\\prefixed_cycle_device.cc",
-  "file": "C:/Users/dan04/projects/sistema-domotico/src/prefixed_cycle_device.cc",
-  "output": "CMakeFiles/sistema-domotico.dir/src/prefixed_cycle_device.cc.obj"
+  "directory": "/Users/dan04piccolo/projects/github/sistema-domotico/build",
+  "command": "/usr/bin/clang++   -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -o CMakeFiles/sistema-domotico.dir/src/prefixed_cycle_device.cc.o -c /Users/dan04piccolo/projects/github/sistema-domotico/src/prefixed_cycle_device.cc",
+  "file": "/Users/dan04piccolo/projects/github/sistema-domotico/src/prefixed_cycle_device.cc",
+  "output": "CMakeFiles/sistema-domotico.dir/src/prefixed_cycle_device.cc.o"
 }
 ]

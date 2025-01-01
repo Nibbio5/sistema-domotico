@@ -14,6 +14,9 @@
  * REMEMBER to run the file: go to the biuld folder. run cmake --build . and ./sistema-domotico.exe
  */
 
+/* DOCUMENTATION
+*  
+*/
 int main()
 {
     time_t rawtime;
