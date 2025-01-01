@@ -2,10 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "sistema-domotico.exe"
-		},
-		{
-			"path" : "sistema-domotico.pdb"
+			"path" : "sistema-domotico"
 		}
 	],
 	"backtrace" : 1,
@@ -38,7 +35,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g"
+					"fragment" : "-g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk"
 				}
 			],
 			"language" : "CXX",
@@ -72,16 +69,12 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
-			},
-			{
-				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
-				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
 	"name" : "sistema-domotico",
-	"nameOnDisk" : "sistema-domotico.exe",
+	"nameOnDisk" : "sistema-domotico",
 	"paths" : 
 	{
 		"build" : ".",
