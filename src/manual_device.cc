@@ -4,7 +4,13 @@
 #include <exception>
 #include <cmath>
 
-ManualDevice::ManualDevice(std::string name, double power, Time startTime, Time stopTime) : Device(name, power), startTime{startTime}, stopTime{stopTime} {}
+ManualDevice::ManualDevice(std::string name, double power, Time startTime, Time stopTime) : Device(name, power) {
+    if(stopTime < startTime)
+        throw std::invalid_argument("start time is higher than stop time");
+
+    this->startTime = startTime;
+    this->stopTime = stopTime;
+}
 
 Time ManualDevice::getActivityDuration() const {
     int totMinutes = getActivityDurationInMinutes();
