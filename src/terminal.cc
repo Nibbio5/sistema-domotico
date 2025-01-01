@@ -1,6 +1,7 @@
 #include "../include/terminal.h"
 #include "../include/device.h"
 #include "../include/time.h"
+#include <iostream>
 
 Terminal::Terminal() {}
 
@@ -48,7 +49,47 @@ void Terminal::rmCommandPrompt(const std::string &arg) {
         "Invalid device provided. Type 'help' for more information.");
   }
 
-  device->remove();
+  // device->remove(); //TODO: implement remove method
+}
+
+void Terminal::showCommandPrompt(const std::string &arg) {
+  if (!arg.empty()) {
+    showOneDevice(arg);
+    return;
+  }
+
+  int consumed_power = 0;
+  int produced_power = 0;
+  std::string output = "Nello specifico:\n";
+  std::vector<Device *> devices = domotics_system.getDevices();
+  for (Device *device : devices) {
+    if (device->name == "Impianto Fotovoltaico") {
+      produced_power += device->power;
+    } else {
+      consumed_power += device->power;
+    }
+    output =
+        output + "- " + device->name + "ha " +
+        (device->name == "Impianto Fotovoltaico" ? "prodotto " : "consumato ") +
+        std::to_string(device->power) + "kWh\n";
+  }
+  std::cout << "[Time] Attualmente il sistema ha prodotto " +
+                   std::to_string(produced_power) + "kWh e consumato " +
+                   std::to_string(consumed_power) + "kWh. " + output;
+}
+
+void Terminal::showOneDevice(const std::string &arg) {
+
+  Device *device = isDevice(arg);
+  if (device == nullptr) {
+    throw std::invalid_argument(
+        "Invalid device provided. Type 'help' for more information.");
+  }
+
+  std::cout << "[Time] Il dispositivo " << device->name << " ha attualmente "
+            << (device->name == "Impianto Fotovoltaico" ? "prodotto "
+                                                        : "consumato ")
+            << device->power << "kWh\n";
 }
 
 void Terminal::setTimeCommandPrompt(const std::string &arg) {

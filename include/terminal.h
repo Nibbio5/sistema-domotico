@@ -1,19 +1,22 @@
 #ifndef TERMINAL_H
 #define TERMINAL_H
 
+#include "device.h"
+#include "domotics_system.h" // Include the header file for DomoticsSystem
 #include <iostream>
 #include <string>
 #include <vector>
-#include "device.h"
-#include "domotics_system.h" // Include the header file for DomoticsSystem
 
 class Terminal {
 private:
   DomoticsSystem domotics_system;
 
   void setTimeCommandPrompt(const std::string &arg);
-  Device* isDevice(const std::string &device_name);
-  void setDeviceCommandPrompt(const std::vector<std::string> &args, Device *device);
+  Device *isDevice(const std::string &device_name);
+  void setDeviceCommandPrompt(const std::vector<std::string> &args,
+                              Device *device);
+  void showOneDevice(const std::string &arg);
+
 public:
   Terminal();
   ~Terminal();
