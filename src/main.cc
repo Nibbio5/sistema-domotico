@@ -1,13 +1,16 @@
-#include "..\include\manual_device.h"
-#include "..\include\cp_device.h"
+#include "../include/manual_device.h"
+#include "../include/cp_device.h"
+#include "../include/device.h"
 #include "../include/time.h"
 #include <string>
 #include <iostream>
 #include <chrono>
 
+int aaa(Device a) {return 1;}
+
 int main() {
 
-    ManulDevice md {"cacca", 12.3, std::chrono::system_clock::now(), std::chrono::system_clock::now()};
+    ManualDevice md {"cacca", 12.3, Time().fromString("12:44"), Time().fromString("12:44")};
     std::cout << md << "\n\n";
     
     CPDevice cpd {"merda", 1.2, std::chrono::duration_cast<std::chrono::seconds>(md.getStartTime() - md.getStopTime())};

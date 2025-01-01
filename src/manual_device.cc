@@ -1,4 +1,4 @@
-#include "..\include\manual_device.h"
+#include "../include/manual_device.h"
 #include <string>
 #include <ostream>
 #include <exception>
