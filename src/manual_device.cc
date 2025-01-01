@@ -12,6 +12,14 @@ ManualDevice::ManualDevice(std::string name, double power, Time startTime, Time 
     this->stopTime = stopTime;
 }
 
+void ManualDevice::setNewTimer(const Time& newStartTime, const Time& newStopTime){
+    if(newStopTime < newStartTime)
+        throw std::invalid_argument("start time is higher than stop time");
+    
+    startTime = Time(newStartTime);
+    stopTime= Time(newStopTime);
+}
+
 Time ManualDevice::getActivityDuration() const {
     int totMinutes = getActivityDurationInMinutes();
     return Time(floor(totMinutes / 60), (totMinutes % 60));
