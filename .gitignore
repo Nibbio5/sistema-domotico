@@ -3,7 +3,6 @@
 *.zsrc
 *.dSYM
 *.md
-build/
 # Compiled Object files
 *.slo
 *.lo
@@ -36,3 +35,12 @@ build/
 
 # Custom
 ._*
+sistema-domotico.*
+build/
+CMakeFiles/
+x64/
+.cache/
+CMakeCache.txt
+cmake_install.cmake
+*.vcxproj
+*.filters
