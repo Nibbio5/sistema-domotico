@@ -2,14 +2,14 @@
 #define CPDEVICE_H
 
 #include "device.h"
-#include <chrono>
+#include "time.h"
 #include <ostream>
 
 class CPDevice: public Device{
     public:
-        const std::chrono::seconds duration;
+        const Time duration;
 
-        CPDevice(std::string, double, std::chrono::seconds duration);
+        CPDevice(std::string, double, Time);
 
         ~CPDevice() = default;
 };

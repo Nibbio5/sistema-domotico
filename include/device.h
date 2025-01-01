@@ -25,6 +25,7 @@ class Device{
 
         // Copy constructor and assignment operator disabled
         Device(const Device&) = delete;
+        
         Device& operator=(const Device&) = delete;
 };
 

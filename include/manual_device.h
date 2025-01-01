@@ -2,31 +2,35 @@
 #define MANUALDEVICE_H
 
 #include "device.h"
+#include "time.h"
 #include <string>
-#include <chrono>
 #include <ostream>
 
-class ManulDevice : public Device{
+class ManualDevice : public Device{
     public:
-        ManulDevice(std::string, double, std::chrono::system_clock::time_point, std::chrono::system_clock::time_point);
+        ManualDevice(std::string, double, Time, Time);
         
-        ~ManulDevice() = default;
+        ~ManualDevice() = default;
 
-        std::chrono::system_clock::time_point getStartTime() const {return startTime;}
+        Time getStartTime() const {return startTime;}
 
-        void setStartTime(std::chrono::system_clock::time_point newTime) {startTime = newTime;}
+        void setStartTime(Time newTime) {startTime = newTime;}
 
-        std::chrono::system_clock::time_point getStopTime() const {return stopTime;}
+        Time getStopTime() const {return stopTime;}
         
-        void setStopTime(std::chrono::system_clock::time_point newTime) {stopTime = newTime;}
+        void setStopTime(Time newTime) {stopTime = newTime;}
 
-        std::chrono::seconds getActivityDurationInSeconds() {return std::chrono::duration_cast<std::chrono::seconds>(stopTime - startTime);}
+        // Works only if the time is within a day
+        Time getActivityDuration() const;
+
+        // Works only if the time is within a day
+        int getActivityDurationInMinutes() const;
 
     private:
-        std::chrono::system_clock::time_point startTime;
-        std::chrono::system_clock::time_point stopTime;
+        Time startTime;
+        Time stopTime;
 };
 
-std::ostream& operator<<(std::ostream&, const ManulDevice);
+std::ostream& operator<<(std::ostream&, const ManualDevice);
 
 #endif
