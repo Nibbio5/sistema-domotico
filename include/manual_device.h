@@ -6,11 +6,11 @@
 #include <chrono>
 #include <ostream>
 
-class ManulDevice : public Device{
+class ManualDevice : public Device{
     public:
-        ManulDevice(std::string, double, std::chrono::system_clock::time_point, std::chrono::system_clock::time_point);
+        ManualDevice(std::string, double, std::chrono::system_clock::time_point, std::chrono::system_clock::time_point);
         
-        ~ManulDevice() = default;
+        ~ManualDevice() = default;
 
         std::chrono::system_clock::time_point getStartTime() const {return startTime;}
 
@@ -27,6 +27,6 @@ class ManulDevice : public Device{
         std::chrono::system_clock::time_point stopTime;
 };
 
-std::ostream& operator<<(std::ostream&, const ManulDevice);
+std::ostream& operator<<(std::ostream&, const ManualDevice);
 
 #endif

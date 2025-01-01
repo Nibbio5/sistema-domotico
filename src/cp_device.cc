@@ -1,4 +1,4 @@
-#include "..\include\cp_device.h"
+#include "../include/cp_device.h"
 #include <string>
 #include <chrono>
 #include <ostream>

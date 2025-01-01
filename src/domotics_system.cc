@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include "../include/domotics_system.h"
+#include "../include/manual_device.h"  // Add this include
 
 /*
 *   std::vector<T>   DomoticsSystem::getDevices () { 
@@ -40,11 +41,12 @@
 
 */
 
-    DomoticsSystem::DomoticsSystem() {
-        devices = "";
+    DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5} {
+        all_devices = setDevices(); 
     }
     
-    void DomoticsSystem::setDevices () {
+    std::vector<Device*> DomoticsSystem::setDevices () {
+    std::vector<Device*> dispositivi;
         std::ifstream file("./assets/devices.json");
     if (!file) {
         throw std::runtime_error("il file devices.json non esiste");
@@ -56,6 +58,7 @@
         if (line.find("\"Nome\":") != std::string::npos) {
             nome = line.substr(line.find(":") + 2);
             nome = nome.substr(1, nome.size() - 3); // Remove the quotes and the final comma
+
         } else if (line.find("\"DurataAccensione\":") != std::string::npos) {
             durataAccensione = line.substr(line.find(":") + 2);
             durataAccensione = durataAccensione.substr(1, durataAccensione.size() - 3);
@@ -65,16 +68,12 @@
 
             // Create the device based on the durataAccensione
             if (durataAccensione == "Manuale") {
-                devices += line;
+                dispositivi.push_back(new ManualDevice(nome, std::stod(produzioneConsumo), std::chrono::system_clock::now(), std::chrono::system_clock::now()));
             } else {
-                devices += line;
+                dispositivi.push_back(new CPDevice(nome, std::stod(produzioneConsumo), std::chrono::system_clock::now(), std::chrono::system_clock::now()));
             }
         }
     }
-    }
-
-    std::string DomoticsSystem::getDevices() const {
-        return devices;
     }
 
 

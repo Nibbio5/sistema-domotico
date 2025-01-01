@@ -1,11 +1,11 @@
-#include "..\include\manual_device.h"
+#include "../include/manual_device.h"
 #include <string>
 #include <chrono>
 #include <ostream>
 
-ManulDevice::ManulDevice(std::string name, double power, std::chrono::system_clock::time_point startTime, std::chrono::system_clock::time_point stopTime) : Device(name, power), startTime{startTime}, stopTime{stopTime} {}
+ManualDevice::ManualDevice(std::string name, double power, std::chrono::system_clock::time_point startTime, std::chrono::system_clock::time_point ) : Device(name, power), startTime{startTime}, stopTime{stopTime} {}
 
-std::ostream& operator<<(std::ostream& out, const ManulDevice device) {
+std::ostream& operator<<(std::ostream& out, const ManualDevice device) {
         return out << "ManulDevice{"
         << "id=" << device.id
         << ", name=" << device.name
