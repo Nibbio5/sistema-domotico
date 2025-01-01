@@ -25,7 +25,9 @@ class DomoticsSystem {
 
     void setDevices();
     std::string getDevices() const;
+    void showDevices() const;
 };
+
 
 
 
