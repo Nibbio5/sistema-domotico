@@ -6,6 +6,8 @@
 #include <vector>
 
 class Terminal {
+private:
+  void setTimeCommandPrompt(const std::string &arg);
 public:
   Terminal();
   ~Terminal();

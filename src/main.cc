@@ -1,13 +1,35 @@
 #include <iostream>
-#include "../include/time.h"
+// remove the following include, ONLIY FOR THEST PURPOSE
+#include <time.h>
+#include <stdio.h>
+#include <string>
+#include "../include/domotics_system.h"
 
-int main() {
-    try {
-        Time time = Time::fromString("12:30");
-        std::cout << time.getHour() << "  " << time.getMinute() << std::endl;
-        std::cout << time << std::endl;
-    } catch(const std::invalid_argument &e) {
-        std::cerr << e.what() << std::endl;
-    }
+/*
+ *   TODO
+ *   time gestion
+ *   input gestion
+ *   output gestion
+ * DomoticsSystem::getDevices ()  to finish after @eros_m has done the device classes
+ * REMEMBER to run the file: go to the biuld folder. run cmake --build . and ./sistema-domotico.exe
+ */
+
+int main()
+{
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer [80];
+
+    time(&rawtime); /* get current time; same as: timer = time(NULL)  */
+    timeinfo = localtime(&rawtime);
+
+    strftime(buffer, 80, "Now it's %T.", timeinfo);
+    puts(buffer);
+
+    DomoticsSystem domotic;
+    domotic.setDevices();
+    std::cout << domotic.getDevices() << std::endl;
     return 0;
 }
+
+

@@ -16,7 +16,7 @@ void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
   }
 }
 
-void setTimeCommandPrompt(const std::string &arg) {
+void Terminal::setTimeCommandPrompt(const std::string &arg) {
   if (arg.empty()) {
     throw std::invalid_argument(
         "Invalid arguments provided. Type 'help' for more information.");
