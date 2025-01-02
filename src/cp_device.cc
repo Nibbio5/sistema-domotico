@@ -1,9 +1,15 @@
+// Eros Menin
+
 #include "../include/cp_device.h"
 #include <string>
 #include <chrono>
 #include <ostream>
 
-CPDevice::CPDevice(std::string name, double power, Time duration) : duration{duration}, Device(name, power){}
+CPDevice::CPDevice(std::string name, double power, Time startTime, Time duration) : duration{duration}, Device(name, power, startTime){}
+
+CPDevice::CPDevice(std::string name, double power, Time duration) : duration{duration}, Device(name, power, Time()){}
+
+void CPDevice::setStartTime(Time newTime) {startTime = newTime;}
 
 std::ostream& operator<<(std::ostream& out, const CPDevice device) {
     return out << "CPDevice{"
@@ -11,6 +17,7 @@ std::ostream& operator<<(std::ostream& out, const CPDevice device) {
     << ", name=" << device.name
     << ", power=" << device.power
     << ", isOn=" << device.isDeviceOn()
-    << ", duration" << device.duration
+    << ", startTime=" << device.getStartTime()
+    << ", duration=" << device.duration
     << "}";
 }

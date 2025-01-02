@@ -1,6 +1,7 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
+#include "time.h"
 #include <string>
 #include <ostream>
 
@@ -38,24 +39,31 @@ class Device{
         virtual ~Device() = default;
 
         /**
+         * @brief Get the Time object which defines the activty start time
+         * 
+         * @return Time 
+         */
+        Time getStartTime() const;
+
+        /**
          * @brief Checks whether the device is active
          * 
          * @return true if the device is on
          * @return false if the device is off
          */
-        bool isDeviceOn() const {return isOn;}
+        bool isDeviceOn() const;
 
         /**
          * @brief Activate the device
          * 
          */
-        void switchOn() {isOn = true;}
+        void switchOn();
 
         /**
          * @brief Deactivate the device
          * 
          */
-        void switchOff() {isOn = false;}
+        void switchOff();
 
     protected:
         /**
@@ -67,12 +75,19 @@ class Device{
         bool isOn;
 
         /**
+         * @brief The time point at which the devices turns on and starts its activity.
+         * 
+         */
+        Time startTime;
+
+        /**
          * @brief Construct a new Device object
          * 
          * @param name the name of the device
          * @param power the power consumption (negative) or production (positive) of the device
+         * @param startTime the time point at which the devices turns on
          */
-        Device(std::string name, double power);
+        Device(std::string name, double power, Time startTime);
 
         /**
          * @brief Copy constuctor disabled for base class
