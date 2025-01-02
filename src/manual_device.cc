@@ -1,3 +1,5 @@
+// Eros Menin
+
 #include "../include/manual_device.h"
 #include <string>
 #include <ostream>

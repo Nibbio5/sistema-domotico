@@ -1,3 +1,5 @@
+// Eros Menin
+
 #ifndef MANUALDEVICE_H
 #define MANUALDEVICE_H
 
