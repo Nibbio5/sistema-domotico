@@ -4,8 +4,10 @@
 #define DEVICE_H
 
 #include "time.h"
+#include "singleton_id.h"
 #include <string>
 #include <ostream>
+#include <memory>
 
 /**
  * @brief Abstract class used to define the basic properties of a domotic device
@@ -45,7 +47,7 @@ class Device{
          * 
          * @return Time 
          */
-        Time getStartTime() const;
+        std::shared_ptr<const Time> getStartTime() const;
 
         /**
          * @brief Checks whether the device is active
@@ -67,6 +69,7 @@ class Device{
          */
         void switchOff();
 
+        
     protected:
         /**
          * @brief Stores the state of the device.
@@ -80,7 +83,7 @@ class Device{
          * @brief The time point at which the devices turns on and starts its activity.
          * 
          */
-        Time startTime;
+        std::shared_ptr<Time> startTime;
 
         /**
          * @brief Construct a new Device object
@@ -89,7 +92,15 @@ class Device{
          * @param power the power consumption (negative) or production (positive) of the device
          * @param startTime the time point at which the devices turns on
          */
-        Device(std::string name, double power, Time startTime);
+        Device(const std::string& name, const double power, const Time& startTime);
+        
+        /**
+         * @brief Construct a new Device object without a start Time object
+         * 
+         * @param name the name of the device
+         * @param power the power consumption (negative) or production (positive) of the device
+         */
+        Device(const std::string& name, const double power);
 
         /**
          * @brief Copy constuctor disabled for base class
