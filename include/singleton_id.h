@@ -16,7 +16,7 @@
  * To get the ID the call is: ``SingeltonId::getInstance().generateId()``
  * 
  */
-class SingeltonId {
+class SingletonId {
     public:
         /**
          * @brief Uses the Singleton design pattern to always provide the same instance
@@ -24,8 +24,8 @@ class SingeltonId {
          * 
          * @return SingeltonId& the instance of SingletonId
          */
-        static SingeltonId& SingeltonId::getInstance() {
-            static SingeltonId instance;
+        static SingletonId& getInstance() {
+            static SingletonId instance;
             return instance;
         }
 
@@ -49,20 +49,20 @@ class SingeltonId {
          * The constructor is private to avoid direct instantiation.
          * 
          */
-        SingeltonId();
+        SingletonId();
 
         /**
          * @brief Copy construct disabled to avoid copy.
          * 
          */
-        SingeltonId(const SingeltonId&) = delete;
+        SingletonId(const SingletonId&) = delete;
 
         /**
          * @brief Copy assignment disabled to avoid copy.
          * 
          * @return SingeltonId& the copied SingeltonId object
          */
-        SingeltonId& operator=(const SingeltonId&) = delete;
+        SingletonId& operator=(const SingletonId&) = delete;
 };
 
 #endif
