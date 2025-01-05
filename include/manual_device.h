@@ -1,3 +1,5 @@
+// Eros Menin
+
 #ifndef MANUALDEVICE_H
 #define MANUALDEVICE_H
 
@@ -9,6 +11,10 @@
 /**
  * @brief Subclass of Device used to define a domotic device which has a timer that
  * defines the time range in which it operates.
+ * 
+ * The main validity condition for the ManualDevice object is that the start time point 
+ * is lower (comes before) than the stop time point. To ensure this condition is 
+ * always valid a check is peformed every time the Time objects are updated. 
  * 
  */
 class ManualDevice : public Device{
@@ -32,18 +38,11 @@ class ManualDevice : public Device{
         ~ManualDevice() = default;
 
         /**
-         * @brief Get the Time object which defines the activty start time
-         * 
-         * @return Time 
-         */
-        Time getStartTime() const {return startTime;}
-
-        /**
          * @brief Get the Time object which defines the activty stop time
          * 
          * @return Time 
          */
-        Time getStopTime() const {return stopTime;}
+        Time getStopTime() const;
 
         /**
          * @brief Set a new timer for the ManualDevice, modifing both the start and stop Time.
@@ -58,8 +57,6 @@ class ManualDevice : public Device{
         /**
          * @brief Get the total activity duration Time object.
          *
-         * Throws an exception if the start time is higher than the stop time. 
-         *  
          * @return Time the object which store the duration as a time point
          */
         Time getActivityDuration() const;
@@ -72,12 +69,6 @@ class ManualDevice : public Device{
         int getActivityDurationInMinutes() const;
 
     private:
-        /**
-         * @brief The time point at which the devices turns on and starts its activity.
-         * 
-         */
-        Time startTime;
-
         /**
          * @brief The time point at which the devices turns off and stops its activity.
          * 
