@@ -32,7 +32,7 @@ int ManualDevice::getActivityDurationInMinutes() const {
     return ((stopTime.getHour() - startTime.getHour()) * 60) + (stopTime.getMinute() - startTime.getMinute());
 }
 
-std::ostream& operator<<(std::ostream& out, const ManualDevice device) {
+std::ostream& operator<<(std::ostream& out, const ManualDevice& device) {
     return out << "ManualDevice{"
     << "id=" << device.id
     << ", name=" << device.name

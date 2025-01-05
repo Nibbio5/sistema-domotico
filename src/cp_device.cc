@@ -11,7 +11,7 @@ CPDevice::CPDevice(std::string name, double power, Time duration) : duration{dur
 
 void CPDevice::setStartTime(Time newTime) {startTime = newTime;}
 
-std::ostream& operator<<(std::ostream& out, const CPDevice device) {
+std::ostream& operator<<(std::ostream& out, const CPDevice& device) {
     return out << "CPDevice{"
     << "id=" << device.id
     << ", name=" << device.name

@@ -24,7 +24,7 @@ class SingeltonId {
          * 
          * @return SingeltonId& the instance of SingletonId
          */
-        static SingeltonId& SingeltonId::getInstance() {
+        static SingeltonId& getInstance() {
             static SingeltonId instance;
             return instance;
         }

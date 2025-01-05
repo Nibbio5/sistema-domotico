@@ -86,6 +86,6 @@ class ManualDevice : public Device{
  * @param device the ManualDevice object which provides the data to inject
  * @return std::ostream& the given output stream
  */
-std::ostream& operator<<(std::ostream& out, const ManualDevice device);
+std::ostream& operator<<(std::ostream& out, const ManualDevice& device);
 
 #endif
