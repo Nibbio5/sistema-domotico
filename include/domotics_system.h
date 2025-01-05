@@ -6,6 +6,7 @@
 #include "../include/device.h"
 #include "../include/manual_device.h"  // Add this include
 #include "../include/cp_device.h"  // Add this include
+#include "../include/time.h"  // Add this include
 
 class DomoticsSystem {
     private:
