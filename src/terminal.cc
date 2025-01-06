@@ -61,7 +61,7 @@ void Terminal::showCommandPrompt(const std::string &arg) {
   int consumed_power = 0;
   int produced_power = 0;
   std::string output = "Nello specifico:\n";
-  std::vector<Device *> devices = domotics_system.getDevices();
+  std::vector<Device *> devices = domotics_system.getDevicesVector();
   for (Device *device : devices) {
     if (device->name == "Impianto Fotovoltaico") {
       produced_power += device->power;
@@ -104,7 +104,7 @@ void Terminal::setTimeCommandPrompt(const std::string &arg) {
 }
 
 Device *Terminal::isDevice(const std::string &arg) {
-  for (Device *device : domotics_system.getDevices()) {
+  for (Device *device : domotics_system.getDevicesVector()) {
     if (device->name == arg) {
       return device;
     }

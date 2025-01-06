@@ -1,14 +1,13 @@
 #include "../include/domotics_system.h"
 #include <string>
 #include <iostream>
-#include <chrono>
 
 
 int main() {
 
     /*ManualDevice md {"cacca", 12.3, Time().fromString("12:44"), Time().fromString("12:44")};
     std::cout << md << "\n\n";
-    
+
     CPDevice cpd {"merda", 1.2, std::chrono::duration_cast<std::chrono::seconds>(md.getStartTime() - md.getStopTime())};
     std::cout << cpd << "\n\n";
 
@@ -19,13 +18,13 @@ int main() {
     } catch(const std::invalid_argument &e) {
         std::cerr << e.what() << std::endl;
     }*/
-      Time t1=  Time (8,10);
-   DomoticsSystem sistema = DomoticsSystem();
-   std::cout << sistema << std::endl;
-   sistema.setCurrentTime(t1);
-   sistema.currentMod();
-   sistema.changeDeviceStatus(true,"Pompa di calore + termostato");
-   //std::cout << sistema << std::endl;
+    auto t1 =  Time(8, 10);
+    auto sistema = DomoticsSystem();
+    std::cout << sistema << std::endl;
+    sistema.setCurrentTime(t1);
+    sistema.currentMod();
+    sistema.changeDeviceStatus(true, "Pompa di calore + termostato");
+    //std::cout << sistema << std::endl;
     return 0;
 }
 
