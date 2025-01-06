@@ -5,13 +5,13 @@
 
 /**
  * @brief Class used to manage the creation of unique numeric IDs.
- * 
- * By using the Singeton design pattern, this class can provide the same instance 
- * every time it's called, without the need to be instantiated.
- * 
- * The IDs are generated starting from zero and incrementing a variable on every call.
- * To get the ID the call is: ``SingeltonId::getInstance().generateId()``
- * 
+ *
+ * By using the Singeton design pattern, this class can provide the same
+ * instance every time it's called, without the need to be instantiated.
+ *
+ * The IDs are generated starting from zero and incrementing a variable on every
+ * call. To get the ID the call is: ``SingeltonId::getInstance().generateId()``
+ *
  */
 class SingletonId {
     public:
@@ -26,19 +26,28 @@ class SingletonId {
             return instance;
         }
 
-        /**
-         * @brief Returns the new ID and then increments the internal variable.
-         * 
-         * @return int a new ID
-         */
-        int generateId();
+  /**
+   * @brief Returns the new ID and then increments the internal variable.
+   *
+   * @return int a new ID
+   */
+  int generateId();
 
+<<<<<<< HEAD
     private:
         /**
          * @brief Stores the last generated ID
          * 
          */
         int current_id_;
+=======
+private:
+  /**
+   * @brief Stores the last generated ID
+   *
+   */
+  int currentId;
+>>>>>>> Francesco
 
         /**
          * @brief Construct a new SingeltonId object.

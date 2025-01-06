@@ -68,6 +68,6 @@ class CPDevice: public Device{
  * @param device the CPDevice object which provides the data to inject
  * @return std::ostream& the given output stream
  */
-std::ostream& operator<<(std::ostream& out, const CPDevice device);
+std::ostream& operator<<(std::ostream& out, const CPDevice& device);
 
 #endif

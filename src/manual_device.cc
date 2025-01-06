@@ -15,12 +15,12 @@ ManualDevice::ManualDevice(const std::string& name, const double power) : Device
 
 std::shared_ptr<const Time> ManualDevice::getStopTime() const {return stop_time_;}
 
-void ManualDevice::setNewTimer(const Time& newStartTime, const Time& newStopTime){
+void ManualDevice::setNewTimer(const Time& newStartTime, const Time& newStopTime) {
     if(newStopTime < newStartTime)
         throw std::invalid_argument("start time is higher than stop time");
-    
-    *start_time_ = newStartTime;
-    *stop_time_ = newStopTime;
+
+    startTime = std::make_shared<Time>(newStartTime);
+    stopTime = std::make_shared<Time>(newStopTime);
 }
 
 // Time ManualDevice::getActivityDuration() const {
@@ -34,21 +34,29 @@ void ManualDevice::setNewTimer(const Time& newStartTime, const Time& newStopTime
 
 std::ostream& operator<<(std::ostream& out, const ManualDevice& device) {
     out << "ManualDevice{"
+<<<<<<< HEAD
     << "id=" << device.kid_
     << ", name=" << device.kname_
     << ", power=" << device.kpower_
     << ", isOn=" << device.isOn();
     
+=======
+        << "id=" << device.id
+        << ", name=" << device.name
+        << ", power=" << device.power
+        << ", isOn=" << device.isDeviceOn();
+
+>>>>>>> Francesco
     out << ", startTime=";
-    if(device.getStartTime()){
+    if(device.getStartTime()) {
         out << *device.getStartTime();
-    }else{
+    } else {
         out << "NOT_SET";
     }
     out << ", stopTime=";
-    if(device.getStopTime()){
+    if(device.getStopTime()) {
         out << *device.getStopTime();
-    }else{
+    } else {
         out << "NOT_SET";
     }
     out << "}";
