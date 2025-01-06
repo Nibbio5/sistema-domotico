@@ -4,6 +4,6 @@
 #include <iostream>
 #include <string>
 
-int SingeltonId::generateId() { return currentId++; }
+int SingletonId::generateId() { return currentId++; }
 
-SingeltonId::SingeltonId() : currentId(0) {}
+SingletonId::SingletonId() : currentId(0) {}

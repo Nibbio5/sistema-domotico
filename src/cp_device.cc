@@ -1,23 +1,31 @@
 // Eros Menin
 
 #include "../include/cp_device.h"
-#include <string>
-#include <chrono>
-#include <ostream>
 
-CPDevice::CPDevice(std::string name, double power, Time startTime, Time duration) : duration{duration}, Device(name, power, startTime){}
+CPDevice::CPDevice(const std::string& name, const double power, const Time& duration, const Time& startTime) : Device(name, power, startTime), duration{duration} {}
 
-CPDevice::CPDevice(std::string name, double power, Time duration) : duration{duration}, Device(name, power, Time()){}
+CPDevice::CPDevice(const std::string& name, const double power, const Time& duration) : Device(name, power), duration{duration} {}
 
-void CPDevice::setStartTime(Time newTime) {startTime = newTime;}
+void CPDevice::setStartTime(const Time& newTime) {*startTime = newTime;}
 
-std::ostream& operator<<(std::ostream& out, const CPDevice& device) {
-    return out << "CPDevice{"
-    << "id=" << device.id
-    << ", name=" << device.name
-    << ", power=" << device.power
-    << ", isOn=" << device.isDeviceOn()
-    << ", startTime=" << device.getStartTime()
-    << ", duration=" << device.duration
-    << "}";
+void CPDevice::resetStartTime() {startTime.reset();}
+
+std::ostream& operator<<(std::ostream& out, const CPDevice device) {
+    out << "CPDevice{"
+        << "id=" << device.id
+        << ", name=" << device.name
+        << ", power=" << device.power
+        << ", isOn=" << device.isDeviceOn()
+        << ", startTime=";
+
+    if(device.getStartTime()){
+        out << *device.getStartTime();
+    }else{
+        out << "NOT_SET";
+    }
+
+    out << ", duration=" << device.duration
+        << "}";
+
+    return out;
 }
