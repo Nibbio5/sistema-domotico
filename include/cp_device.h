@@ -4,8 +4,6 @@
 #define CPDEVICE_H
 
 #include "device.h"
-#include "time.h"
-#include <ostream>
 
 /**
  * @brief Subclass of Device used to define a domotic device which has a duration that
@@ -26,10 +24,10 @@ class CPDevice: public Device{
          * 
          * @param name the name of the device
          * @param power the power consumption (negative) or production (positive) of the device
-         * @param startTime the time point at which the devices turns on
          * @param duration the amount of time the devices has to work before shutting off
+         * @param startTime the time point at which the devices turns on
          */
-        CPDevice(std::string name, double power, Time startTime, Time duration);
+        CPDevice(const std::string& name, const double power, const Time& duration, const Time& startTime);
 
         /**
          * @brief Construct a new CPDevice object without a start time
@@ -38,7 +36,7 @@ class CPDevice: public Device{
          * @param power the power consumption (negative) or production (positive) of the device
          * @param duration the amount of time the devices has to work before shutting off
          */
-        CPDevice(std::string name, double power, Time duration);
+        CPDevice(const std::string& name, const double power, const Time& duration);
 
         /**
          * @brief Destroy the CPDevice object
@@ -51,7 +49,13 @@ class CPDevice: public Device{
          * 
          * @param newTime the new time for the start Time object
          */
-        void setStartTime(Time newTime);
+        void setStartTime(const Time& newTime);
+
+        /**
+         * @brief Deletes the start timer
+         * 
+         */
+        void resetStartTime();
 };
 
 /**
@@ -64,6 +68,6 @@ class CPDevice: public Device{
  * @param device the CPDevice object which provides the data to inject
  * @return std::ostream& the given output stream
  */
-std::ostream& operator<<(std::ostream& out, const CPDevice device);
+std::ostream& operator<<(std::ostream& out, const CPDevice& device);
 
 #endif

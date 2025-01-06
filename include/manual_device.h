@@ -4,9 +4,6 @@
 #define MANUALDEVICE_H
 
 #include "device.h"
-#include "time.h"
-#include <string>
-#include <ostream>
 
 /**
  * @brief Subclass of Device used to define a domotic device which has a timer that
@@ -29,8 +26,12 @@ class ManualDevice : public Device{
          * @param startTime the time point at which the devices turns on
          * @param stopTime the time point at which the devices turns off
          */
-        ManualDevice(std::string name, double power, Time startTime, Time stopTime);
-        
+        ManualDevice(const std::string& name, const double power, const Time& startTime, const Time& stopTime);
+    
+        ManualDevice(const std::string& name, const double power, const Time& startTime);
+    
+        ManualDevice(const std::string& name, const double power);
+
         /**
          * @brief Destroy the Manual Device object
          * 
@@ -42,7 +43,7 @@ class ManualDevice : public Device{
          * 
          * @return Time 
          */
-        Time getStopTime() const;
+        std::shared_ptr<const Time> getStopTime() const;
 
         /**
          * @brief Set a new timer for the ManualDevice, modifing both the start and stop Time.
@@ -59,21 +60,21 @@ class ManualDevice : public Device{
          *
          * @return Time the object which store the duration as a time point
          */
-        Time getActivityDuration() const;
+        // Time getActivityDuration() const;
 
         /**
          * @brief Get the total activity duration in minutes
          * 
          * @return int the total minutes of activity
          */
-        int getActivityDurationInMinutes() const;
+        // int getActivityDurationInMinutes() const;
 
     private:
         /**
          * @brief The time point at which the devices turns off and stops its activity.
          * 
          */
-        Time stopTime;
+        std::shared_ptr<Time> stopTime;
 };
 
 /**
@@ -86,6 +87,6 @@ class ManualDevice : public Device{
  * @param device the ManualDevice object which provides the data to inject
  * @return std::ostream& the given output stream
  */
-std::ostream& operator<<(std::ostream& out, const ManualDevice device);
+std::ostream& operator<<(std::ostream& out, const ManualDevice& device);
 
 #endif

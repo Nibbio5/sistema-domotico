@@ -13,18 +13,18 @@
  * call. To get the ID the call is: ``SingeltonId::getInstance().generateId()``
  *
  */
-class SingeltonId {
-public:
-  /**
-   * @brief Uses the Singleton design pattern to always provide the same
-   * instance of SingletonId object.
-   *
-   * @return SingeltonId& the instance of SingletonId
-   */
-  static SingeltonId &getInstance() {
-    static SingeltonId instance;
-    return instance;
-  }
+class SingletonId {
+    public:
+        /**
+         * @brief Uses the Singleton design pattern to always provide the same instance
+         * of SingletonId object.
+         * 
+         * @return SingeltonId& the instance of SingletonId
+         */
+        static SingletonId& getInstance() {
+            static SingletonId instance;
+            return instance;
+        }
 
   /**
    * @brief Returns the new ID and then increments the internal variable.
@@ -40,26 +40,26 @@ private:
    */
   int currentId;
 
-  /**
-   * @brief Construct a new SingeltonId object.
-   *
-   * The constructor is private to avoid direct instantiation.
-   *
-   */
-  SingeltonId();
+        /**
+         * @brief Construct a new SingeltonId object.
+         * 
+         * The constructor is private to avoid direct instantiation.
+         * 
+         */
+        SingletonId();
 
-  /**
-   * @brief Copy construct disabled to avoid copy.
-   *
-   */
-  SingeltonId(const SingeltonId &) = delete;
+        /**
+         * @brief Copy construct disabled to avoid copy.
+         * 
+         */
+        SingletonId(const SingletonId&) = delete;
 
-  /**
-   * @brief Copy assignment disabled to avoid copy.
-   *
-   * @return SingeltonId& the copied SingeltonId object
-   */
-  SingeltonId &operator=(const SingeltonId &) = delete;
+        /**
+         * @brief Copy assignment disabled to avoid copy.
+         * 
+         * @return SingeltonId& the copied SingeltonId object
+         */
+        SingletonId& operator=(const SingletonId&) = delete;
 };
 
 #endif

@@ -4,7 +4,10 @@
 #define DEVICE_H
 
 #include "time.h"
+#include "singleton_id.h"
+#include <string>
 #include <ostream>
+#include <memory>
 
 /**
  * @brief Abstract class used to define the basic properties of a domotic device
@@ -39,12 +42,12 @@ public:
    */
   virtual ~Device() = default;
 
-  /**
-   * @brief Get the Time object which defines the activty start time
-   *
-   * @return Time
-   */
-  Time getStartTime() const;
+        /**
+         * @brief Get the Time object which defines the activty start time
+         * 
+         * @return Time 
+         */
+        std::shared_ptr<const Time> getStartTime() const;
 
   /**
    * @brief Checks whether the device is active
@@ -66,31 +69,38 @@ public:
    */
   void switchOff();
 
-protected:
-  /**
-   * @brief Stores the state of the device.
-   *
-   * true (1) if the device is on, false (0) if the device is off.
-   *
-   */
-  bool isOn;
+        
+    protected:
+        /**
+         * @brief Stores the state of the device.
+         * 
+         * true (1) if the device is on, false (0) if the device is off.
+         * 
+         */
+        bool isOn;
 
-  /**
-   * @brief The time point at which the devices turns on and starts its
-   * activity.
-   *
-   */
-  Time startTime;
+        /**
+         * @brief The time point at which the devices turns on and starts its activity.
+         * 
+         */
+        std::shared_ptr<Time> startTime;
 
-  /**
-   * @brief Construct a new Device object
-   *
-   * @param name the name of the device
-   * @param power the power consumption (negative) or production (positive) of
-   * the device
-   * @param startTime the time point at which the devices turns on
-   */
-  Device(std::string name, double power, Time startTime);
+        /**
+         * @brief Construct a new Device object
+         * 
+         * @param name the name of the device
+         * @param power the power consumption (negative) or production (positive) of the device
+         * @param startTime the time point at which the devices turns on
+         */
+        Device(const std::string& name, const double power, const Time& startTime);
+        
+        /**
+         * @brief Construct a new Device object without a start Time object
+         * 
+         * @param name the name of the device
+         * @param power the power consumption (negative) or production (positive) of the device
+         */
+        Device(const std::string& name, const double power);
 
   /**
    * @brief Copy constuctor disabled for base class
