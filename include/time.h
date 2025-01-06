@@ -141,6 +141,19 @@ class Time {
          * @return Time& the added Time object
          */
         Time& operator+=(const Time &time);
+
+        /**
+         * @brief Subtract two Time objects
+         * 
+         * @param time The time object
+         * @return Time object
+         */
+        Time operator-(const Time &time) const;
+
+        //>=
+        bool operator>=(const Time &time) const;
+        //<=
+        bool operator<=(const Time &time) const;
 };
 
 /**

@@ -6,7 +6,10 @@ CPDevice::CPDevice(const std::string& name, const double power, const Time& dura
 
 CPDevice::CPDevice(const std::string& name, const double power, const Time& duration) : Device(name, power), duration{duration} {}
 
-void CPDevice::setStartTime(const Time& newTime) {*startTime = newTime;}
+void CPDevice::setStartTime(const Time& newTime) {
+    std::shared_ptr<Time> newStartTime_ptr = std::make_shared<Time>(newTime);
+    startTime = newStartTime_ptr;
+    }
 
 void CPDevice::resetStartTime() {startTime.reset();}
 

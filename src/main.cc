@@ -24,9 +24,14 @@ int main() {
    DomoticsSystem sistema = DomoticsSystem();
    std::cout << sistema << std::endl;
    sistema.setCurrentTime(t1);
-   sistema.currentMod();
-   sistema.changeDeviceStatus(true,"Pompa di calore + termostato");
+   sistema.changeDeviceStatus(true,"Pompa di calore");
+    //sistema.changeDeviceStatus(false,"Pompa di calore");
+    sistema.changeDeviceStatus(true,"Lavatrice");
+     sistema.setCurrentTime(Time(9,34));
+    sistema.changeDeviceStatus(true,"Lavastoviglie");
    //std::cout << sistema << std::endl;
+   sistema.setCurrentTime(Time(9,35));
+   sistema.setCurrentTime(Time(15,31));
     return 0;
 }
 

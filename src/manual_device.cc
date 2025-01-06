@@ -19,8 +19,10 @@ void ManualDevice::setNewTimer(const Time& newStartTime, const Time& newStopTime
     if(newStopTime < newStartTime)
         throw std::invalid_argument("start time is higher than stop time");
     
-    *startTime = newStartTime;
-    *stopTime = newStopTime;
+    std::shared_ptr<Time> newStartTime_ptr = std::make_shared<Time>(newStartTime);
+    std::shared_ptr<Time> newStopTime_ptr = std::make_shared<Time>(newStopTime);
+    startTime = newStartTime_ptr;
+    stopTime = newStopTime_ptr;
 }
 
 // Time ManualDevice::getActivityDuration() const {

@@ -10,6 +10,7 @@
 #include <string> // Aggiungi questo include
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 
 /**
@@ -26,29 +27,30 @@ class DomoticsSystem {
         * 
         *  std::vector<T> getDevices();
         */
-        std::map<std::string, Device*> all_devices;
-        std::map<std::string, Device*> active_devices;
+        std::vector<Device*> all_devices;
+        std::vector<Device*> active_devices;
         const double KPowerLimit;
         double powerLoad;
         Time currentTime;
 
-        std::map<std::string, Device*> setDevices();
+        std::vector<Device*> setDevices();
     public:
 
     DomoticsSystem();
     //void start(/*${DEVICENAME}*/ );
     //void stop(/*${DEVICENAME}*/);
    // void removeTimer(/*${DEVICENAME}*/);
-    std::map<std::string, Device *> getDevices() const;
+    std::vector<Device*> getDevices() const;
     void showDevices() const; //
     Time getCurrentTime() const; 
+    int getIndex(std::string device) const;
     double getPowerLoad() const; 
     void setCurrentTime(const Time& newTime);
     void setDeviceTime(const std::string& device, const Time& start, const Time& stop);
     void startDevices(); //
     void changeDeviceStatus (bool status, std::string device); 
     void removeDevice(std::string device);
-    void balancePower();
+    void balancePower(std::string last);
     void showActiveDevices() const; //
     void currentMod (); //
 
