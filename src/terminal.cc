@@ -1,6 +1,4 @@
 #include "../include/terminal.h"
-#include "../include/device.h"
-#include "../include/time.h"
 #include <iostream>
 
 Terminal::Terminal() {}
@@ -15,12 +13,14 @@ void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
 
   if (args[0] == "time") {
     setTimeCommandPrompt(args.at(1));
+    return;
   }
-  Device *device = isDevice(args.at(1));
+  Device *device = isDevice(args.at(0));
   if (device == nullptr) {
     throw std::invalid_argument(
         "Invalid device provided. Type 'help' for more information.");
   }
+  setDeviceCommandPrompt(args, device);
 }
 
 void Terminal::setDeviceCommandPrompt(const std::vector<std::string> &args,
@@ -111,3 +111,18 @@ Device *Terminal::isDevice(const std::string &arg) {
   }
   return nullptr;
 }
+
+// void Terminal::resetCommandPrompt(const std::string &arg) {
+//   if (arg.empty()) {
+//     throw std::invalid_argument(
+//         "Invalid arguments provided. Type 'help' for more information.");
+//   }
+//
+//   Device *device = isDevice(arg);
+//   if (device == nullptr) {
+//     throw std::invalid_argument(
+//         "Invalid device provided. Type 'help' for more information.");
+//   }
+//
+//   // device->reset(); //TODO: implement reset method
+// }
