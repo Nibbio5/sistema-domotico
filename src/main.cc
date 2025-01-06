@@ -20,9 +20,9 @@ int main() {
     } catch(const std::invalid_argument &e) {
         std::cerr << e.what() << std::endl;
     }*/
+      Time t1=  Time (8,10);
    DomoticsSystem sistema = DomoticsSystem();
    std::cout << sistema << std::endl;
-   Time t1=  Time (8,10);
    sistema.setCurrentTime(t1);
    sistema.currentMod();
    sistema.changeDeviceStatus(true,"Pompa di calore + termostato");
