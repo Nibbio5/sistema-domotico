@@ -1,9 +1,8 @@
 #include "../include/domotics_system.h"
 
-DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5}
+DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5}, currentTime{Time(0, 0)}
 {
     all_devices = setDevices();
-    Time currentTime = Time(0, 0);
     powerLoad = 0;
     startDevices();
 }
