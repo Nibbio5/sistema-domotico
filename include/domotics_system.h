@@ -1,16 +1,12 @@
 
-//template <typename T>
 #include "device.h"
 #include <string>  // Aggiungi questo include
 #include <map>
-#include <iostream>
 #include "../include/device.h"
-#include "../include/manual_device.h"  // Add this include
-#include "../include/cp_device.h"  // Add this include
-#include "../include/time.h"  // Add this include
-#include <string> // Aggiungi questo include
-#include <fstream>
-#include <sstream>
+#include "../include/time.h"  
+#include <string>
+#include <vector> 
+
 
 
 /**

@@ -4,7 +4,6 @@
 #define DEVICE_H
 
 #include "time.h"
-#include "singleton_id.h"
 #include <string>
 #include <ostream>
 #include <memory>
