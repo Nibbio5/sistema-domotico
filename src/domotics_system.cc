@@ -83,20 +83,20 @@ void DomoticsSystem::removeDevice(const std::string &deviceName) {
 
 void DomoticsSystem::startDevices() {
     // accendo frigo e imposto fotovoltaico 8:00 alle 18:00
-    dynamic_cast<ManualDevice *>(active_devices.at("Impianto fotovoltaico"))->setNewTimer(Time(8, 0), Time(18, 0));
-    dynamic_cast<ManualDevice *>(active_devices.at("Frigorifero"))->setNewTimer(Time(0, 0), Time(23, 59));
+    dynamic_cast<ManualDevice *>(active_devices.at("Impianto fotovoltaico"))->set_new_timer(Time(8, 0), Time(18, 0));
+    dynamic_cast<ManualDevice *>(active_devices.at("Frigorifero"))->set_new_timer(Time(0, 0), Time(23, 59));
 }
 
 void DomoticsSystem::currentMod() {
     for(const auto [key, value] : active_devices) {
         if(dynamic_cast<ManualDevice *>(value) != nullptr) {
-            if(*(value->getStartTime().get()) < currentTime && *(dynamic_cast<ManualDevice *>(value)->getStopTime().get()) > currentTime && value->isDeviceOn() == false) {
-                value->switchOn();
+            if(*(value->get_start_time().get()) < currentTime && *(dynamic_cast<ManualDevice *>(value)->get_stop_time().get()) > currentTime && value->isDeviceOn() == false) {
+                value->switch_on();
                 powerLoad += value->power;
-                dynamic_cast<ManualDevice *>(value)->setNewTimer(currentTime, Time(23, 59));
+                dynamic_cast<ManualDevice *>(value)->set_new_timer(currentTime, Time(23, 59));
                 std::cout << powerLoad << " acceso " << value->name << std::endl;
-            } else if(*(dynamic_cast<ManualDevice *>(value)->getStopTime().get()) < currentTime && value->isDeviceOn() == true) {
-                value->switchOff();
+            } else if(*(dynamic_cast<ManualDevice *>(value)->get_stop_time().get()) < currentTime && value->isDeviceOn() == true) {
+                value->switch_off();
                 powerLoad -= value->power;
                 std::cout << powerLoad << " spento " << value->name << std::endl;
             }
@@ -115,15 +115,15 @@ void DomoticsSystem::changeDeviceStatus(bool status, const std::string &device) 
                 active_devices.try_emplace(device, all_devices.at(device));
                 // active_devices.insert(std::make_pair(device, all_devices.at(device)));
             }
-            active_devices.at(device)->switchOn();
+            active_devices.at(device)->switch_on();
             if(auto cpDevice = dynamic_cast<CPDevice *>(active_devices[device])) {
-                cpDevice->setStartTime(currentTime);
+                cpDevice->set_start_time(currentTime);
             } else if(auto manualDevice = dynamic_cast<ManualDevice *>(active_devices[device])) {
-                manualDevice->setNewTimer(currentTime, Time(23, 59));
+                manualDevice->set_new_timer(currentTime, Time(23, 59));
             }
             powerLoad += active_devices.at(device)->power;
         } else {
-            active_devices.at(device)->switchOff();
+            active_devices.at(device)->switch_off();
             powerLoad -= active_devices.at(device)->power;
             active_devices.erase(device);
         }
@@ -136,19 +136,19 @@ void DomoticsSystem::balancePower() {
     std::string name;
     do {
         for(auto &[key, value] : active_devices) {
-            temp = *(value->getStartTime().get());
+            temp = *(value->get_start_time().get());
             if(value->name != "Impianto fotovoltaico" && value->name != "Frigorifero" && firstTime > temp) {
                 firstTime = temp;
                 name = value->name;
             }
         }
-        active_devices[name]->switchOff();
+        active_devices[name]->switch_off();
         powerLoad -= active_devices[name]->power;
     } while(powerLoad > KPowerLimit);
 }
 
 void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start, const Time &stop) {
-    dynamic_cast<ManualDevice *>(all_devices.at(device))->setNewTimer(start, stop);;
+    dynamic_cast<ManualDevice *>(all_devices.at(device))->set_new_timer(start, stop);;
     active_devices[device] = all_devices.at(device);
 }
 
