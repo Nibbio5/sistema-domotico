@@ -17,7 +17,7 @@ class CPDevice: public Device{
          * @brief The amount of time the devices has to work before shutting off
          * 
          */
-        const Time duration;
+        const Time kduration_;
 
         /**
          * @brief Construct a new CPDevice object

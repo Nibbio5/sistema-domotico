@@ -74,7 +74,7 @@ class ManualDevice : public Device{
          * @brief The time point at which the devices turns off and stops its activity.
          * 
          */
-        std::shared_ptr<Time> stopTime;
+        std::shared_ptr<Time> stop_time_;
 };
 
 /**

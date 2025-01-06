@@ -6,21 +6,21 @@ ManualDevice::ManualDevice(const std::string& name, const double power, const Ti
     if(stopTime < startTime)
         throw std::invalid_argument("start time is higher than stop time");
 
-    *(this->stopTime) = stopTime;
+    *(this->stop_time_) = stopTime;
 }
 
-ManualDevice::ManualDevice(const std::string& name, const double power, const Time& startTime) : Device(name, power, startTime), stopTime{nullptr} {}
+ManualDevice::ManualDevice(const std::string& name, const double power, const Time& startTime) : Device(name, power, startTime), stop_time_{nullptr} {}
 
-ManualDevice::ManualDevice(const std::string& name, const double power) : Device(name, power), stopTime{nullptr} {}
+ManualDevice::ManualDevice(const std::string& name, const double power) : Device(name, power), stop_time_{nullptr} {}
 
-std::shared_ptr<const Time> ManualDevice::getStopTime() const {return stopTime;}
+std::shared_ptr<const Time> ManualDevice::getStopTime() const {return stop_time_;}
 
 void ManualDevice::setNewTimer(const Time& newStartTime, const Time& newStopTime){
     if(newStopTime < newStartTime)
         throw std::invalid_argument("start time is higher than stop time");
     
-    *startTime = newStartTime;
-    *stopTime = newStopTime;
+    *start_time_ = newStartTime;
+    *stop_time_ = newStopTime;
 }
 
 // Time ManualDevice::getActivityDuration() const {
@@ -34,10 +34,10 @@ void ManualDevice::setNewTimer(const Time& newStartTime, const Time& newStopTime
 
 std::ostream& operator<<(std::ostream& out, const ManualDevice& device) {
     out << "ManualDevice{"
-    << "id=" << device.id
-    << ", name=" << device.name
-    << ", power=" << device.power
-    << ", isOn=" << device.isDeviceOn();
+    << "id=" << device.kid_
+    << ", name=" << device.kname_
+    << ", power=" << device.kpower_
+    << ", isOn=" << device.isOn();
     
     out << ", startTime=";
     if(device.getStartTime()){

@@ -1,9 +1,7 @@
 // Eros Menin
 
 #include "../include/singleton_id.h"
-#include <iostream>
-#include <string>
 
-int SingletonId::generateId() { return currentId++; }
+int SingletonId::generateId() { return current_id_++; }
 
-SingletonId::SingletonId() : currentId(0) {}
+SingletonId::SingletonId() : current_id_(0) {}

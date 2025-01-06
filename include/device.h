@@ -20,13 +20,13 @@ class Device{
          * unique identifier
          * 
          */
-        const int id;
+        const int kid_;
 
         /**
          * @brief The name of the device
          * 
          */
-        const std::string name;
+        const std::string kname_;
 
         /**
          * @brief The power of the device measured in kW.
@@ -34,7 +34,7 @@ class Device{
          * The value indicates a power consumption if negative, and a 
          * 
          */
-        const double power;
+        const double kpower_;
 
         /**
          * @brief Destroy the Device object
@@ -55,7 +55,7 @@ class Device{
          * @return true if the device is on
          * @return false if the device is off
          */
-        bool isDeviceOn() const;
+        bool isOn() const;
 
         /**
          * @brief Activate the device
@@ -77,13 +77,15 @@ class Device{
          * true (1) if the device is on, false (0) if the device is off.
          * 
          */
-        bool isOn;
+        bool is_on;
+
+        double total_power_ = 0;
 
         /**
          * @brief The time point at which the devices turns on and starts its activity.
          * 
          */
-        std::shared_ptr<Time> startTime;
+        std::shared_ptr<Time> start_time_;
 
         /**
          * @brief Construct a new Device object

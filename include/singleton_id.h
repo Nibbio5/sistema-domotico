@@ -3,9 +3,6 @@
 #ifndef SINGLETONID_H
 #define SINGLETONID_H
 
-#include <iostream>
-#include <string>
-
 /**
  * @brief Class used to manage the creation of unique numeric IDs.
  * 
@@ -41,7 +38,7 @@ class SingletonId {
          * @brief Stores the last generated ID
          * 
          */
-        int currentId;
+        int current_id_;
 
         /**
          * @brief Construct a new SingeltonId object.
