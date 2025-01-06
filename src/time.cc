@@ -101,6 +101,9 @@ Time Time::operator+(const Time &time) const {
 }
 
 Time& Time::operator=(const Time &time) {
+    if (this == &time) {
+        return *this;
+    }
     hour = time.hour;
     minute = time.minute;
     return *this;

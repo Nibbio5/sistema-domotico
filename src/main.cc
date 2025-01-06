@@ -22,9 +22,10 @@ int main() {
     }*/
    DomoticsSystem sistema = DomoticsSystem();
    std::cout << sistema << std::endl;
-   Time t1 = Time(8, 10);
+   Time t1=  Time (8,10);
    sistema.setCurrentTime(t1);
    sistema.currentMod();
+   sistema.changeDeviceStatus(true,"Pompa di calore + termostato");
    //std::cout << sistema << std::endl;
     return 0;
 }

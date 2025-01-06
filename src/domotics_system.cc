@@ -3,7 +3,7 @@
 DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5}
 {
     all_devices = setDevices();
-    Time currentTime = Time();
+    Time currentTime = Time(0, 0);
     powerLoad = 0;
     startDevices();
 }
@@ -43,11 +43,11 @@ std::map<std::string, Device *> DomoticsSystem::setDevices()
             {
                 if (nome == "Impianto fotovoltaico" || nome == "Frigorifero")
                 {
-                    active_devices.insert(std::make_pair(nome, new ManualDevice(nome, std::stod(produzioneConsumo), Time(0, 0), Time(0, 0))));
+                    active_devices.insert(std::make_pair(nome, new ManualDevice(nome, std::stod(produzioneConsumo))));
                 }
                 else
                 {
-                    dispositivi.insert(std::make_pair(nome, new ManualDevice(nome, std::stod(produzioneConsumo), Time(0, 0), Time(0, 0))));
+                    dispositivi.insert(std::make_pair(nome, new ManualDevice(nome, std::stod(produzioneConsumo))));
                 }
             }
             else
@@ -112,13 +112,14 @@ void DomoticsSystem::currentMod()
     {
         if (dynamic_cast<ManualDevice *>(value) != nullptr)
         {
-            if (value->getStartTime() < currentTime && dynamic_cast<ManualDevice *>(value)->getStopTime() > currentTime && value->isDeviceOn() == false)
+            if (*(value->getStartTime().get()) < currentTime && *(dynamic_cast<ManualDevice *>(value)->getStopTime().get()) > currentTime && value->isDeviceOn() == false)
             {
                 value->switchOn();
                 powerLoad += value->power;
+                dynamic_cast<ManualDevice *>(value)->setNewTimer(currentTime, Time(23, 59));
                 std::cout << powerLoad << " acceso " << value->name << std::endl;
             }
-            else if (dynamic_cast<ManualDevice *>(value)->getStopTime() < currentTime && value->isDeviceOn() == true)
+            else if (*(dynamic_cast<ManualDevice *>(value)->getStopTime().get()) < currentTime && value->isDeviceOn() == true)
             {
                 value->switchOff();
                 powerLoad -= value->power;
@@ -165,15 +166,16 @@ void DomoticsSystem::changeDeviceStatus(bool status, std::string device)
 
 void DomoticsSystem::balancePower()
 {
-    Time firstTime = Time(23,59);
+    Time firstTime (23,59), temp;
     std::string name;
     do
     {
         for (auto &[key, value] : active_devices)
         {
-            if (value->name != "Impianto fotovoltaico" && value->name != "Frigorifero" && firstTime > value->getStartTime())
+            temp = *(value->getStartTime().get());
+            if (value->name != "Impianto fotovoltaico" && value->name != "Frigorifero" && firstTime > temp)
             {
-                firstTime = value->getStartTime();
+                firstTime = temp;
                 name = value->name;
             }
         }
@@ -184,8 +186,7 @@ void DomoticsSystem::balancePower()
 
 void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start, const Time &stop)
 {
-    dynamic_cast<ManualDevice *>(all_devices.at(device))->setNewTimer(start, stop);
-    // active_devices.insert(std::make_pair(device, all_devices.at(device)));
+    dynamic_cast<ManualDevice *>(all_devices.at(device))->setNewTimer(start, stop);;
     active_devices[device] = all_devices.at(device);
 }
 

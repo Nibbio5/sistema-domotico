@@ -10,7 +10,7 @@ void CPDevice::setStartTime(const Time& newTime) {*startTime = newTime;}
 
 void CPDevice::resetStartTime() {startTime.reset();}
 
-std::ostream& operator<<(std::ostream& out, const CPDevice device) {
+std::ostream& operator<<(std::ostream& out, const CPDevice& device) {
     out << "CPDevice{"
         << "id=" << device.id
         << ", name=" << device.name
