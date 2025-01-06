@@ -69,6 +69,7 @@ class Device{
          */
         void switchOff();
 
+
         
     protected:
         /**
@@ -77,7 +78,7 @@ class Device{
          * true (1) if the device is on, false (0) if the device is off.
          * 
          */
-        bool is_on;
+        bool is_on = false;
 
         double total_power_ = 0;
 
