@@ -119,6 +119,24 @@ class Time {
     bool operator>(const Time &time) const;
 
     /**
+     * @brief Compare two Time objects
+     *
+     * @param time The time object
+     * @return true if the first Time object is less than or equal to the second Time object
+     * @return false if the first Time object is not less than or equal to the second Time object
+     */
+    bool operator<=(const Time &time) const;
+
+    /**
+     * @brief Compare two Time objects
+     *
+     * @param time The time object
+     * @return true if the first Time object is greater than or equal to the second Time object
+     * @return false if the first Time object is not greater than or equal to the second Time object
+     */
+    bool operator>=(const Time &time) const;
+
+    /**
      * @brief Add two Time objects
      *
      * @param time The time object
@@ -160,7 +178,5 @@ class Time {
      */
     friend std::istream& operator>>(std::istream &in, Time &time);
 };
-
-
 
 #endif

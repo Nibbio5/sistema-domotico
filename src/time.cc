@@ -84,6 +84,14 @@ bool Time::operator>(const Time &time) const {
     return false;
 }
 
+bool Time::operator<=(const Time &time) const {
+    return *this < time || *this == time;
+}
+
+bool Time::operator>=(const Time &time) const {
+    return *this > time || *this == time;
+}
+
 Time Time::operator+(const Time &time) const {
     if(*this > time) {
         throw std::invalid_argument("Invalid time addition");

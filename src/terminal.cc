@@ -1,10 +1,6 @@
 #include "../include/terminal.h"
 #include <iostream>
 
-Terminal::Terminal() {}
-
-Terminal::~Terminal() {}
-
 void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
   if (args.size() < 2) {
     throw std::invalid_argument(
@@ -24,7 +20,7 @@ void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
 }
 
 void Terminal::setDeviceCommandPrompt(const std::vector<std::string> &args,
-                                      Device *device) {
+                                      Device *device) const{
   if (args.size() < 3) {
     throw std::invalid_argument(
         "Invalid arguments provided. Type 'help' for more information.");
@@ -43,7 +39,7 @@ void Terminal::rmCommandPrompt(const std::string &arg) {
         "Invalid arguments provided. Type 'help' for more information.");
   }
 
-  Device *device = isDevice(arg);
+  const Device *device = isDevice(arg);
   if (device == nullptr) {
     throw std::invalid_argument(
         "Invalid device provided. Type 'help' for more information.");
@@ -58,11 +54,11 @@ void Terminal::showCommandPrompt(const std::string &arg) {
     return;
   }
 
-  int consumed_power = 0;
-  int produced_power = 0;
+  double consumed_power = 0.0;
+  double produced_power = 0.0;
   std::string output = "Nello specifico:\n";
   std::vector<Device *> devices = domotics_system.getDevicesVector();
-  for (Device *device : devices) {
+  for (const Device *device : devices) {
     if (device->name == "Impianto Fotovoltaico") {
       produced_power += device->power;
     } else {
@@ -80,7 +76,7 @@ void Terminal::showCommandPrompt(const std::string &arg) {
 
 void Terminal::showOneDevice(const std::string &arg) {
 
-  Device *device = isDevice(arg);
+  const Device *device = isDevice(arg);
   if (device == nullptr) {
     throw std::invalid_argument(
         "Invalid device provided. Type 'help' for more information.");
@@ -92,13 +88,13 @@ void Terminal::showOneDevice(const std::string &arg) {
             << device->power << "kWh\n";
 }
 
-void Terminal::setTimeCommandPrompt(const std::string &arg) {
+void Terminal::setTimeCommandPrompt(const std::string &arg) const {
   if (arg.empty()) {
     throw std::invalid_argument(
         "Invalid arguments provided. Type 'help' for more information.");
   }
 
-  Time time = Time::fromString(arg);
+  // Time time = Time::fromString(arg);
 
   // TODO:call the time setter
 }
@@ -112,17 +108,17 @@ Device *Terminal::isDevice(const std::string &arg) {
   return nullptr;
 }
 
-// void Terminal::resetCommandPrompt(const std::string &arg) {
-//   if (arg.empty()) {
-//     throw std::invalid_argument(
-//         "Invalid arguments provided. Type 'help' for more information.");
-//   }
-//
-//   Device *device = isDevice(arg);
-//   if (device == nullptr) {
-//     throw std::invalid_argument(
-//         "Invalid device provided. Type 'help' for more information.");
-//   }
-//
-//   // device->reset(); //TODO: implement reset method
-// }
+void Terminal::resetCommandPrompt(const std::string &arg) {
+  if (arg.empty()) {
+    throw std::invalid_argument(
+        "Invalid arguments provided. Type 'help' for more information.");
+  }
+
+  const Device *device = isDevice(arg);
+  if (device == nullptr) {
+    throw std::invalid_argument(
+        "Invalid device provided. Type 'help' for more information.");
+  }
+
+  // device->reset(); //TODO: implement reset method
+}
