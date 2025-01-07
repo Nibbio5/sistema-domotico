@@ -37,7 +37,7 @@ class CPDevice: public Device{
          * @param duration the amount of time the devices has to work before shutting off
          */
         CPDevice(const std::string& name, const double power, const Time& duration);
-
+        
         /**
          * @brief Set the start Time object
          * 

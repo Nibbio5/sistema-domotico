@@ -40,6 +40,16 @@ class ManualDevice : public Device {
         std::shared_ptr<const Time> get_stop_time() const;
 
         /**
+         * @brief Set the start time object.
+         * 
+         * If the new start Time object is higher than the current stop Time object, an
+         * exception is thrown.
+         * 
+         * @param new_time the new time for the start Time object
+         */
+        void set_start_time(const Time& new_time);
+
+        /**
          * @brief Set a new timer for the ManualDevice, modifing both the start and stop Time.
          *
          * Throws an exception if the start time is higher than the stop time.
@@ -50,11 +60,10 @@ class ManualDevice : public Device {
         void set_new_timer(const Time& new_start_time, const Time& new_stop_time);
 
         /**
-         * @brief Get the total activity duration Time object.
-         *
-         * @return Time the object which store the duration as a time point
+         * @brief Removes the start and stop Time objects of this Device object
+         * 
          */
-        // Time getActivityDuration() const;
+        void removeTimer() override;
 
     private:
         /**

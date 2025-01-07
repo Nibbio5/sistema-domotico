@@ -3,7 +3,7 @@
 #include "../include/manual_device.h"
 
 ManualDevice::ManualDevice(const std::string& name, const double power, const Time& start_time, const Time& stop_time) : Device(name, power, start_time) {
-    if(stop_time < start_time)
+    if(start_time > stop_time)
         throw std::invalid_argument("Start time is higher than stop time");
 
     stop_time_ = std::make_shared<Time>(stop_time);
@@ -15,22 +15,25 @@ ManualDevice::ManualDevice(const std::string& name, const double power) : Device
 
 std::shared_ptr<const Time> ManualDevice::get_stop_time() const {return stop_time_;}
 
+void ManualDevice::set_start_time(const Time& new_time) {
+    if(stop_time_ && *stop_time_ < new_time)
+        throw std::invalid_argument("Start time is higher than stop time");
+    
+    start_time_ = std::make_shared<Time>(new_time);
+}
+
 void ManualDevice::set_new_timer(const Time& newStartTime, const Time& newStopTime) {
-    if(newStopTime < newStartTime)
+    if(newStartTime > newStopTime)
         throw std::invalid_argument("Start time is higher than stop time");
 
     start_time_ = std::make_shared<Time>(newStartTime);
     stop_time_ = std::make_shared<Time>(newStopTime);
 }
 
-// Time ManualDevice::getActivityDuration() const {
-//     int totMinutes = getActivityDurationInMinutes();
-//     return Time(floor(totMinutes / 60), (totMinutes % 60));
-// }
-
-// int ManualDevice::getActivityDurationInMinutes() const {
-//     return ((*stopTime.getHour() - *startTime.getHour()) * 60) + (stopTime.getMinute() - startTime.getMinute());
-// }
+void ManualDevice::removeTimer() {
+    start_time_.reset();
+    stop_time_.reset();
+}
 
 std::ostream& operator<<(std::ostream& out, const ManualDevice& device) {
     out << "ManualDevice{"
