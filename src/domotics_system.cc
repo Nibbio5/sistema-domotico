@@ -7,15 +7,18 @@ DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5}, currentTime{Time(0, 0)}
     startDevices();
 }
 
-std::vector<Device*> DomoticsSystem::setDevices()
+std::vector<Device *> DomoticsSystem::setDevices()
 {
-    std::vector<Device*> dispositivi;
+    std::vector<Device *> dispositivi;
     std::ifstream file("./assets/devices.json");
     if (!file)
     {
-        throw std::runtime_error("il file devices.json non esiste");
+        throw std::invalid_argument("il file devices.json non esiste");
     }
-    std::string line, nome, durataAccensione, produzioneConsumo;
+    std::string line;
+    std::string nome;
+    std::string durataAccensione;
+    std::string produzioneConsumo;
 
     // manual parsing of the JSON (simple)
     while (std::getline(file, line))
@@ -51,7 +54,8 @@ std::vector<Device*> DomoticsSystem::setDevices()
             }
             else
             {
-                int ore, minuto;
+                int ore;
+                int minuto;
                 if (durataAccensione.substr(2).length() == 6)
                 {
                     minuto = std::stoi(durataAccensione.substr(0, 2));
@@ -74,7 +78,7 @@ std::vector<Device*> DomoticsSystem::setDevices()
     return dispositivi;
 }
 
-std::vector<Device*> DomoticsSystem::getDevices() const
+std::vector<Device *> DomoticsSystem::getDevices() const
 {
     return active_devices;
 }
@@ -91,38 +95,43 @@ Time DomoticsSystem::getCurrentTime() const
 
 void DomoticsSystem::removeDevice(std::string device)
 {
-    if (dynamic_cast<ManualDevice *>(active_devices[getIndex(device)]) != nullptr)
+    if (dynamic_cast<ManualDevice *>(active_devices[getIndex(device, true)]) != nullptr)
     {
-        powerLoad -= active_devices[getIndex(device)]->power;
-        active_devices[getIndex(device)] = active_devices.back();
+        powerLoad -= active_devices[getIndex(device, true)]->power;
+        active_devices[getIndex(device, true)] = active_devices.back();
         active_devices.pop_back();
     }
 }
 
-int DomoticsSystem::getIndex(std::string device) const
+int DomoticsSystem::getIndex(std::string device, bool prova) const
 {
-    for (int i = 0; i < active_devices.size(); i++)
+    std::vector<Device *> devices;
+    (!prova) ? devices = all_devices : devices = active_devices;
+    for (int i = 0; i < devices.size(); i++)
     {
-        if (active_devices[i]->name == device)
-        {
+        if (devices[i]->name == device)
             return i;
-        }
     }
     return -1;
+}
+
+bool DomoticsSystem::isPresent(std::string device) const
+{
+        return getIndex(device, true) != -1;
 }
 
 void DomoticsSystem::startDevices()
 {
     // accendo frigo e imposto fotovoltaico 8:00 alle 18:00
-    dynamic_cast<ManualDevice *>(active_devices[getIndex("Impianto fotovoltaico")])->setNewTimer(Time(8, 0), Time(18, 0));
-    dynamic_cast<ManualDevice *>(active_devices[getIndex("Frigorifero")])->setNewTimer(Time(0, 0), Time(23, 59));
+    dynamic_cast<ManualDevice *>(active_devices[getIndex("Impianto fotovoltaico", true)])->setNewTimer(Time(8, 0), Time(18, 0));
+    dynamic_cast<ManualDevice *>(active_devices[getIndex("Frigorifero", true)])->setNewTimer(Time(0, 0), Time(23, 59));
 }
 
 void DomoticsSystem::currentMod()
 {
     for (auto it = active_devices.begin(); it != active_devices.end();)
     {
-        Device* value = *it;
+        Device *value = *it;
         if (dynamic_cast<ManualDevice *>(value) != nullptr)
         {
             if (*(value->getStartTime().get()) < currentTime && *(dynamic_cast<ManualDevice *>(value)->getStopTime().get()) > currentTime && value->isDeviceOn() == false)
@@ -140,7 +149,8 @@ void DomoticsSystem::currentMod()
             }
             ++it;
         }
-        else if (currentTime - dynamic_cast<CPDevice *>(value)->duration >= *(value->getStartTime().get()) && value->isDeviceOn() == true)
+        else if(dynamic_cast<CPDevice *>(value) != nullptr){
+        if (currentTime >= dynamic_cast<CPDevice *>(value)->duration + *(value->getStartTime().get()) && value->isDeviceOn() == true)
         {
             value->switchOff();
             powerLoad -= value->power;
@@ -150,6 +160,7 @@ void DomoticsSystem::currentMod()
         else
         {
             ++it;
+        }
         }
     }
 }
@@ -162,64 +173,65 @@ void DomoticsSystem::setCurrentTime(const Time &newTime)
 
 void DomoticsSystem::changeDeviceStatus(bool status, std::string device)
 {
-    try
+    if(getIndex(device, false) == -1)
     {
-        if (active_devices[getIndex(device)]->isDeviceOn() != status)
-        {
-            active_devices[getIndex(device)]->switchOff();
-            powerLoad -= active_devices[getIndex(device)]->power;
-            active_devices[getIndex(device)] = all_devices.back();
-            all_devices.pop_back();
-        }
+        throw std::invalid_argument("device not found");
     }
-    catch(const std::exception& e)
-    {
-        if (status == true)
+    int index = getIndex(device, true);
+    if (index == -1 && status)
+    {   
+        active_devices.push_back(all_devices[getIndex(device, false)]);
+        active_devices.back()->switchOn();
+        if (auto cpDevice = dynamic_cast<CPDevice *>(active_devices.back()))
         {
-             active_devices.push_back(all_devices[getIndex(device)]);
-            active_devices[getIndex(device)]->switchOn();
-            if (auto cpDevice = dynamic_cast<CPDevice *>(active_devices[getIndex(device)]))
-            {
-                cpDevice->setStartTime(currentTime);
-            }
-            else if (auto manualDevice = dynamic_cast<ManualDevice *>(active_devices[getIndex(device)]))
-            {
-                manualDevice->setNewTimer(currentTime, Time(23, 59));
-            }
-            powerLoad += active_devices[getIndex(device)]->power;
-            balancePower(device);
+            cpDevice->setStartTime(currentTime);
         }
-    }  
+        else if (auto manualDevice = dynamic_cast<ManualDevice *>(active_devices.back()))
+        {
+            manualDevice->setNewTimer(currentTime, Time(23, 59));
+        }
+        powerLoad += active_devices.back()->power;
+        balancePower(device);
+    } else if (index != -1 && !status)
+    {
+        active_devices[index]->switchOff();
+        powerLoad -= active_devices[index]->power;
+        active_devices[index] = active_devices.back();
+        active_devices.pop_back();
+    }
 }
 
 void DomoticsSystem::balancePower(std::string last)
 {
-    Time firstTime (23,59), temp;
+    Time firstTime(23, 59), temp;
     std::string name;
     while (-powerLoad > KPowerLimit)
     {
         for (auto *value : active_devices)
         {
             temp = *(value->getStartTime().get());
-            if (value->name != "Solar Panel" && value->name != "Refrigerator" && firstTime > temp)
+            if (value->name != "Impianto fotovoltaico" && value->name != "Frigorifero" && firstTime > temp)
             {
                 firstTime = temp;
                 name = value->name;
             }
         }
-        if (*(active_devices[getIndex(last)]->getStartTime().get()) == firstTime)
+        if (*(active_devices[active_devices.size()-2]->getStartTime().get()) == firstTime)
         {
-            name = last;
+            name = active_devices[active_devices.size()-2]->name;
         }
-        active_devices[getIndex(name)]->switchOff();
-        powerLoad -= active_devices[getIndex(name)]->power;
+        int index = getIndex(name, true);
+        active_devices[index]->switchOff();
+        powerLoad -= active_devices[index]->power;
+        active_devices[index] = active_devices.back();
+        active_devices.pop_back();
     }
 }
 
 void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start, const Time &stop)
 {
-    dynamic_cast<ManualDevice *>(all_devices[getIndex(device)])->setNewTimer(start, stop);;
-    active_devices[getIndex(device)] = all_devices[getIndex(device)];
+    dynamic_cast<ManualDevice *>(all_devices[getIndex(device, false)])->setNewTimer(start, stop);
+    active_devices[getIndex(device, true)] = all_devices[getIndex(device, false)];
 }
 
 std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys)
@@ -238,4 +250,14 @@ std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys)
     out << "Current time: " << sys.getCurrentTime() << std::endl;
     out << "Power load: " << sys.getPowerLoad() << std::endl;
     return out;
+}
+
+std::vector<Device *> DomoticsSystem::getDevicesVector() const
+{
+    std::vector<Device *> deviceList;
+    for (auto *value : active_devices)
+    {
+        deviceList.push_back(value);
+    }
+    return deviceList;
 }

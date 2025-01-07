@@ -8,11 +8,11 @@ Device::Device(const std::string& name, const double power) : id{SingletonId::ge
 
 std::shared_ptr<const Time> Device::getStartTime() const {return startTime;}
 
-bool Device::isDeviceOn() const {return isOn;}
+bool Device::isDeviceOn() const { return isOn; }
 
-void Device::switchOn() {isOn = true;}
+void Device::switchOn() { isOn = true; }
 
-void Device::switchOff() {isOn = false;}
+void Device::switchOff() { isOn = false; }
 
 std::ostream& operator<<(std::ostream& out, const Device& device) {
     out << "Device{"

@@ -1,21 +1,21 @@
-
-//template <typename T>
 #include <string>  // Aggiungi questo include
 #include <map>
 #include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <stdexcept>
 #include "../include/device.h"
 #include "../include/manual_device.h"  // Add this include
 #include "../include/cp_device.h"  // Add this include
 #include "../include/time.h"  // Add this include
-#include <string> // Aggiungi questo include
-#include <fstream>
-#include <sstream>
-#include <vector>
 
 
 /**
  * @brief  A class that manages the domotics system by controlling the devices
- * 
+ *
  */
 class DomoticsSystem {
     private:
@@ -41,9 +41,11 @@ class DomoticsSystem {
     //void stop(/*${DEVICENAME}*/);
    // void removeTimer(/*${DEVICENAME}*/);
     std::vector<Device*> getDevices() const;
+    std::vector<Device *> getDevicesVector() const;
     void showDevices() const; //
     Time getCurrentTime() const; 
-    int getIndex(std::string device) const;
+    int getIndex(std::string device, bool prova) const;
+    bool isPresent(std::string device) const;
     double getPowerLoad() const; 
     void setCurrentTime(const Time& newTime);
     void setDeviceTime(const std::string& device, const Time& start, const Time& stop);
@@ -52,12 +54,12 @@ class DomoticsSystem {
     void removeDevice(std::string device);
     void balancePower(std::string last);
     void showActiveDevices() const; //
-    void currentMod (); //
+    void currentMod();  //
 
     //DEBUG section
     void resetTime();
     void resetTimers();
     void resetAll();
-};
 
-std::ostream& operator<<(std::ostream& out, const DomoticsSystem& sys);
+    friend std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys);
+};
