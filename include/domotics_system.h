@@ -12,7 +12,6 @@
 #include "../include/cp_device.h"  // Add this include
 #include "../include/time.h"  // Add this include
 
-
 /**
  * @brief  A class that manages the domotics system by controlling the devices
  *
@@ -33,10 +32,13 @@ class DomoticsSystem {
         double powerLoad;
         Time currentTime;
 
+        void checkSchedule();
         std::vector<Device*> setDevices();
+
     public:
 
     DomoticsSystem();
+    DomoticsSystem(double power);
     //void start(/*${DEVICENAME}*/ );
     //void stop(/*${DEVICENAME}*/);
    // void removeTimer(/*${DEVICENAME}*/);
@@ -49,12 +51,10 @@ class DomoticsSystem {
     double getPowerLoad() const; 
     void setCurrentTime(const Time& newTime);
     void setDeviceTime(const std::string& device, const Time& start, const Time& stop);
-    void startDevices(); //
     void changeDeviceStatus (bool status, std::string device); 
     void removeDevice(std::string device);
     void balancePower(std::string last);
     void showActiveDevices() const; //
-    void currentMod();  //
 
     //DEBUG section
     void resetTime();

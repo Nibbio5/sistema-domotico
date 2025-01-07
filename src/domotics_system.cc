@@ -1,10 +1,13 @@
 #include "../include/domotics_system.h"
 
-DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5}, currentTime{Time(0, 0)}
+DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5}, currentTime{Time(0, 0)}, powerLoad{0}
 {
     all_devices = setDevices();
-    powerLoad = 0;
-    startDevices();
+}
+
+DomoticsSystem::DomoticsSystem(double power) : KPowerLimit{power}, currentTime{Time(0, 0)}, powerLoad{0}
+{
+    all_devices = setDevices();
 }
 
 std::vector<Device *> DomoticsSystem::setDevices()
@@ -19,6 +22,8 @@ std::vector<Device *> DomoticsSystem::setDevices()
     std::string nome;
     std::string durataAccensione;
     std::string produzioneConsumo;
+    auto orarioAccensione = std::shared_ptr<Time>(nullptr);
+    auto orarioSpegnimento = std::shared_ptr<Time>(nullptr);
 
     // manual parsing of the JSON (simple)
     while (std::getline(file, line))
@@ -33,7 +38,12 @@ std::vector<Device *> DomoticsSystem::setDevices()
             durataAccensione = line.substr(line.find(":") + 2);
 
             durataAccensione = durataAccensione.substr(1, durataAccensione.size() - 3);
-            // std::cout << durataAccensione << std::endl;
+        }
+        else if(line.find("\"OrarioAccensione\":") != std::string::npos){
+            orarioAccensione =  std::make_shared<Time>(Time::fromString(line.substr(line.find(":") + 2)));
+        }
+        else if(line.find("\"OrarioSpegnimento\":") != std::string::npos){
+            orarioSpegnimento =  std::make_shared<Time>(Time::fromString(line.substr(line.find(":") + 2)));
         }
         else if (line.find("\"ProduzioneConsumo\":") != std::string::npos)
         {
@@ -43,9 +53,12 @@ std::vector<Device *> DomoticsSystem::setDevices()
             // Create the device based on the durataAccensione
             if (durataAccensione == "Manuale")
             {
-                if (nome == "Impianto fotovoltaico" || nome == "Frigorifero")
+                if (orarioAccensione != nullptr)
                 {
-                    active_devices.push_back(new ManualDevice(nome, std::stod(produzioneConsumo)));
+                    (orarioSpegnimento == nullptr) ? active_devices.push_back(new ManualDevice(nome, std::stod(produzioneConsumo), Time(23,59))) :  
+                                    active_devices.push_back(new ManualDevice(nome, std::stod(produzioneConsumo), *orarioAccensione.get(), *orarioSpegnimento.get()));
+                    orarioAccensione = nullptr;
+                    orarioSpegnimento = nullptr;
                 }
                 else
                 {
@@ -93,12 +106,23 @@ Time DomoticsSystem::getCurrentTime() const
     return currentTime;
 }
 
-void DomoticsSystem::removeDevice(std::string device)
+void DomoticsSystem::removeDevice(std::string device) 
 {
-    if (dynamic_cast<ManualDevice *>(active_devices[getIndex(device, true)]) != nullptr)
+    int index = getIndex(device, false);
+    if(index == -1)
     {
-        powerLoad -= active_devices[getIndex(device, true)]->power;
-        active_devices[getIndex(device, true)] = active_devices.back();
+        throw std::invalid_argument("device not found or already removed");
+    }
+    if (dynamic_cast<ManualDevice *>(active_devices[index]) != nullptr)
+    {
+        powerLoad -= active_devices[index]->power;
+        active_devices[index] = active_devices.back();
+        active_devices.pop_back();
+    }else if (dynamic_cast<CPDevice *>(active_devices[index]) != nullptr)
+    {
+        powerLoad -= active_devices[index]->power;
+        active_devices[index]->switchOff();
+        active_devices[index] = active_devices.back();
         active_devices.pop_back();
     }
 }
@@ -120,14 +144,7 @@ bool DomoticsSystem::isPresent(std::string device) const
         return getIndex(device, true) != -1;
 }
 
-void DomoticsSystem::startDevices()
-{
-    // accendo frigo e imposto fotovoltaico 8:00 alle 18:00
-    dynamic_cast<ManualDevice *>(active_devices[getIndex("Impianto fotovoltaico", true)])->setNewTimer(Time(8, 0), Time(18, 0));
-    dynamic_cast<ManualDevice *>(active_devices[getIndex("Frigorifero", true)])->setNewTimer(Time(0, 0), Time(23, 59));
-}
-
-void DomoticsSystem::currentMod()
+void DomoticsSystem::checkSchedule()
 {
     for (auto it = active_devices.begin(); it != active_devices.end();)
     {
@@ -139,13 +156,11 @@ void DomoticsSystem::currentMod()
                 value->switchOn();
                 powerLoad += value->power;
                 dynamic_cast<ManualDevice *>(value)->setNewTimer(currentTime, Time(23, 59));
-                std::cout << powerLoad << " turned on " << value->name << std::endl;
             }
             else if (*(dynamic_cast<ManualDevice *>(value)->getStopTime().get()) < currentTime && value->isDeviceOn() == true)
             {
                 value->switchOff();
                 powerLoad -= value->power;
-                std::cout << powerLoad << " turned off " << value->name << std::endl;
             }
             ++it;
         }
@@ -154,8 +169,13 @@ void DomoticsSystem::currentMod()
         {
             value->switchOff();
             powerLoad -= value->power;
-            std::cout << powerLoad << " turned off " << value->name << std::endl;
             it = active_devices.erase(it);
+        }else if (value->isDeviceOn() == false && *(value->getStartTime().get()) < currentTime)
+        {
+            value->switchOn();
+            powerLoad += value->power;
+            balancePower(value->name);
+            ++it;
         }
         else
         {
@@ -168,7 +188,7 @@ void DomoticsSystem::currentMod()
 void DomoticsSystem::setCurrentTime(const Time &newTime)
 {
     (newTime < currentTime) ? throw std::invalid_argument("time is lower than current time") : currentTime = newTime;
-    currentMod();
+    checkSchedule();
 }
 
 void DomoticsSystem::changeDeviceStatus(bool status, std::string device)
@@ -228,10 +248,24 @@ void DomoticsSystem::balancePower(std::string last)
     }
 }
 
-void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start, const Time &stop)
+void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start, const Time &stop) 
 {
-    dynamic_cast<ManualDevice *>(all_devices[getIndex(device, false)])->setNewTimer(start, stop);
-    active_devices[getIndex(device, true)] = all_devices[getIndex(device, false)];
+    if (getIndex(device, false) == -1 || start > stop || start < currentTime || stop < currentTime)  
+    {
+        throw std::invalid_argument("Error: invalid input data, please check the device name and the time");  
+    }else if(getIndex(device, true) == -1)
+    {
+        
+        int index = getIndex(device, false);
+        active_devices.push_back(all_devices[index]);
+        if(dynamic_cast<CPDevice *>(active_devices.back()) != nullptr) 
+        {
+            dynamic_cast<CPDevice *>(active_devices.back())->setStartTime(start);
+        }else if(dynamic_cast<ManualDevice *>(active_devices.back()) != nullptr)
+        {
+            dynamic_cast<ManualDevice *>(active_devices.back())->setNewTimer(start, stop);
+        }
+    }
 }
 
 std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys)
