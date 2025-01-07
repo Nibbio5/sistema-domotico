@@ -24,6 +24,5 @@ class Terminal {
     Terminal() = default;
     ~Terminal() = default;
 
-
 };
 #endif // #ifndef
