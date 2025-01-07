@@ -16,40 +16,39 @@
  *
  */
 class DomoticsSystem {
-  private:
-    std::vector<Device*> devices;
-    /*
-    * private variables that must be touched  only by the class methods
-    * std::vector<T> all_devices;
-    * std::vector<T> active_devices;
-    * std::double power_limit:
-    *
-    *  std::vector<T> getDevices();
-    */
-    std::map<std::string, Device*, std::less<>> all_devices;
-    std::map<std::string, Device*, std::less<>> active_devices;
-    const double KPowerLimit;
-    double powerLoad;
-    Time currentTime;
+    private:
+        /*
+        * private variables that must be touched  only by the class methods
+        * std::vector<T> all_devices;
+        * std::vector<T> active_devices;
+        * std::double power_limit:
+        * 
+        *  std::vector<T> getDevices();
+        */
+        std::vector<Device*> all_devices;
+        std::vector<Device*> active_devices;
+        const double KPowerLimit;
+        double powerLoad;
+        Time currentTime;
 
-    std::map<std::string, Device*, std::less<>> setDevices();
-  public:
+        std::vector<Device*> setDevices();
+    public:
 
     DomoticsSystem();
     //void start(/*${DEVICENAME}*/ );
     //void stop(/*${DEVICENAME}*/);
-    // void removeTimer(/*${DEVICENAME}*/);
-    std::map<std::string, Device*, std::less<>> getDevices() const;
-    std::vector<Device *> getDevicesVector() const;
+   // void removeTimer(/*${DEVICENAME}*/);
+    std::vector<Device*> getDevices() const;
     void showDevices() const; //
-    Time getCurrentTime() const;
-    double getPowerLoad() const;
+    Time getCurrentTime() const; 
+    int getIndex(std::string device) const;
+    double getPowerLoad() const; 
     void setCurrentTime(const Time& newTime);
     void setDeviceTime(const std::string& device, const Time& start, const Time& stop);
     void startDevices(); //
-    void changeDeviceStatus(bool status, const std::string& device);
-    void removeDevice(const std::string &device);
-    void balancePower();
+    void changeDeviceStatus (bool status, std::string device); 
+    void removeDevice(std::string device);
+    void balancePower(std::string last);
     void showActiveDevices() const; //
     void currentMod();  //
 
@@ -59,4 +58,3 @@ class DomoticsSystem {
     void resetAll();
 
     friend std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys);
-};

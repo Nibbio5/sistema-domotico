@@ -108,6 +108,22 @@ Time Time::operator+(const Time &time) const {
     return Time(newHour, newMinute);
 }
 
+Time Time::operator-(const Time &time) const {
+    if(*this < time) {
+        throw std::invalid_argument("Invalid time subtraction");
+    }
+    int newHour = hour - time.hour;
+    int newMinute = minute - time.minute;
+    if(newMinute < 0) {
+        newHour--;
+        newMinute += 60;
+    }
+    if(newHour < 0) {
+        newHour += 24;
+    }
+    return Time(newHour, newMinute);
+}
+
 Time& Time::operator=(const Time &time) {
     if (this == &time) {
         return *this;
@@ -159,4 +175,3 @@ std::istream& operator>>(std::istream &in, Time &time) {
 std::ostream& operator<<(std::ostream &out, const Time &time) {
     out << time.getHourString() << ":" << time.getMinuteString();
     return out;
-}
