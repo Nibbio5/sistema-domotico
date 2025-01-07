@@ -25,9 +25,9 @@ void Terminal::setDeviceCommandPrompt(const std::vector<std::string> &args,
     throw std::invalid_argument(
         "Invalid arguments provided. Type 'help' for more information.");
   } else if (args[2] == "on") {
-    device->switchOn();
+    device->switch_on();
   } else if (args[2] == "off") {
-    device->switchOff();
+    device->switch_off();
   } else {
     // TODO: call the timer setter for the device
   }

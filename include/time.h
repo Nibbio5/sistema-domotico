@@ -161,6 +161,32 @@ class Time {
     Time& operator+=(const Time &time);
 
     /**
+     * @brief Subtract two Time objects
+     * 
+     * @param time The time object
+     * @return Time object
+     */
+    Time operator-(const Time &time) const;
+
+    /**
+     * @brief Compare two Time objects
+     * 
+     * @param time The Time object
+     * @return true if the first Time object is greater or equal to the second Time object
+     * @return false if the first Time object is not greater than the second Time object
+     */
+    bool operator>=(const Time &time) const;
+
+    /**
+     * @brief Compare two Time objects
+     * 
+     * @param time The Time object
+     * @return true if the first Time object is not greater or equal to the second Time object
+     * @return false if the first Time object is greater than the second Time object
+     */
+    bool operator<=(const Time &time) const;
+
+    /**
     * @brief Output the Time object to the output stream
     *
     * @param out The output stream

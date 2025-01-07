@@ -2,29 +2,25 @@
 
 #include "../include/manual_device.h"
 
-ManualDevice::ManualDevice(const std::string& name, const double power, const Time& startTime, const Time& stopTime) : Device(name, power, startTime) {
-    if(stopTime < startTime)
-        throw std::invalid_argument("start time is higher than stop time");
+ManualDevice::ManualDevice(const std::string& name, const double power, const Time& start_time, const Time& stop_time) : Device(name, power, start_time) {
+    if(stop_time < start_time)
+        throw std::invalid_argument("Start time is higher than stop time");
 
-    *(this->stopTime) = stopTime;
+    stop_time_ = std::make_shared<Time>(stop_time);
 }
 
-ManualDevice::ManualDevice(const std::string& name, const double power, const Time& startTime) : Device(name, power, startTime), stopTime{nullptr} {}
+ManualDevice::ManualDevice(const std::string& name, const double power, const Time& startTime) : Device(name, power, startTime), stop_time_{nullptr} {}
 
-ManualDevice::ManualDevice(const std::string& name, const double power) : Device(name, power), stopTime{nullptr} {}
+ManualDevice::ManualDevice(const std::string& name, const double power) : Device(name, power), stop_time_{nullptr} {}
 
-std::shared_ptr<const Time> ManualDevice::getStopTime() const {
-    return stopTime;
-}
+std::shared_ptr<const Time> ManualDevice::get_stop_time() const {return stop_time_;}
 
-void ManualDevice::setNewTimer(const Time& newStartTime, const Time& newStopTime) {
+void ManualDevice::set_new_timer(const Time& newStartTime, const Time& newStopTime) {
     if(newStopTime < newStartTime)
-        throw std::invalid_argument("start time is higher than stop time");
+        throw std::invalid_argument("Start time is higher than stop time");
 
-    auto newStartTime_ptr = std::make_shared<Time>(newStartTime);
-    auto newStopTime_ptr = std::make_shared<Time>(newStopTime);
-    startTime = newStartTime_ptr;
-    stopTime = newStopTime_ptr;
+    start_time_ = std::make_shared<Time>(newStartTime);
+    stop_time_ = std::make_shared<Time>(newStopTime);
 }
 
 // Time ManualDevice::getActivityDuration() const {
@@ -38,20 +34,20 @@ void ManualDevice::setNewTimer(const Time& newStartTime, const Time& newStopTime
 
 std::ostream& operator<<(std::ostream& out, const ManualDevice& device) {
     out << "ManualDevice{"
-        << "id=" << device.id
-        << ", name=" << device.name
-        << ", power=" << device.power
-        << ", isOn=" << device.isDeviceOn();
-
-    out << ", startTime=";
-    if(device.getStartTime()) {
-        out << *device.getStartTime();
+    << "id=" << device.KId
+    << ", name=" << device.KName
+    << ", power=" << device.KPower
+    << ", is_on=" << device.is_on_;
+    
+    out << ", start_time=";
+    if(device.start_time_) {
+        out << *device.start_time_;
     } else {
         out << "NOT_SET";
     }
-    out << ", stopTime=";
-    if(device.getStopTime()) {
-        out << *device.getStopTime();
+    out << ", stop_time=";
+    if(device.stop_time_) {
+        out << *device.stop_time_;
     } else {
         out << "NOT_SET";
     }

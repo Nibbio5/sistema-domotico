@@ -33,12 +33,12 @@ class SingletonId {
    */
   int generateId();
 
-private:
-  /**
-   * @brief Stores the last generated ID
-   *
-   */
-  int currentId;
+    private:
+        /**
+         * @brief Stores the last generated ID
+         * 
+         */
+        int current_id_;
 
         /**
          * @brief Construct a new SingeltonId object.
