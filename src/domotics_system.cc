@@ -167,7 +167,7 @@ void DomoticsSystem::balancePower(std::string last) {
 }
 
 void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start, const Time &stop) {
-    dynamic_cast<ManualDevice *>(all_devices[getIndex(device)])->set_new_timer(start, stop);;
+    dynamic_cast<ManualDevice *>(all_devices[getIndex(device)])->set_new_timer(start, stop);
     active_devices[getIndex(device)] = all_devices[getIndex(device)];
 }
 
