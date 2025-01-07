@@ -15,14 +15,15 @@ class Terminal {
     void setDeviceCommandPrompt(const std::vector<std::string> &args,
                                 Device *device) const;
     void showOneDevice(const std::string &arg);
-
-  public:
-    Terminal();
-    ~Terminal();
     void setCommandPrompt(const std::vector<std::string> &args);
     void rmCommandPrompt(const std::string &arg);
     void showCommandPrompt(const std::string &arg);
     void resetCommandPrompt(const std::string &arg);
+
+  public:
+    Terminal() = default;
+    ~Terminal() = default;
+
 
 };
 #endif // #ifndef
