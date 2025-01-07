@@ -59,15 +59,15 @@ void Terminal::showCommandPrompt(const std::string &arg) {
   std::string output = "Nello specifico:\n";
   std::vector<Device *> devices = domotics_system.getDevicesVector();
   for (const Device *device : devices) {
-    if (device->name == "Impianto Fotovoltaico") {
-      produced_power += device->power;
+    if (device->KName == "Impianto Fotovoltaico") {
+      produced_power += device->KPower;
     } else {
-      consumed_power += device->power;
+      consumed_power += device->KPower;
     }
     output =
-        output + "- " + device->name + "ha " +
-        (device->name == "Impianto Fotovoltaico" ? "prodotto " : "consumato ") +
-        std::to_string(device->power) + "kWh\n";
+        output + "- " + device->KName + "ha " +
+        (device->KName == "Impianto Fotovoltaico" ? "prodotto " : "consumato ") +
+        std::to_string(device->KPower) + "kWh\n";
   }
   std::cout << "[Time] Attualmente il sistema ha prodotto " +
                    std::to_string(produced_power) + "kWh e consumato " +
@@ -82,10 +82,10 @@ void Terminal::showOneDevice(const std::string &arg) {
         "Invalid device provided. Type 'help' for more information.");
   }
 
-  std::cout << "[Time] Il dispositivo " << device->name << " ha attualmente "
-            << (device->name == "Impianto Fotovoltaico" ? "prodotto "
+  std::cout << "[Time] Il dispositivo " << device->KName << " ha attualmente "
+            << (device->KName == "Impianto Fotovoltaico" ? "prodotto "
                                                         : "consumato ")
-            << device->power << "kWh\n";
+            << device->KPower << "kWh\n";
 }
 
 void Terminal::setTimeCommandPrompt(const std::string &arg) const {
@@ -101,7 +101,7 @@ void Terminal::setTimeCommandPrompt(const std::string &arg) const {
 
 Device *Terminal::isDevice(const std::string &arg) {
   for (Device *device : domotics_system.getDevicesVector()) {
-    if (device->name == arg) {
+    if (device->KName == arg) {
       return device;
     }
   }

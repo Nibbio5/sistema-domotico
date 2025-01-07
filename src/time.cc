@@ -149,14 +149,6 @@ Time Time::operator-(const Time &time) const {
     return Time(newHour, newMinute);
 }
 
-bool Time::operator>=(const Time &time) const {
-    return *this > time || *this == time;
-}
-
-bool Time::operator<=(const Time &time) const {
-    return *this < time || *this == time;
-}
-
 std::istream& operator>>(std::istream &in, Time &time) {
     std::string tmpTime;
     in >> tmpTime;
