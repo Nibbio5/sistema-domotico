@@ -168,6 +168,26 @@ class Time {
      */
     bool operator<=(const Time &time) const;
 
+        /**
+         * @brief Add a Time object to another Time object
+         * 
+         * @param time The time object
+         * @return Time& the added Time object
+         */
+        Time& operator+=(const Time &time);
+
+        /**
+         * @brief Subtract two Time objects
+         * 
+         * @param time The time object
+         * @return Time object
+         */
+        Time operator-(const Time &time) const;
+
+        //>=
+        bool operator>=(const Time &time) const;
+        //<=
+        bool operator<=(const Time &time) const;
     /**
     * @brief Output the Time object to the output stream
     *
@@ -187,4 +207,7 @@ class Time {
     friend std::istream& operator>>(std::istream &in, Time &time);
 };
 
-#endif // TIME_H
+
+
+
+#endif

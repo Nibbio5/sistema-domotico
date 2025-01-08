@@ -3,6 +3,8 @@
       {
         "Nome": "Impianto fotovoltaico",
         "DurataAccensione": "Manuale",
+        "OrarioAccensione": "08:00",
+        "OrarioSpegnimento": "18:00",
         "ProduzioneConsumo": "+1.5 kW"
       },
       {
@@ -33,6 +35,8 @@
       {
         "Nome": "Frigorifero",
         "DurataAccensione": "Manuale",
+        "OrarioAccensione": "00:00",
+        "OrarioSpegnimento": "23:59",
         "ProduzioneConsumo": "-0.4 kW"
       },
       {

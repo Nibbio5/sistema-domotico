@@ -6,7 +6,7 @@ ManualDevice::ManualDevice(const std::string& name, const double power, const Ti
     if(stop_time < start_time)
         throw std::invalid_argument("Start time is higher than stop time");
 
-    stop_time_ = std::make_shared<Time>(stop_time);
+    this->stopTime = std::make_shared<Time>(stopTime);
 }
 
 ManualDevice::ManualDevice(const std::string& name, const double power, const Time& startTime) : Device(name, power, startTime), stop_time_{nullptr} {}
@@ -17,10 +17,12 @@ std::shared_ptr<const Time> ManualDevice::get_stop_time() const {return stop_tim
 
 void ManualDevice::set_new_timer(const Time& newStartTime, const Time& newStopTime) {
     if(newStopTime < newStartTime)
-        throw std::invalid_argument("Start time is higher than stop time");
+        throw std::invalid_argument("start time is higher than stop time");
 
-    start_time_ = std::make_shared<Time>(newStartTime);
-    stop_time_ = std::make_shared<Time>(newStopTime);
+    auto newStartTime_ptr = std::make_shared<Time>(newStartTime);
+    auto newStopTime_ptr = std::make_shared<Time>(newStopTime);
+    startTime = newStartTime_ptr;
+    stopTime = newStopTime_ptr;
 }
 
 // Time ManualDevice::getActivityDuration() const {

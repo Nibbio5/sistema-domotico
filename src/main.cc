@@ -29,6 +29,3 @@ int main() {
    sistema.setCurrentTime(Time(9,35));
    sistema.setCurrentTime(Time(15,31));
     return 0;
-}
-
-
