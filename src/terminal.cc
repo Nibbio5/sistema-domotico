@@ -140,11 +140,11 @@ void Terminal::resetCommandPrompt(const std::string &arg) {
     }
 
     if(arg == "time") {
-        domotics_system.resetTime();
+        //domotics_system.resetTime();
     } else if(arg == "timers") {
-        domotics_system.resetTimers();
+       // domotics_system.resetTimers();
     } else if(arg == "all") {
-        domotics_system.resetAll();
+        //domotics_system.resetAll();
     } else {
         throw std::invalid_argument(
             "Invalid argument provided. Type 'help' for more information.");

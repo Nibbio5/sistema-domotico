@@ -6,7 +6,7 @@ ManualDevice::ManualDevice(const std::string& name, const double power, const Ti
     if(start_time > stop_time)
         throw std::invalid_argument("Start time is higher than stop time");
 
-    this->start_time_ = std::make_shared<Time>(stop_time);
+    this->stop_time_ = std::make_shared<Time>(stop_time);
 }
 
 ManualDevice::ManualDevice(const std::string& name, const double power, const Time& startTime) : Device(name, power, startTime), stop_time_{nullptr} {}
