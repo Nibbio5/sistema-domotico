@@ -1,23 +1,30 @@
 #include "../include/terminal.h"
 #include <iostream>
+#include <stdexcept>
 #include <string>
+
+Terminal::Terminal(double power_limit) : domotics_system(power_limit) {}
 
 void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
     if(args.size() < 2) {
-        throw std::invalid_argument(
-            "Invalid arguments provided. Type 'help' for more information.");
+        throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
     }
 
-    if(args[0] == "time") {
-        setTimeCommandPrompt(args.at(1));
-        return;
+    try {
+        if(args[0] == "time") {
+
+            setTimeCommandPrompt(args[1]);
+            return;
+        }
+        Device *device = isDevice(args.at(0));
+        if(device == nullptr) {
+            throw std::invalid_argument("Invalid device provided. Type 'help' for more information.");
+        }
+        setDeviceCommandPrompt(args, device);
+    } catch(const std::out_of_range &e) {
+        throw std::invalid_argument(e.what());
     }
-    Device *device = isDevice(args.at(0));
-    if(device == nullptr) {
-        throw std::invalid_argument(
-            "Invalid device provided. Type 'help' for more information.");
-    }
-    setDeviceCommandPrompt(args, device);
+
 }
 
 void Terminal::setDeviceCommandPrompt(
@@ -40,24 +47,21 @@ void Terminal::setDeviceTimer(
     const std::string &stop
 ) {
     if(start.empty()) {
-        throw std::invalid_argument(
-            "Invalid arguments provided. Type 'help' for more information.");
+        throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
     }
     Time start_time = Time::fromString(start);
-    Time stop_time = (stop.empty()) ? Time() : Time::fromString(stop);
+    Time stop_time = (stop.empty()) ? Time(23, 59) : Time::fromString(stop);
 
     Device *device = isDevice(device_name);
     if(device == nullptr) {
-        throw std::invalid_argument(
-            "Invalid device provided. Type 'help' for more information.");
+        throw std::invalid_argument("Invalid device provided. Type 'help' for more information.");
     }
-    // TODO: implement setDeviceTime method from DomoticsSystem
+    domotics_system.setDeviceTime(device->KName, start_time, stop_time);
 }
 
 void Terminal::rmCommandPrompt(const std::string &arg) {
     if(arg.empty()) {
-        throw std::invalid_argument(
-            "Invalid arguments provided. Type 'help' for more information.");
+        throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
     }
 
     const Device *device = isDevice(arg);
@@ -66,12 +70,16 @@ void Terminal::rmCommandPrompt(const std::string &arg) {
             "Invalid device provided. Type 'help' for more information.");
     }
 
-    domotics_system.removeDevice(device->KName);
+    //TODO: implement removeTimerDevice method from DomoticsSystem
 }
 
 void Terminal::showCommandPrompt(const std::string &arg) {
     if(!arg.empty()) {
-        showOneDevice(arg);
+        const Device *device = isDevice(arg);
+        if(device == nullptr) {
+            throw std::invalid_argument("Invalid device provided. Type 'help' for more information.");
+        }
+        showOneDevice(device);
         return;
     }
 
@@ -80,14 +88,12 @@ void Terminal::showCommandPrompt(const std::string &arg) {
     std::string output = "Nello specifico:\n";
     std::vector<Device *> devices = domotics_system.getDevices();
     for(const Device *device : devices) {
-        if(device->KName == "Impianto Fotovoltaico") {
-            produced_power += device->KPower;
+        if(device->KPower >= 0) {
+            produced_power += device->get_total_power(domotics_system.getCurrentTime());
         } else {
-            consumed_power += device->KPower;
+            consumed_power += device->get_total_power(domotics_system.getCurrentTime());
         }
-        output = output + "- " + device->KName + "ha " +
-                 (device->KName == "Impianto Fotovoltaico" ? "prodotto " : "consumato ") +
-                 std::to_string(device->KPower) + "kWh\n";
+        output = output + showOneDevice(device, false);
     }
     Time currentTime = domotics_system.getCurrentTime();
     std::cout << "[" << currentTime << "] Attualmente il sistema ha prodotto " +
@@ -95,32 +101,29 @@ void Terminal::showCommandPrompt(const std::string &arg) {
               std::to_string(consumed_power) + "kWh. " + output;
 }
 
-void Terminal::showOneDevice(const std::string &arg) {
+std::string Terminal::showOneDevice(const Device *device, const bool &show_time) {
 
-    const Device *device = isDevice(arg);
-    if(device == nullptr) {
-        throw std::invalid_argument(
-            "Invalid device provided. Type 'help' for more information.");
-    }
     Time currentTime = domotics_system.getCurrentTime();
-    std::cout << "[" << currentTime << "] Il dispositivo " << device->KName << " ha attualmente "
-              << (device->KName == "Impianto Fotovoltaico" ? "prodotto "
-                  : "consumato ")
-              << device->KPower << "kWh\n";
+    std::string time = "- ";
+    if(show_time) {
+        time = "[" + currentTime.getHourString() + ":" + currentTime.getMinuteString() + "] " ;
+    }
+    return time + "Il dispositivo " + "(" + std::to_string(device->is_on()) + ") " + device->KName + " ha " + (show_time ? "attualmente " : "")
+           + (device->KPower >= 0 ? "prodotto " : "consumato ")
+           + std::to_string(device->get_total_power(domotics_system.getCurrentTime())) + "kWh\n";
 }
 
 void Terminal::setTimeCommandPrompt(const std::string &arg) {
     if(arg.empty()) {
-        throw std::invalid_argument(
-            "Invalid arguments provided. Type 'help' for more information.");
+        throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
     }
 
-    Time time = Time::fromString(arg);
-
     try {
+        Time time = Time::fromString(arg);
+
         domotics_system.setCurrentTime(time);
     } catch(const std::invalid_argument &e) {
-        std::cerr << e.what() << std::endl;
+        throw std::invalid_argument(e.what());
     }
 }
 
@@ -135,10 +138,10 @@ Device *Terminal::isDevice(const std::string &arg) {
 
 void Terminal::resetCommandPrompt(const std::string &arg) {
     if(arg.empty()) {
-        throw std::invalid_argument(
-            "Invalid arguments provided. Type 'help' for more information.");
+        throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
     }
-
+    throw std::invalid_argument("not implemented yet");
+    /*
     if(arg == "time") {
         domotics_system.resetTime();
     } else if(arg == "timers") {
@@ -148,5 +151,18 @@ void Terminal::resetCommandPrompt(const std::string &arg) {
     } else {
         throw std::invalid_argument(
             "Invalid argument provided. Type 'help' for more information.");
-    }
+    }*/
+}
+
+void Terminal::helpCommandPrompt() {
+    std::cout << "Commands:\n"
+              << " - set {device} {start} [{stop}] - Imposta l'orario di accensione [ e spegnimento(solo M)] per il dispositivo.\n"
+              << " - set {device} on/off - accende/spegne il dispositivo\n"
+              << " - rm {device} - rimuove il timer del dispositivo\n"
+              << " - show {device} - mostra lo stato del dispositivo\n"
+              << " - show - mostra lo stato di tutti i dispositivi\n"
+              << " - reset time - riporta il tempo a 00:00 spegnendo i dispositivi ma mantenendo i timer\n"
+              << " - reset timers - rimuove i timer dai dispositivi (mantengono lo stato)\n"
+              << " - reset all - riporta il sistema allo stato iniziale\n"
+              << " - exit - esci dalla casa\n";
 }

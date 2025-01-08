@@ -1,5 +1,6 @@
 #include "../include/time.h"
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 Time::Time() : hour(0), minute(0) {}
@@ -47,15 +48,24 @@ Time Time::fromString(const std::string &time) {
     size_t pos = tmpTime.find(delimiter);
 
     if(pos == std::string::npos) {
-        throw std::invalid_argument("Invalid time format");
-    }
-    int hour = std::stoi(tmpTime.substr(pos - 2, pos));
-    int minute = std::stoi(tmpTime.substr(pos + 1, 2));
-    if(hour < 0 || hour > 23 || minute < 0 || minute > 59) {
-        throw std::invalid_argument("Invalid time format");
+        throw std::invalid_argument("Invalid time format (hh:mm)");
     }
 
-    return Time(hour, minute);
+    try {
+        std::string hour_str = tmpTime.substr(pos - 2, 2);
+        std::string minute_str = tmpTime.substr(pos + 1, 2);
+        int hour = std::stoi(hour_str);
+        int minute = std::stoi(minute_str);
+        if(hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+            throw std::invalid_argument("Invalid time format (hh:mm)");
+        }
+        return Time(hour, minute);
+
+    } catch(const std::invalid_argument &e) {
+        throw std::invalid_argument("Invalid time format (hh:mm)");
+    } catch(const std::out_of_range &e) {
+        throw std::invalid_argument("Invalid time format (hh:mm)");
+    }
 }
 
 bool Time::operator==(const Time &time) const {
@@ -125,7 +135,7 @@ Time Time::operator-(const Time &time) const {
 }
 
 Time& Time::operator=(const Time &time) {
-    if (this == &time) {
+    if(this == &time) {
         return *this;
     }
     hour = time.hour;

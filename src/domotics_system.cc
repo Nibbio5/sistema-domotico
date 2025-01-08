@@ -1,4 +1,5 @@
 #include "../include/domotics_system.h"
+#include <memory>
 
 DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5}, currentTime{Time(0, 0)}, powerLoad{0} {
     all_devices = setDevices();
@@ -41,7 +42,7 @@ std::vector<Device *> DomoticsSystem::setDevices() {
             // Create the device based on the durataAccensione
             if(durataAccensione == "Manuale") {
                 if(orarioAccensione != nullptr) {
-                    (orarioSpegnimento == nullptr) ? active_devices.push_back(new ManualDevice(nome, std::stod(produzioneConsumo), Time(23, 59))) :
+                    (orarioSpegnimento == nullptr) ? active_devices.push_back(new ManualDevice(nome, std::stod(produzioneConsumo), *orarioAccensione.get())) :
                     active_devices.push_back(new ManualDevice(nome, std::stod(produzioneConsumo), *orarioAccensione.get(), *orarioSpegnimento.get()));
                     orarioAccensione = nullptr;
                     orarioSpegnimento = nullptr;
@@ -69,7 +70,7 @@ std::vector<Device *> DomoticsSystem::setDevices() {
 }
 
 std::vector<Device *> DomoticsSystem::getDevices() const {
-    return active_devices;
+    return all_devices;
 }
 
 double DomoticsSystem::getPowerLoad() const {
@@ -114,18 +115,20 @@ bool DomoticsSystem::isPresent(std::string device) const {
 void DomoticsSystem::checkSchedule() {
     for(auto it = active_devices.begin(); it != active_devices.end();) {
         Device *value = *it;
-        if(dynamic_cast<ManualDevice *>(value) != nullptr) {
-            if(*(value->get_start_time().get()) < currentTime && *(dynamic_cast<ManualDevice *>(value)->get_stop_time().get()) > currentTime && value->is_on() == false) {
+        ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(value);
+        CPDevice *cpDevice = dynamic_cast<CPDevice *>(value);
+        if(manualDevice != nullptr) {
+            if(*(value->get_start_time().get()) < currentTime && *(manualDevice->get_stop_time().get()) > currentTime && value->is_on() == false) {
                 value->switch_on(currentTime);
                 powerLoad += value->KPower;
-                dynamic_cast<ManualDevice *>(value)->set_new_timer(currentTime, Time(23, 59));
-            } else if(*(dynamic_cast<ManualDevice *>(value)->get_stop_time().get()) < currentTime && value->is_on() == true) {
+                manualDevice->set_new_timer(currentTime, Time(23, 59));
+            } else if(manualDevice->get_stop_time() && *(manualDevice->get_stop_time().get()) < currentTime && value->is_on() == true) {
                 value->switch_off(currentTime);
                 powerLoad -= value->KPower;
             }
             ++it;
-        } else if(dynamic_cast<CPDevice *>(value) != nullptr) {
-            if(currentTime >= dynamic_cast<CPDevice *>(value)->KDuration + * (value->get_start_time().get()) && value->is_on() == true) {
+        } else if(cpDevice != nullptr) {
+            if(currentTime >= cpDevice->KDuration + * (value->get_start_time().get()) && value->is_on() == true) {
                 value->switch_off(currentTime);
                 powerLoad -= value->KPower;
                 it = active_devices.erase(it);
