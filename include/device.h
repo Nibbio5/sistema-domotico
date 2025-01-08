@@ -154,7 +154,7 @@ class Device{
         Device(const Device &device) = delete;
 
         /**
-         * @brief Copy assigmnet disabled for base class
+         * @brief Copy assignment disabled for base class
          *
          * @param device the Device to use for the copy
          * @return Device& the given device

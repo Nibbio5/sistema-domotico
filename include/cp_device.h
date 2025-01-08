@@ -29,21 +29,21 @@ class CPDevice: public Device {
      */
     CPDevice(const std::string& name, const double power, const Time& duration, const Time& start_time);
 
-        /**
-         * @brief Construct a new CPDevice object without a start time
-         * 
-         * @param name the name of the device
-         * @param power the power consumption (negative) or production (positive) of the device
-         * @param duration the amount of time the devices has to work before shutting off
-         */
-        CPDevice(const std::string& name, const double power, const Time& duration);
-        
-        /**
-         * @brief Set the start Time object
-         * 
-         * @param newTime the new time for the start Time object
-         */
-        void set_start_time(const Time& new_time);
+    /**
+     * @brief Construct a new CPDevice object without a start time
+     *
+     * @param name the name of the device
+     * @param power the power consumption (negative) or production (positive) of the device
+     * @param duration the amount of time the devices has to work before shutting off
+     */
+    CPDevice(const std::string& name, const double power, const Time& duration);
+
+    /**
+     * @brief Set the start Time object
+     *
+     * @param newTime the new time for the start Time object
+     */
+    void set_start_time(const Time& new_time);
 
     /**
      * @brief Deletes the start timer
@@ -64,3 +64,4 @@ class CPDevice: public Device {
     friend std::ostream& operator<<(std::ostream& out, const CPDevice& device);
 };
 
+#endif // #ifndef

@@ -11,7 +11,7 @@
  *
  * The main validity condition for the ManualDevice object is that the start time point
  * is lower (comes before) than the stop time point. To ensure this condition is
- * always valid a check is peformed every time the Time objects are updated.
+ * always valid a check is performed every time the Time objects are updated.
  *
  */
 class ManualDevice : public Device {

@@ -91,7 +91,7 @@ void DomoticsSystem::removeDevice(std::string device) {
         active_devices.pop_back();
     } else if(dynamic_cast<CPDevice *>(active_devices[index]) != nullptr) {
         powerLoad -= active_devices[index]->KPower;
-        active_devices[index]->switch_off();
+        active_devices[index]->switch_off(currentTime);
         active_devices[index] = active_devices.back();
         active_devices.pop_back();
     }
@@ -116,21 +116,21 @@ void DomoticsSystem::checkSchedule() {
         Device *value = *it;
         if(dynamic_cast<ManualDevice *>(value) != nullptr) {
             if(*(value->get_start_time().get()) < currentTime && *(dynamic_cast<ManualDevice *>(value)->get_stop_time().get()) > currentTime && value->is_on() == false) {
-                value->switch_on();
+                value->switch_on(currentTime);
                 powerLoad += value->KPower;
                 dynamic_cast<ManualDevice *>(value)->set_new_timer(currentTime, Time(23, 59));
             } else if(*(dynamic_cast<ManualDevice *>(value)->get_stop_time().get()) < currentTime && value->is_on() == true) {
-                value->switch_off();
+                value->switch_off(currentTime);
                 powerLoad -= value->KPower;
             }
             ++it;
         } else if(dynamic_cast<CPDevice *>(value) != nullptr) {
             if(currentTime >= dynamic_cast<CPDevice *>(value)->KDuration + * (value->get_start_time().get()) && value->is_on() == true) {
-                value->switch_off();
+                value->switch_off(currentTime);
                 powerLoad -= value->KPower;
                 it = active_devices.erase(it);
             } else if(value->is_on() == false && *(value->get_start_time().get()) < currentTime) {
-                value->switch_on();
+                value->switch_on(currentTime);
                 powerLoad += value->KPower;
                 balancePower(value->KName);
                 ++it;
@@ -162,7 +162,7 @@ void DomoticsSystem::changeDeviceStatus(bool status, std::string device) {
         powerLoad += active_devices.back()->KPower;
         balancePower(device);
     } else if(index != -1 && !status) {
-        active_devices[index]->switch_off();
+        active_devices[index]->switch_off(currentTime);
         powerLoad -= active_devices[index]->KPower;
         active_devices[index] = active_devices.back();
         active_devices.pop_back();
@@ -184,7 +184,7 @@ void DomoticsSystem::balancePower(std::string last) {
             name = active_devices[active_devices.size() - 2]->KName;
         }
         int index = getIndex(name, true);
-        active_devices[index]->switch_off();
+        active_devices[index]->switch_off(currentTime);
         powerLoad -= active_devices[index]->KPower;
         active_devices[index] = active_devices.back();
         active_devices.pop_back();
