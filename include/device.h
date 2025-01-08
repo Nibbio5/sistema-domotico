@@ -31,8 +31,9 @@ class Device{
         /**
          * @brief The power of the device measured in kW.
          * 
-         * The value indicates a power consumption if negative, and a 
-         * 
+         * The value indicates either an energy consumption if negative or a energy
+         * production if positive.
+         *  
          */
         const double KPower;
 
@@ -61,13 +62,42 @@ class Device{
          * @brief Activate the device
          *
          */
-        void switch_on();
+        void switch_on(const Time& current_time);
 
         /**
          * @brief Deactivate the device
          *
          */
-        void switch_off();
+        void switch_off(const Time& current_time);
+
+        /**
+         * @brief Get the total power consumerd/produced by the device
+         * 
+         * @param current_time the time point at which is required to calculate 
+         * the power consumption/production
+         * @return double 
+         */
+        double get_total_power(const Time& current_time) const;
+
+        /**
+         * @brief Removes the start Time object of this Device object
+         * 
+         */
+        virtual void removeTimer();
+
+        /**
+         * @brief Reset the amount of power consumed/produced and shut off the 
+         * device. Doesn't remove the timer.
+         * 
+         */
+        void resetDevice();
+
+        /**
+         * @brief Reset the amount of power consumed/produced, shut off the 
+         * device and remove the timer.
+         * 
+         */
+        void resetDeviceAndTimer();
 
         
     protected:
@@ -79,13 +109,25 @@ class Device{
          */
         bool is_on_ = false;
 
+        /**
+         * @brief The total power consumed (negative) or produced (positive) by the device.
+         * 
+         * The values updates when the device is turned on/off.
+         * 
+         */
         double total_power_ = 0;
 
         /**
          * @brief The time point at which the devices turns on and starts its activity.
          * 
          */
-        std::shared_ptr<Time> start_time_;
+        std::shared_ptr<Time> start_time_ = nullptr;
+
+        /**
+         * @brief The last time point at which the device was turned on
+         * 
+         */
+        std::unique_ptr<Time> last_activation_time = nullptr;
 
         /**
          * @brief Construct a new Device object
@@ -131,5 +173,15 @@ class Device{
          */
         friend std::ostream &operator<<(std::ostream &out, const Device &device);
 };
+
+/**
+ * @brief Calculates the amount of power consumed/produced by a device in a time period.
+ * 
+ * @param start_time the time point at which the device started its consumption/production
+ * @param stop_time the time point at which the device stopped its consumption/production
+ * @param power the power consumption/production is kW/h
+ * @return double the total power consumed/produced
+ */
+static double calculateTimePeriodPower(const Time& start_time, const Time& stop_time, const double power);
 
 #endif

@@ -61,3 +61,4 @@ class DomoticsSystem {
     void resetAll();
 
     friend std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys);
+};
