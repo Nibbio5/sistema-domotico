@@ -187,6 +187,4 @@ class Time {
     friend std::istream& operator>>(std::istream &in, Time &time);
 };
 
-
-
 #endif

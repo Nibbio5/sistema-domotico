@@ -49,7 +49,7 @@ class Device{
          * @return The Time object 
          */
         std::shared_ptr<const Time> get_start_time() const;
-
+        std::shared_ptr<const Time> get_last_activation_time() const;
         /**
          * @brief Return the Time object which defines the last time point at which 
          * the device was turned on

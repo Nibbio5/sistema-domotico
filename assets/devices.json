@@ -3,26 +3,28 @@
       {
         "Nome": "Impianto fotovoltaico",
         "DurataAccensione": "Manuale",
+        "OrarioAccensione": "08:00",
+        "OrarioSpegnimento": "18:00",
         "ProduzioneConsumo": "+1.5 kW"
       },
       {
         "Nome": "Lavatrice",
-        "DurataAccensione": "1 ora e 50 minuti",
+        "DurataAccensione": "01:50",
         "ProduzioneConsumo": "-2 kW"
       },
       {
         "Nome": "Lavastoviglie",
-        "DurataAccensione": "3 ore e 15 minuti",
+        "DurataAccensione": "03:15",
         "ProduzioneConsumo": "-1.5 kW"
       },
       {
-        "Nome": "Pompa di calore + termostato",
+        "Nome": "Pompa di calore",
         "DurataAccensione": "Manuale",
         "ProduzioneConsumo": "-2 kW"
       },
       {
         "Nome": "Tapparelle elettriche",
-        "DurataAccensione": "1 minuto",
+        "DurataAccensione": "00:01",
         "ProduzioneConsumo": "-0.3 kW"
       },
       {
@@ -33,21 +35,23 @@
       {
         "Nome": "Frigorifero",
         "DurataAccensione": "Manuale",
+        "OrarioAccensione": "00:00",
+        "OrarioSpegnimento": "23:59",
         "ProduzioneConsumo": "-0.4 kW"
       },
       {
         "Nome": "Forno a microonde",
-        "DurataAccensione": "2 minuti",
+        "DurataAccensione": "00:02",
         "ProduzioneConsumo": "-0.8 kW"
       },
       {
         "Nome": "Asciugatrice",
-        "DurataAccensione": "1 ora",
+        "DurataAccensione": "01:00",
         "ProduzioneConsumo": "-0.5 kW"
       },
       {
         "Nome": "Televisore",
-        "DurataAccensione": "1 ora",
+        "DurataAccensione": "01:00",
         "ProduzioneConsumo": "-0.2 kW"
       }
     ]

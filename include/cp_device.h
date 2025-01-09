@@ -14,13 +14,13 @@
  * according to the start time.
  * 
  */
-class CPDevice: public Device{
-    public:
-        /**
-         * @brief The amount of time the devices has to work before shutting off
-         * 
-         */
-        const Time KDuration;
+class CPDevice: public Device {
+  public:
+    /**
+     * @brief The amount of time the devices has to work before shutting off
+     *
+     */
+    const Time KDuration;
 
         /**
          * @brief Construct a new CPDevice object
@@ -65,4 +65,4 @@ class CPDevice: public Device{
         friend std::ostream& operator<<(std::ostream& out, const CPDevice& device);
 };
 
-#endif
+#endif // #ifndef

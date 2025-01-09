@@ -16,9 +16,9 @@ std::ostream& operator<<(std::ostream& out, const CPDevice& device) {
         << ", is_on=" << device.is_on_
         << ", start_time=";
 
-    if(device.start_time_){
+    if(device.start_time_) {
         out << *device.start_time_;
-    }else{
+    } else {
         out << "NOT_SET";
     }
 
