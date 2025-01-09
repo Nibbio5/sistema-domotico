@@ -12,7 +12,7 @@ bool Device::is_on() const {return is_on_;}
 
 void Device::switch_on(const Time& current_time) {
     if(!is_on_){
-        last_activation_time = std::make_unique<Time>(current_time);
+        last_activation_time = std::make_shared<Time>(current_time);
     }
     is_on_ = true;
 }

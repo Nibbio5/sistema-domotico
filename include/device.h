@@ -51,6 +51,14 @@ class Device{
         std::shared_ptr<const Time> get_start_time() const;
 
         /**
+         * @brief Get the Time object which defines the last time point at which 
+         * the device was turned on
+         * 
+         * @return std::shared_ptr<const Time> the dynamic pointer to the Time object
+         */
+        std::shared_ptr<const Time> get_last_activation_time() const;
+
+        /**
          * @brief Checks whether the device is active
          * 
          * @return true if the device is on
@@ -127,7 +135,7 @@ class Device{
          * @brief The last time point at which the device was turned on
          * 
          */
-        std::unique_ptr<Time> last_activation_time = nullptr;
+        std::shared_ptr<Time> last_activation_time = nullptr;
 
         /**
          * @brief Construct a new Device object
