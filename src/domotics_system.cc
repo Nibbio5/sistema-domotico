@@ -54,7 +54,7 @@ void DomoticsSystem::setDevices() {
                     all_devices.push_back(new ManualDevice(nome, std::stod(produzioneConsumo)));
                 }
             } else {
-                if(orarioAccensione != nullptr){
+                if(orarioAccensione != nullptr) {
                     active_devices.push_back(new CPDevice(nome, std::stod(produzioneConsumo), *orarioAccensione.get()));
                     all_devices.push_back(new CPDevice(nome, std::stod(produzioneConsumo), *orarioAccensione.get()));
                 }
@@ -119,7 +119,7 @@ void DomoticsSystem::checkSchedule() {
                 value->switch_on(currentTime);
                 powerLoad += value->KPower;
                 manualDevice->set_new_timer(currentTime, Time(23, 59));
-            } else if(manualDevice->get_stop_time() && (*(manualDevice->get_stop_time().get()) <= currentTime && value->is_on() == true || currentTime < *(manualDevice->get_start_time().get()) && value->is_on() == true)) {
+            } else if(manualDevice->get_stop_time() && (*(manualDevice->get_stop_time().get()) <= currentTime && value->is_on() == true || currentTime < * (manualDevice->get_start_time().get()) && value->is_on() == true)) {
                 value->switch_off(currentTime);
                 powerLoad -= value->KPower;
             }
@@ -205,7 +205,7 @@ void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start,
             dynamic_cast<ManualDevice *>(active_devices.back())->set_new_timer(start, stop);
             dynamic_cast<ManualDevice *>(all_devices[index])->set_new_timer(start, stop);
         }
-}else if (*active_devices[activeIndex]->get_start_time().get() != start || *dynamic_cast<ManualDevice *>(active_devices[activeIndex])->get_stop_time().get() != stop) {
+    } else if(*active_devices[activeIndex]->get_start_time().get() != start || *dynamic_cast<ManualDevice *>(active_devices[activeIndex])->get_stop_time().get() != stop) {
         if(dynamic_cast<CPDevice *>(active_devices[activeIndex]) != nullptr) {
             dynamic_cast<CPDevice *>(active_devices[activeIndex])->set_start_time(start);
             dynamic_cast<CPDevice *>(all_devices[index])->set_start_time(start);
@@ -238,8 +238,8 @@ std::vector<Device *> DomoticsSystem::getDevicesVector() const {
     return deviceList;
 }
 
-void DomoticsSystem::resetTime(){
-    currentTime = Time(0,0);
+void DomoticsSystem::resetTime() {
+    currentTime = Time(0, 0);
     checkSchedule();
 }
 
@@ -250,3 +250,4 @@ void DomoticsSystem::resetTimers() {// to be finished
         }
     }
     checkSchedule();
+}
