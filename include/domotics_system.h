@@ -42,7 +42,7 @@ class DomoticsSystem {
     void setCurrentTime(const Time& newTime);
     void setDeviceTime(const std::string& device, const Time& start, const Time& stop);
     void changeDeviceStatus (bool status, std::string device); 
-    void removeDevice(std::string device);
+    void removeDeviceTimer(std::string device);
     void balancePower(std::string last);
     void showActiveDevices() const; 
 

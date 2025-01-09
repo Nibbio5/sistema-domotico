@@ -65,8 +65,6 @@ void Terminal::rmCommandPrompt(const std::string &arg) {
         throw std::invalid_argument(
             "Invalid device provided. Type 'help' for more information.");
     }
-
-    domotics_system.removeDevice(device->KName);
 }
 
 void Terminal::showCommandPrompt(const std::string &arg) {

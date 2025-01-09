@@ -49,7 +49,7 @@ class Device{
          * @return Time
          */
         std::shared_ptr<const Time> get_start_time() const;
-
+        std::shared_ptr<const Time> get_last_activation_time() const;
         /**
          * @brief Checks whether the device is active
          * 
@@ -127,7 +127,7 @@ class Device{
          * @brief The last time point at which the device was turned on
          * 
          */
-        std::unique_ptr<Time> last_activation_time = nullptr;
+        std::shared_ptr<Time> last_activation_time = nullptr;
 
         /**
          * @brief Construct a new Device object
