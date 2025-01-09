@@ -103,9 +103,6 @@ bool Time::operator>=(const Time &time) const {
 }
 
 Time Time::operator+(const Time &time) const {
-    if(*this > time) {
-        throw std::invalid_argument("Invalid time addition");
-    }
     int newHour = hour + time.hour;
     int newMinute = minute + time.minute;
     if(newMinute >= 60) {

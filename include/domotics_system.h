@@ -17,14 +17,7 @@
  */
 class DomoticsSystem {
     private:
-        /*
-        * private variables that must be touched  only by the class methods
-        * std::vector<T> all_devices;
-        * std::vector<T> active_devices;
-        * std::double power_limit:
-        * 
-        *  std::vector<T> getDevices();
-        */
+    
         std::vector<Device*> all_devices;
         std::vector<Device*> active_devices;
         const double KPowerLimit;
@@ -32,15 +25,13 @@ class DomoticsSystem {
         Time currentTime;
 
         void checkSchedule();
-        std::vector<Device*> setDevices();
+        void setDevices();
+        void resetDevicesPowerCounter(); // to be implemented
 
     public:
 
     DomoticsSystem();
     DomoticsSystem(double power);
-    //void start(/*${DEVICENAME}*/ );
-    //void stop(/*${DEVICENAME}*/);
-   // void removeTimer(/*${DEVICENAME}*/);
     std::vector<Device*> getDevices() const;
     std::vector<Device *> getDevicesVector() const;
     void showDevices() const; //
@@ -53,7 +44,7 @@ class DomoticsSystem {
     void changeDeviceStatus (bool status, std::string device); 
     void removeDevice(std::string device);
     void balancePower(std::string last);
-    void showActiveDevices() const; //
+    void showActiveDevices() const; 
 
     //DEBUG section
     void resetTime();

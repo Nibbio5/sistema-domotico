@@ -61,7 +61,19 @@
     "list": "cpp",
     "functional": "cpp",
     "unordered_map": "cpp",
-    "xhash": "cpp"
+    "xhash": "cpp",
+    "array": "cpp",
+    "*.tcc": "cpp",
+    "cwctype": "cpp",
+    "deque": "cpp",
+    "map": "cpp",
+    "memory_resource": "cpp",
+    "numeric": "cpp",
+    "string_view": "cpp",
+    "fstream": "cpp",
+    "numbers": "cpp",
+    "span": "cpp",
+    "variant": "cpp"
   },
   "cSpell.words": ["domotic", "Domotics"]
 }
