@@ -30,6 +30,7 @@ class Terminal {
     ~Terminal() = default;
 
     void run();
+    static void log(const std::string &message);
 };
 
 #endif // #ifndef

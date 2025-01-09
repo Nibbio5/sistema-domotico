@@ -141,28 +141,26 @@ void Terminal::resetCommandPrompt(const std::string &arg) {
         throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
     }
     throw std::invalid_argument("not implemented yet");
-    /*
+
     if(arg == "time") {
-        //domotics_system.resetTime();
+        domotics_system.resetTime();
     } else if(arg == "timers") {
-       // domotics_system.resetTimers();
+        domotics_system.resetTimers();
     } else if(arg == "all") {
         //domotics_system.resetAll();
     } else {
-        throw std::invalid_argument(
-            "Invalid argument provided. Type 'help' for more information.");
-    }*/
+        throw std::invalid_argument("Invalid argument provided. Type 'help' for more information.");
+    }
 }
 
 void Terminal::helpCommandPrompt() {
     std::cout << "Commands:\n"
-              << " - set {device} {start} [{stop}] - Imposta l'orario di accensione [ e spegnimento(solo M)] per il dispositivo.\n"
-              << " - set {device} on/off - accende/spegne il dispositivo\n"
-              << " - rm {device} - rimuove il timer del dispositivo\n"
-              << " - show {device} - mostra lo stato del dispositivo\n"
-              << " - show - mostra lo stato di tutti i dispositivi\n"
-              << " - reset time - riporta il tempo a 00:00 spegnendo i dispositivi ma mantenendo i timer\n"
-              << " - reset timers - rimuove i timer dai dispositivi (mantengono lo stato)\n"
-              << " - reset all - riporta il sistema allo stato iniziale\n"
-              << " - exit - esci dalla casa\n";
+              << " - set {device} {start} [{stop}]: Imposta l'orario di accensione [ e spegnimento(solo M)] per il dispositivo.\n"
+              << " - set {device} on/off: accende/spegne il dispositivo\n"
+              << " - rm {device}: rimuove il timer del dispositivo\n"
+              << " - show {device}: mostra lo stato del dispositivo, se non è specificato il dispositivo li mostra tutti\n"
+              << " - reset time: riporta il tempo a 00:00 spegnendo i dispositivi ma mantenendo i timer\n"
+              << " - reset timers: rimuove i timer dai dispositivi (mantengono lo stato)\n"
+              << " - reset all: riporta il sistema allo stato iniziale\n"
+              << " - exit: esci dalla casa\n";
 }
