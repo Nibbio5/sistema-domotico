@@ -65,4 +65,4 @@ class CPDevice: public Device {
         friend std::ostream& operator<<(std::ostream& out, const CPDevice& device);
 };
 
-#endif // #ifndef
+#endif
