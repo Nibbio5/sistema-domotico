@@ -66,10 +66,10 @@ void Terminal::rmCommandPrompt(const std::string &arg) {
 
     const Device *device = isDevice(arg);
     if(device == nullptr) {
-        throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
+        throw std::invalid_argument("Dispositivo sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
 
-    //TODO: implement removeTimerDevice method from DomoticsSystem
+    domotics_system.removeDeviceTime(device->KName);
 }
 
 void Terminal::showCommandPrompt(const std::string &arg) {
@@ -161,4 +161,3 @@ void Terminal::helpCommandPrompt() {
               << " - reset timers: rimuove i timer dai dispositivi (mantengono lo stato)\n"
               << " - reset all: riporta il sistema allo stato iniziale\n"
               << " - exit: esci dalla casa\n";
-}
