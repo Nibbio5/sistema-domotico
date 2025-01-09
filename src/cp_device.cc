@@ -8,8 +8,6 @@ CPDevice::CPDevice(const std::string& name, const double power, const Time& dura
 
 void CPDevice::set_start_time(const Time& new_time) {start_time_ = std::make_shared<Time>(new_time);}
 
-void CPDevice::reset_start_time() {start_time_.reset();}
-
 std::ostream& operator<<(std::ostream& out, const CPDevice& device) {
     out << "CPDevice{"
         << "id=" << device.KId

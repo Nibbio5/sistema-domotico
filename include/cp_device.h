@@ -44,13 +44,9 @@ class CPDevice: public Device{
          * @param newTime the new time for the start Time object
          */
         void set_start_time(const Time& new_time);
+    
 
-        /**
-         * @brief Deletes the start timer
-         * 
-         */
-        void reset_start_time();
-
+    private:
         /**
          * @brief Output the CPDevice object to the output stream.
          * 
