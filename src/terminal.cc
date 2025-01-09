@@ -7,7 +7,7 @@ Terminal::Terminal(double power_limit) : domotics_system(power_limit) {}
 
 void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
     if(args.size() < 2) {
-        throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
+        throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
 
     try {
@@ -18,7 +18,7 @@ void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
         }
         Device *device = isDevice(args.at(0));
         if(device == nullptr) {
-            throw std::invalid_argument("Invalid device provided. Type 'help' for more information.");
+            throw std::invalid_argument("Dispositivo sbagliato. Scrivere 'help' per maggiori informazioni.");
         }
         setDeviceCommandPrompt(args, device);
     } catch(const std::out_of_range &e) {
@@ -47,27 +47,26 @@ void Terminal::setDeviceTimer(
     const std::string &stop
 ) {
     if(start.empty()) {
-        throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
+        throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
     Time start_time = Time::fromString(start);
     Time stop_time = (stop.empty()) ? Time(23, 59) : Time::fromString(stop);
 
     Device *device = isDevice(device_name);
     if(device == nullptr) {
-        throw std::invalid_argument("Invalid device provided. Type 'help' for more information.");
+        throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
     domotics_system.setDeviceTime(device->KName, start_time, stop_time);
 }
 
 void Terminal::rmCommandPrompt(const std::string &arg) {
     if(arg.empty()) {
-        throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
+        throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
 
     const Device *device = isDevice(arg);
     if(device == nullptr) {
-        throw std::invalid_argument(
-            "Invalid device provided. Type 'help' for more information.");
+        throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
 
     //TODO: implement removeTimerDevice method from DomoticsSystem
@@ -77,7 +76,7 @@ void Terminal::showCommandPrompt(const std::string &arg) {
     if(!arg.empty()) {
         const Device *device = isDevice(arg);
         if(device == nullptr) {
-            throw std::invalid_argument("Invalid device provided. Type 'help' for more information.");
+            throw std::invalid_argument("Dispositivo sbagliato. Scrivere 'help' per maggiori informazioni.");
         }
         showOneDevice(device);
         return;
@@ -115,7 +114,7 @@ std::string Terminal::showOneDevice(const Device *device, const bool &show_time)
 
 void Terminal::setTimeCommandPrompt(const std::string &arg) {
     if(arg.empty()) {
-        throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
+        throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
 
     try {
@@ -138,9 +137,8 @@ Device *Terminal::isDevice(const std::string &arg) {
 
 void Terminal::resetCommandPrompt(const std::string &arg) {
     if(arg.empty()) {
-        throw std::invalid_argument("Invalid arguments provided. Type 'help' for more information.");
+        throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
-    throw std::invalid_argument("not implemented yet");
 
     if(arg == "time") {
         domotics_system.resetTime();
@@ -149,7 +147,7 @@ void Terminal::resetCommandPrompt(const std::string &arg) {
     } else if(arg == "all") {
         //domotics_system.resetAll();
     } else {
-        throw std::invalid_argument("Invalid argument provided. Type 'help' for more information.");
+        throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
 }
 

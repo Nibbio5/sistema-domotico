@@ -15,6 +15,7 @@ void Terminal::run() {
         split(command, args, ' ');
         std::string arg = args.size() > 1 ? args.at(1) : "";
         try {
+            std::cout << "[" << domotics_system.getCurrentTime() << "]" << " L'orario attuale è  " << domotics_system.getCurrentTime() << std::endl;
             if(args[0] == "set") {
                 args.erase(args.begin());
                 setCommandPrompt(args);
@@ -28,7 +29,7 @@ void Terminal::run() {
                 helpCommandPrompt();
             } else {
                 throw std::invalid_argument(
-                    "Invalid command provided. Type 'help' for more information.");
+                    "Commando sbagliato. Scrivere 'help' per maggiori informazioni.");
             }
         } catch(const std::invalid_argument &e) {
             std::cerr << "[!Error!]" << e.what() << std::endl;
@@ -36,8 +37,8 @@ void Terminal::run() {
     }
 }
 
-void Terminal::log(const std::string &message) {
-    std::cout << message << std::endl;
+void Terminal::log(const Time &currentTime, const std::string &message) {
+    std::cout << "[" << currentTime << "]" << message << std::endl;
 }
 
 size_t Terminal::split(const std::string &txt, std::vector<std::string> &strs, char ch) {
