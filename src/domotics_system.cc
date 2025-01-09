@@ -185,18 +185,25 @@ void DomoticsSystem::balancePower(std::string last) {
     Time firstTime(23, 59), temp;
     std::string name;
     while(-powerLoad > KPowerLimit) {
-        for(auto *value : active_devices) {
+        for(int i =0; i < active_devices.size() ;  i++) {
+            temp = *active_devices[i]->get_start_time().get();
+            if(active_devices[i]->KName != "Impianto fotovoltaico" && active_devices[i]->KName != "Frigorifero" && active_devices[i]->KName != last && firstTime >= temp && active_devices[i]->is_on()) {
+                firstTime = temp;
+                name = active_devices[i]->KName;
+            }
+        }
+        /*for(auto *value : active_devices) {
             temp = *(value->get_start_time().get());
-            if(value->KName != "Impianto fotovoltaico" && value->KName != "Frigorifero" && firstTime > temp) {
+            if(value->KName != "Impianto fotovoltaico" && value->KName != "Frigorifero" && firstTime > temp && value->is_on()) {
                 firstTime = temp;
                 name = value->KName;
             }
         }
-        int activeIndex = getIndex(name, true);
         if(*(active_devices[active_devices.size() - 2]->get_start_time().get()) == firstTime
                 && active_devices[active_devices.size() - 2]->is_on()) {
             name = active_devices[active_devices.size() - 2]->KName;
-        }
+        }*/
+        int activeIndex = getIndex(name, true);
         int index = getIndex(name, false);
         active_devices[activeIndex]->switch_off(currentTime);
         powerLoad -= active_devices[activeIndex]->KPower;
