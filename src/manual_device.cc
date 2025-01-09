@@ -9,9 +9,9 @@ ManualDevice::ManualDevice(const std::string& name, const double power, const Ti
     stop_time_ = std::make_shared<Time>(stop_time);
 }
 
-ManualDevice::ManualDevice(const std::string& name, const double power, const Time& startTime) : Device(name, power, startTime), stop_time_{nullptr} {}
+ManualDevice::ManualDevice(const std::string& name, const double power, const Time& start_time) : Device(name, power, start_time) {}
 
-ManualDevice::ManualDevice(const std::string& name, const double power) : Device(name, power), stop_time_{nullptr} {}
+ManualDevice::ManualDevice(const std::string& name, const double power) : Device(name, power) {}
 
 std::shared_ptr<const Time> ManualDevice::get_stop_time() const {return stop_time_;}
 
@@ -22,12 +22,12 @@ void ManualDevice::set_start_time(const Time& new_time) {
     start_time_ = std::make_shared<Time>(new_time);
 }
 
-void ManualDevice::set_new_timer(const Time& newStartTime, const Time& newStopTime) {
-    if(newStartTime > newStopTime)
+void ManualDevice::set_new_timer(const Time& new_start_time, const Time& new_stop_time) {
+    if(new_start_time > new_stop_time)
         throw std::invalid_argument("Start time is higher than stop time");
 
-    start_time_ = std::make_shared<Time>(newStartTime);
-    stop_time_ = std::make_shared<Time>(newStopTime);
+    start_time_ = std::make_shared<Time>(new_start_time);
+    stop_time_ = std::make_shared<Time>(new_stop_time);
 }
 
 void ManualDevice::removeTimer() {

@@ -10,7 +10,7 @@
  * instance every time it's called, without the need to be instantiated.
  *
  * The IDs are generated starting from zero and incrementing a variable on every
- * call. To get the ID the call is: ``SingeltonId::getInstance().generateId()``
+ * call. To get the ID the call is: ``SingletonId::getInstance().generateId()``
  *
  */
 class SingletonId {
@@ -26,12 +26,12 @@ class SingletonId {
             return instance;
         }
 
-  /**
-   * @brief Returns the new ID and then increments the internal variable.
-   *
-   * @return int a new ID
-   */
-  int generateId();
+        /**
+         * @brief Returns the new ID and then increments the internal variable.
+         *
+         * @return int a new ID
+         */
+        int generateId();
 
     private:
         /**

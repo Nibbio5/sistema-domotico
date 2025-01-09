@@ -29,7 +29,7 @@ class Device{
         const std::string KName;
 
         /**
-         * @brief The power of the device measured in kW.
+         * @brief The power of the device measured in kW/h.
          * 
          * The value indicates either an energy consumption if negative or a energy
          * production if positive.
@@ -44,17 +44,17 @@ class Device{
         virtual ~Device() = default;
 
         /**
-         * @brief Get the Time object which defines the activty start time
+         * @brief Return the Time object which defines the activity start time
          *
-         * @return Time
+         * @return The Time object 
          */
         std::shared_ptr<const Time> get_start_time() const;
 
         /**
-         * @brief Get the Time object which defines the last time point at which 
+         * @brief Return the Time object which defines the last time point at which 
          * the device was turned on
          * 
-         * @return std::shared_ptr<const Time> the dynamic pointer to the Time object
+         * @return std::shared_ptr<const Time>: the dynamic pointer to the Time object
          */
         std::shared_ptr<const Time> get_last_activation_time() const;
 
@@ -67,28 +67,29 @@ class Device{
         bool is_on() const;
 
         /**
-         * @brief Activate the device
+         * @brief Activate the device and updates the last activation Time object
          *
          */
         void switch_on(const Time& current_time);
 
         /**
-         * @brief Deactivate the device
+         * @brief Deactivate the device and updates the total consumption/production
+         * of power
          *
          */
         void switch_off(const Time& current_time);
 
         /**
-         * @brief Get the total power consumerd/produced by the device
+         * @brief Return the total power consumerd/produced by the device
          * 
          * @param current_time the time point at which is required to calculate 
          * the power consumption/production
-         * @return double 
+         * @return double: the total power consumed/produced until the given time
          */
         double get_total_power(const Time& current_time) const;
 
         /**
-         * @brief Removes the start Time object of this Device object
+         * @brief Remove the start Time object of the device
          * 
          */
         virtual void removeTimer();
@@ -120,7 +121,7 @@ class Device{
         /**
          * @brief The total power consumed (negative) or produced (positive) by the device.
          * 
-         * The values updates when the device is turned on/off.
+         * The values updates when the device is turned off.
          * 
          */
         double total_power_ = 0;
@@ -142,7 +143,7 @@ class Device{
          *
          * @param name the name of the device
          * @param power the power consumption (negative) or production (positive) of the device
-         * @param startTime the time point at which the devices turns on
+         * @param start_time the time point at which the devices turns on
          */
         Device(const std::string& name, const double power, const Time& start_time);
 
@@ -162,10 +163,10 @@ class Device{
         Device(const Device &device) = delete;
 
         /**
-         * @brief Copy assigmnet disabled for base class
+         * @brief Copy assignment disabled for base class
          *
          * @param device the Device to use for the copy
-         * @return Device& the given device
+         * @return Device&: the given device
          */
         Device &operator=(const Device &device) = delete;
 
@@ -174,10 +175,12 @@ class Device{
          *
          * The data injected in the ostream object contains the class name and a list of
          * all the class variables with the respective value.
+         * If the dynamic pointer to the Time object holds a nullptr, the start time
+         * is "NOT_SET". 
          *
          * @param out the stream where the data are injected
          * @param device the Device object which provides the data to inject
-         * @return std::ostream& the given output stream
+         * @return std::ostream&: the given output stream
          */
         friend std::ostream &operator<<(std::ostream &out, const Device &device);
 };
@@ -188,7 +191,7 @@ class Device{
  * @param start_time the time point at which the device started its consumption/production
  * @param stop_time the time point at which the device stopped its consumption/production
  * @param power the power consumption/production is kW/h
- * @return double the total power consumed/produced
+ * @return double: the total power consumed/produced
  */
 static double calculateTimePeriodPower(const Time& start_time, const Time& stop_time, const double power);
 
