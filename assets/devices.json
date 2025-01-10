@@ -5,6 +5,7 @@
         "DurataAccensione": "Manuale",
         "OrarioAccensione": "08:00",
         "OrarioSpegnimento": "18:00",
+        "WhiteList": true,
         "ProduzioneConsumo": "+1.5 kW"
       },
       {
