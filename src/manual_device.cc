@@ -1,16 +1,17 @@
 // Eros Menin
 
 #include "../include/manual_device.h"
-#include <memory>
 
-ManualDevice::ManualDevice(const std::string& name, const double power, const Time& start_time, const Time& stop_time) : Device(name, power, start_time) {
+ManualDevice::ManualDevice(const std::string& name, const double power, const Time& start_time, const Time& stop_time, const bool is_on_white_list) 
+    : Device(name, power, start_time, is_on_white_list) {
     if(start_time > stop_time)
         throw std::invalid_argument("Start time is higher than stop time");
 
     this->stop_time_ = std::make_shared<Time>(stop_time);
 }
 
-ManualDevice::ManualDevice(const std::string& name, const double power, const Time& start_time) : Device(name, power, start_time) {}
+ManualDevice::ManualDevice(const std::string& name, const double power, const Time& start_time, const bool is_on_white_list) 
+    : Device(name, power, start_time, is_on_white_list) {}
 
 ManualDevice::ManualDevice(const std::string& name, const double power) : Device(name, power) {}
 
@@ -55,7 +56,9 @@ std::ostream& operator<<(std::ostream& out, const ManualDevice& device) {
     } else {
         out << "NOT_SET";
     }
-    out << "}";
+    
+    out << ", is_on_white_list=" << device.KIsOnWhiteList 
+        << "}";
 
     return out;
 }

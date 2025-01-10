@@ -2,9 +2,11 @@
 
 #include "../include/device.h"
 
-Device::Device(const std::string& name, const double power, const Time& start_time) : KId{SingletonId::getInstance().generateId()}, KName(name), KPower(power), start_time_{std::make_shared<Time>(start_time)} {}
+Device::Device(const std::string& name, const double power, const Time& start_time, const bool is_on_white_list) 
+    : KId{SingletonId::getInstance().generateId()}, KName{name}, KPower{power}, start_time_{std::make_shared<Time>(start_time)}, KIsOnWhiteList{is_on_white_list} {}
 
-Device::Device(const std::string& name, const double power) : KId{SingletonId::getInstance().generateId()}, KName(name), KPower(power) {}
+Device::Device(const std::string& name, const double power, const bool is_on_white_list) 
+    : KId{SingletonId::getInstance().generateId()}, KName{name}, KPower{power}, KIsOnWhiteList{is_on_white_list} {}
 
 std::shared_ptr<const Time> Device::get_start_time() const {return start_time_;}
 
@@ -64,7 +66,8 @@ std::ostream& operator<<(std::ostream& out, const Device& device) {
         out << "NOT_SET";
     }
 
-    out << "}";
+    out << ", is_on_white_list=" << device.KIsOnWhiteList 
+        << "}";
 
     return out;
 }

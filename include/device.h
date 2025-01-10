@@ -38,6 +38,15 @@ class Device{
         const double KPower;
 
         /**
+         * @brief Defines whether the device is part of a white list (true) or not (false).
+         * 
+         * The white list contains a list of devices that in case of electrical overload are not 
+         * turned off, if possible.
+         * 
+         */
+        const bool KIsOnWhiteList;
+
+        /**
          * @brief Destroy the Device object
          *
          */
@@ -52,7 +61,9 @@ class Device{
 
         /**
          * @brief Return the Time object which defines the last time point at which 
-         * the device was turned on
+         * the device was turned on.
+         * 
+         * If the device is turned off, this holds a nullptr.
          * 
          * @return std::shared_ptr<const Time>: the dynamic pointer to the Time object
          */
@@ -144,16 +155,20 @@ class Device{
          * @param name the name of the device
          * @param power the power consumption (negative) or production (positive) of the device
          * @param start_time the time point at which the devices turns on
+         * @param is_on_white_list whether the device is part of a white list of devices that won't 
+         * be turned off in case of electrical overload (if possible).
          */
-        Device(const std::string& name, const double power, const Time& start_time);
+        Device(const std::string& name, const double power, const Time& start_time, const bool is_on_white_list = false);
 
         /**
          * @brief Construct a new Device object without a start Time object
          *
          * @param name the name of the device
          * @param power the power consumption (negative) or production (positive) of the device
+         * @param is_on_white_list whether the device is part of a white list of devices that won't 
+         * be turned off in case of electrical overload (if possible).
          */
-        Device(const std::string& name, const double power);
+        Device(const std::string& name, const double power, const bool is_on_white_list = false);
 
         /**
          * @brief Copy constuctor disabled for base class

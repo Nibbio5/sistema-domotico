@@ -29,8 +29,10 @@ class CPDevice: public Device {
          * @param power the power consumption (negative) or production (positive) of the device
          * @param duration the amount of time the devices has to work before shutting off
          * @param start_time the time point at which the device turns on
+         * @param is_on_white_list whether the device is part of a white list of devices that won't 
+         * be turned off in case of electrical overload (if possible).
          */
-        CPDevice(const std::string& name, const double power, const Time& duration, const Time& start_time);
+        CPDevice(const std::string& name, const double power, const Time& duration, const Time& start_time, const bool is_on_white_list = false);
 
         /**
          * @brief Construct a new CPDevice object without a start time
@@ -38,8 +40,10 @@ class CPDevice: public Device {
          * @param name the name of the device
          * @param power the power consumption (negative) or production (positive) of the device
          * @param duration the amount of time the devices has to work before shutting off
+         * @param is_on_white_list whether the device is part of a white list of devices that won't 
+         * be turned off in case of electrical overload (if possible).
          */
-        CPDevice(const std::string& name, const double power, const Time& duration);
+        CPDevice(const std::string& name, const double power, const Time& duration, const bool is_on_white_list = false);
         
         /**
          * @brief Set the start Time object

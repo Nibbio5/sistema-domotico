@@ -29,8 +29,10 @@ class ManualDevice : public Device {
          * @param power the power consumption (negative) or production (positive) of the device
          * @param start_time the time point at which the devices turns on
          * @param stop_time the time point at which the devices turns off
+         * @param is_on_white_list whether the device is part of a white list of devices that won't 
+         * be turned off in case of electrical overload (if possible).
          */
-        ManualDevice(const std::string& name, const double power, const Time& start_time, const Time& stop_time);
+        ManualDevice(const std::string& name, const double power, const Time& start_time, const Time& stop_time, const bool is_on_white_list = false);
         
         /**
          * @brief Construct a new ManualDevice object without a stop time
@@ -38,8 +40,10 @@ class ManualDevice : public Device {
          * @param name the name of the device
          * @param power the power consumption (negative) or production (positive) of the device
          * @param start_time the time point at which the devices turns on
+         * @param is_on_white_list whether the device is part of a white list of devices that won't 
+         * be turned off in case of electrical overload (if possible).
          */
-        ManualDevice(const std::string& name, const double power, const Time& start_time);
+        ManualDevice(const std::string& name, const double power, const Time& start_time, const bool is_on_white_list = false);
 
         /**
          * @brief Construct a new Manual Device object without both the start and stop time
