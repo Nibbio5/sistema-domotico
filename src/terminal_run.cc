@@ -36,10 +36,6 @@ void Terminal::run() {
     }
 }
 
-void Terminal::log(const Time &currentTime, const std::string &message) {
-    std::cout << "[" << currentTime << "]" << message << std::endl;
-}
-
 size_t Terminal::split(const std::string &txt, std::vector<std::string> &strs, char ch) {
     size_t pos = txt.find(ch);
     size_t initialPos = 0;

@@ -1,10 +1,11 @@
 #ifndef TERMINAL_H
 #define TERMINAL_H
 
-#include "device.h"
-#include "domotics_system.h"
 #include <string>
 #include <vector>
+#include "domotics_system.h"
+#include "device.h"
+
 
 class Terminal {
   private:
@@ -30,7 +31,6 @@ class Terminal {
     ~Terminal() = default;
 
     void run();
-    static void log(const Time &currentTime, const std::string &message);
 };
 
 #endif // #ifndef

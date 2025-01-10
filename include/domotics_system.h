@@ -1,3 +1,8 @@
+// Daniele Piccolo
+
+#ifndef DOMOTICS_SYSTEM_H
+#define DOMOTICS_SYSTEM_H
+
 #include <string>  // Aggiungi questo include
 #include <map>
 #include <iostream>
@@ -9,7 +14,7 @@
 #include "time.h"
 #include "manual_device.h"
 #include "cp_device.h"
-
+#include "log.h"
 
 /**
  * @brief  A class that manages the domotics system by controlling the devices
@@ -27,6 +32,7 @@ class DomoticsSystem {
         void checkSchedule();
         void setDevices();
         void resetDevicesPowerCounter(); // to be implemented
+        void insertByTime(std::string device);
 
     public:
 
@@ -53,3 +59,6 @@ class DomoticsSystem {
 
     friend std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys);
 };
+
+
+#endif // #ifndef
