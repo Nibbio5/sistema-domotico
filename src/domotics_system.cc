@@ -156,22 +156,20 @@ bool DomoticsSystem::isPresent(std::string device) const
 void DomoticsSystem::checkSchedule()
 {
     Time tempo = Time(0, 0);
-    for (int i = 0; i <= active_devices.size(); i++)
+    for (int i = 0; i <= active_devices.size();)
     {
-        try
-        {   
-            if(i < active_devices.size()){
-                if(*active_devices[i]->get_start_time().get() <= currentTime)
+        if (i < active_devices.size())
+        {
+            if (*active_devices[i]->get_start_time().get() <= currentTime)
                 tempo = *active_devices[i]->get_start_time().get();
-            }else 
+        }
+        else
             tempo = currentTime;
-        }
-        catch (const std::exception &e)
+
+        bool deviceRemoved = false;
+        for (auto it = active_devices.begin(); it != active_devices.end();)
         {
-            
-        }
-        for (auto *device : active_devices)
-        {
+            auto *device = *it;
             auto startTime = device->get_start_time();
             if (auto manualDevice = dynamic_cast<ManualDevice *>(device))
             {
@@ -183,31 +181,40 @@ void DomoticsSystem::checkSchedule()
                     powerLoad += manualDevice->KPower;
                     log(*startTime, "Il dispositivo " + manualDevice->KName + " si é acceso");
                 }
-                else if (stopTime != nullptr &&
-                         (*stopTime <= tempo && manualDevice->is_on()))
+                else if (stopTime != nullptr && (*stopTime <= tempo && manualDevice->is_on()))
                 {
                     log(*stopTime, "Il dispositivo " + manualDevice->KName + " si é spento");
-                    manualDevice->switch_off(currentTime);
+                    manualDevice->switch_off(tempo);
                     powerLoad -= manualDevice->KPower;
+                    it = active_devices.erase(it);
+                    deviceRemoved = true;
+                    continue;
                 }
             }
             else if (auto cpDevice = dynamic_cast<CPDevice *>(device))
             {
-
                 auto duration = cpDevice->KDuration;
-                if (startTime != nullptr && !cpDevice->is_on() && *startTime <= tempo && *startTime + duration >= tempo )
+                if (startTime != nullptr && !cpDevice->is_on() && *startTime <= tempo && *startTime + duration >= tempo)
                 {
                     cpDevice->switch_on(*startTime);
                     powerLoad += cpDevice->KPower;
                     log(*startTime, "Il dispositivo " + cpDevice->KName + " si é acceso");
                 }
-                if (startTime != nullptr && tempo > *startTime + duration && cpDevice->is_on())
+                if (startTime != nullptr && tempo >= *startTime + duration && cpDevice->is_on())
                 {
                     log(duration + *startTime, "Il dispositivo " + cpDevice->KName + " si é spento");
                     cpDevice->switch_off(duration + *startTime);
                     powerLoad -= cpDevice->KPower;
+                    it = active_devices.erase(it);
+                    deviceRemoved = true;
+                    continue;
                 }
             }
+            ++it;
+        }
+        if (!deviceRemoved)
+        {
+            ++i;
         }
     }
 }
@@ -281,7 +288,7 @@ void DomoticsSystem::changeDeviceStatus(bool status, std::string device)
     {
         active_devices.push_back(all_devices[index]);
         active_devices.back()->switch_on(currentTime);
-        all_devices[index]->switch_on(currentTime);
+        active_devices.back()->set_start_time(currentTime);
         log(currentTime, "Il dispositivo " + device + " si é acceso");
         powerLoad += active_devices.back()->KPower;
         balancePower(device);
@@ -295,6 +302,7 @@ void DomoticsSystem::changeDeviceStatus(bool status, std::string device)
     else
     {
         active_devices[activeIndex]->switch_on(currentTime);
+        active_devices[activeIndex]->set_start_time(currentTime);
         powerLoad += active_devices[activeIndex]->KPower;
         log(currentTime, "Il dispositivo " + device + " si é acceso");
         balancePower(device);
@@ -359,6 +367,7 @@ void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start,
     {
         manualDevice->set_new_timer(start, stop);
     }
+    checkSchedule();
 }
 
 std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys)
@@ -392,10 +401,15 @@ std::vector<Device *> DomoticsSystem::getDevicesVector() const
 void DomoticsSystem::resetTime()
 {
     currentTime = Time(0, 0);
-    for (auto *value : active_devices)
+    for (auto *value : all_devices)
     {
+        if (value->get_start_time() != nullptr && getIndex(value->KName, true) == -1)
+        {
+            active_devices.push_back(value);
+        }
         value->resetDevice();
     }
+    orderByStartTime();
     powerLoad = 0;
     checkSchedule();
 }
@@ -419,10 +433,11 @@ void DomoticsSystem::resetTimers()
 void DomoticsSystem::resetAll()
 {
     currentTime = Time(0, 0);
-    for (auto *value : active_devices)
+    for (auto *value : all_devices)
     {
         value->resetDeviceAndTimer();
     }
+    active_devices.clear();
     powerLoad = 0;
     checkSchedule();
 }
