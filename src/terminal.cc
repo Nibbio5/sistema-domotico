@@ -1,3 +1,11 @@
+/**
+ * @file terminal.cc
+ * @author Francesco Dotoli (francesco.dotoli@studenti.unipd.it)
+ * @brief part of implementation of the terminal class
+ * @date 2024-12-27
+ *
+ */
+
 #include "../include/terminal.h"
 #include <iostream>
 #include <stdexcept>
@@ -163,6 +171,6 @@ void Terminal::helpCommandPrompt() {
               << " - exit: esci dalla casa\n";
 }
 
-double roundTo(double value, double precision = 1.0) {
+double roundTo(double value, double precision) {
     return std::round(value / precision) * precision;
 }

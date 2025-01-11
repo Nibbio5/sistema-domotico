@@ -1,3 +1,12 @@
+/**
+ * @file time.h
+ * @author Francesco Dotoli (francesco.dotoli@studenti.unipd.it)
+ * @brief
+ * @date 2024-12-22
+ *
+ * @copyright Copyright (c) 2025
+ *
+ */
 #ifndef TIME_H
 #define TIME_H
 
@@ -144,7 +153,7 @@ class Time {
 
     /**
      * @brief Subtract two Time objects
-     * 
+     *
      * @param time The time object
      * @return Time object
      */
@@ -152,7 +161,7 @@ class Time {
 
     /**
      * @brief Compare two Time objects
-     * 
+     *
      * @param time The Time object
      * @return true if the first Time object is greater or equal to the second Time object
      * @return false if the first Time object is not greater than the second Time object
@@ -161,7 +170,7 @@ class Time {
 
     /**
      * @brief Compare two Time objects
-     * 
+     *
      * @param time The Time object
      * @return true if the first Time object is not greater or equal to the second Time object
      * @return false if the first Time object is greater than the second Time object

@@ -17,6 +17,7 @@
 #ifndef DOMOTICS_SYSTEM_H
 #define DOMOTICS_SYSTEM_H
 
+#include <functional>
 #include <string>
 #include <map>
 #include <iostream>
@@ -180,5 +181,7 @@ class DomoticsSystem {
          */
         friend std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys);
 };
+
+void checkScheduleCpDevice();
 
 #endif // #ifndef

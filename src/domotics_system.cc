@@ -116,48 +116,47 @@ bool DomoticsSystem::isPresent(std::string device) const {
 }
 
 void DomoticsSystem::checkSchedule() {
-    for(auto it = active_devices.begin(); it != active_devices.end();) {
+    for(auto it = active_devices.begin(); it != active_devices.end(); it++) {
         Device *device = *it;
+        auto startTime = device->get_start_time();
+        auto lastActivationTime = device->get_last_activation_time();
         ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(device);
         CPDevice *cpDevice = dynamic_cast<CPDevice *>(device);
 
         if(manualDevice != nullptr) {
-            auto startTime = device->get_start_time();
             auto stopTime = manualDevice->get_stop_time();
-            auto lastActivationTime = manualDevice->get_last_activation_time();
-
             if(startTime != nullptr && *startTime <= currentTime && stopTime != nullptr && *stopTime > currentTime && !device->is_on()) {
                 device->switch_on(*startTime);
                 powerLoad += device->KPower;
                 log(*startTime, "Il dispositivo " + device->KName + " si é acceso");
-                balancePower(device->KName);
             } else if(stopTime != nullptr && (*stopTime <= currentTime && device->is_on() || lastActivationTime != nullptr && currentTime < *lastActivationTime && device->is_on())) {
                 log(*stopTime, "Il dispositivo " + device->KName + " si é spento");
                 device->switch_off(currentTime);
                 powerLoad -= device->KPower;
             }
         } else if(cpDevice != nullptr) {
-            auto lastActivationTime = device->get_last_activation_time();
-            auto startTime = device->get_start_time();
-            auto duration = cpDevice->KDuration;
-
-            if(startTime != nullptr && !device->is_on() && *startTime <= currentTime) {
-                device->switch_on(*startTime);
-                powerLoad += device->KPower;
-                log(*startTime, "Il dispositivo " + device->KName + " si é acceso");
-                balancePower(device->KName);
-            }
-
-            if(lastActivationTime != nullptr
-                    && currentTime >= duration + *lastActivationTime
-                    && device->is_on() || startTime != nullptr
-                    && currentTime < *startTime && device->is_on()) {
-                log(duration + *lastActivationTime, "Il dispositivo " + device->KName + " si é spento");
-                device->switch_off(duration + *lastActivationTime);
-                powerLoad -= device->KPower;
-            }
+            // checkScheduleCpDevice(cpDevice, currentTime, startTime, lastActivationTime, powerLoad);
         }
-        ++it;
+
+        balancePower(device->KName);
+    }
+}
+
+void checkScheduleCpDevice(CPDevice *cpDevice, Time currentTime, Time *startTime, Time *lastActivationTime, double &powerLoad) {
+    auto duration = cpDevice->KDuration;
+    if(startTime != nullptr && !cpDevice->is_on() && *startTime <= currentTime) {
+        cpDevice->switch_on(*startTime);
+        powerLoad += cpDevice->KPower;
+        log(*startTime, "Il dispositivo " + cpDevice->KName + " si é acceso");
+    }
+
+    if(lastActivationTime != nullptr
+            && currentTime >= duration + *lastActivationTime
+            && cpDevice->is_on() || startTime != nullptr
+            && currentTime < *startTime && cpDevice->is_on()) {
+        log(duration + *lastActivationTime, "Il dispositivo " + cpDevice->KName + " si é spento");
+        cpDevice->switch_off(duration + *lastActivationTime);
+        powerLoad -= cpDevice->KPower;
     }
 }
 

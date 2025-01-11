@@ -1,3 +1,13 @@
+/**
+ * @file terminal.h
+ * @author Francesco Dotoli (francesco.dotoli@studenti.unipd.it)
+ * @brief
+ * @date 2024-12-27
+ *
+ * @copyright Copyright (c) 2025
+ *
+ */
+
 #ifndef TERMINAL_H
 #define TERMINAL_H
 
@@ -36,7 +46,7 @@ class Terminal {
 
 /**
  * @brief Helper function that rounds a given double value to the diresred precision
- * 
+ *
  * @param value the double value to round
  * @param precision the decimal precision
  * @return double the rounded value
