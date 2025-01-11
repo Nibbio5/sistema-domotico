@@ -17,6 +17,8 @@ int main(int argc, char* argv[]) {
 
     if(argc < 2){
         std::cout << "Nessuna potenza fornita, il programma utilizzerà il valore di default 3.5kW\n\n";
+        Terminal terminal;
+        terminal.run();
     }else{
         double power;
         
