@@ -3,9 +3,7 @@
 #include <stdexcept>
 #include <string>
 
-Terminal::Terminal(double power_limit) : domotics_system(power_limit) {
-    std::cout << "\n\t\tBenvenuto a casa ;)\n" << std::endl;
-}
+Terminal::Terminal(double power_limit) : domotics_system(power_limit) {}
 
 void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
     if(args.size() < 2) {
