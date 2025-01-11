@@ -96,8 +96,8 @@ void Terminal::showCommandPrompt(const std::string &arg) {
     }
     Time currentTime = domotics_system.getCurrentTime();
     std::cout << "[" << currentTime << "] Attualmente il sistema ha prodotto " +
-              std::to_string(produced_power) + "kWh e consumato " +
-              std::to_string(consumed_power) + "kWh. " + output;
+              std::to_string(roundTo(produced_power)) + "kWh e consumato " +
+              std::to_string(roundTo(consumed_power)) + "kWh. " + output;
 }
 
 std::string Terminal::showOneDevice(const Device *device, const bool &show_time) {
@@ -109,7 +109,7 @@ std::string Terminal::showOneDevice(const Device *device, const bool &show_time)
     }
     return time + "Il dispositivo " + "(" + std::to_string(device->is_on()) + ") " + device->KName + " ha " + (show_time ? "attualmente " : "")
            + (device->KPower >= 0 ? "prodotto " : "consumato ")
-           + std::to_string(device->get_total_power(domotics_system.getCurrentTime())) + "kWh\n";
+           + std::to_string(roundTo(device->get_total_power(domotics_system.getCurrentTime()))) + "kWh\n";
 }
 
 void Terminal::setTimeCommandPrompt(const std::string &arg) {
@@ -161,4 +161,8 @@ void Terminal::helpCommandPrompt() {
               << " - reset timers: rimuove i timer dai dispositivi (mantengono lo stato)\n"
               << " - reset all: riporta il sistema allo stato iniziale\n"
               << " - exit: esci dalla casa\n";
+}
+
+double roundTo(double value, double precision = 1.0) {
+    return std::round(value / precision) * precision;
 }

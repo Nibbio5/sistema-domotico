@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <cmath>
 #include "domotics_system.h"
 #include "device.h"
 
@@ -32,5 +33,14 @@ class Terminal {
 
     void run();
 };
+
+/**
+ * @brief Helper function that rounds a given double value to the diresred precision
+ * 
+ * @param value the double value to round
+ * @param precision the decimal precision
+ * @return double the rounded value
+ */
+double roundTo(double value, double precision = 2.0);
 
 #endif // #ifndef
