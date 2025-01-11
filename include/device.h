@@ -57,7 +57,14 @@ class Device{
          *
          * @return The Time object 
          */
-        std::shared_ptr<const Time> get_start_time() const;
+        virtual std::shared_ptr<const Time> get_start_time() const;
+
+        /**
+         * @brief Set the start Time object
+         * 
+         * @param new_time the new time for the start Time object
+         */
+        void set_start_time(const Time& new_time);
 
         /**
          * @brief Return the Time object which defines the last time point at which 
