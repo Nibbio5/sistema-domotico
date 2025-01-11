@@ -6,8 +6,6 @@ CPDevice::CPDevice(const std::string& name, const double power, const Time& dura
 
 CPDevice::CPDevice(const std::string& name, const double power, const Time& duration, const bool is_on_white_list) : Device(name, power, is_on_white_list), KDuration{duration} {}
 
-void CPDevice::set_start_time(const Time& new_time) {start_time_ = std::make_shared<Time>(new_time);}
-
 std::ostream& operator<<(std::ostream& out, const CPDevice& device) {
     out << "CPDevice{"
         << "id=" << device.KId

@@ -44,13 +44,6 @@ class CPDevice: public Device {
          * be turned off in case of electrical overload (if possible).
          */
         CPDevice(const std::string& name, const double power, const Time& duration, const bool is_on_white_list = false);
-        
-        /**
-         * @brief Set the start Time object
-         * 
-         * @param new_time the new time for the start Time object
-         */
-        void set_start_time(const Time& new_time);
     
 
     private:

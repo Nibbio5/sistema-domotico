@@ -104,8 +104,8 @@ void Terminal::showCommandPrompt(const std::string &arg) {
     }
     Time currentTime = domotics_system.getCurrentTime();
     std::cout << "[" << currentTime << "] Attualmente il sistema ha prodotto " +
-              std::to_string(roundTo(produced_power)) + "kWh e consumato " +
-              std::to_string(roundTo(consumed_power)) + "kWh. " + output;
+              roundTo(produced_power) + "kWh e consumato " +
+              roundTo(consumed_power) + "kWh. " + output;
 }
 
 std::string Terminal::showOneDevice(const Device *device, const bool &show_time) {
@@ -117,7 +117,7 @@ std::string Terminal::showOneDevice(const Device *device, const bool &show_time)
     }
     return time + "Il dispositivo " + "(" + std::to_string(device->is_on()) + ") " + device->KName + " ha " + (show_time ? "attualmente " : "")
            + (device->KPower >= 0 ? "prodotto " : "consumato ")
-           + std::to_string(roundTo(device->get_total_power(domotics_system.getCurrentTime()))) + "kWh\n";
+           + roundTo(device->get_total_power(domotics_system.getCurrentTime())) + "kWh\n";
 }
 
 void Terminal::setTimeCommandPrompt(const std::string &arg) {
@@ -171,6 +171,13 @@ void Terminal::helpCommandPrompt() {
               << " - exit: esci dalla casa\n";
 }
 
-double roundTo(double value, double precision) {
-    return std::round(value / precision) * precision;
+static std::string roundTo(double value, int precision) {
+    auto value_str = std::to_string(std::round(value * std::pow(10, (precision + 1))) / std::pow(10, (precision + 1)));
+    auto pos = value_str.find(".");
+    auto result = value_str.substr(0, pos) + ".";
+    
+    for (int i = (pos + 1); i < (pos + 1) + precision; i++) {
+        result += value_str[i];
+    }
+    return result;
 }
