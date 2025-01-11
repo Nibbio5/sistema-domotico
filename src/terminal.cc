@@ -3,7 +3,9 @@
 #include <stdexcept>
 #include <string>
 
-Terminal::Terminal(double power_limit) : domotics_system(power_limit) {}
+Terminal::Terminal(double power_limit) : domotics_system(power_limit) {
+    std::cout << "\n\t\tBenvenuto a casa ;)\n" << std::endl;
+}
 
 void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
     if(args.size() < 2) {
@@ -145,7 +147,7 @@ void Terminal::resetCommandPrompt(const std::string &arg) {
     } else if(arg == "timers") {
         domotics_system.resetTimers();
     } else if(arg == "all") {
-        //domotics_system.resetAll();
+        domotics_system.resetAll();
     } else {
         throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }

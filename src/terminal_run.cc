@@ -5,7 +5,7 @@
 void Terminal::run() {
     std::string command;
     std::vector<std::string> args;
-    std::cout << "\n\t\tBenvenuto a casa ;)\n" << std::endl;
+    
     while(true) {
         std::cout << "\n>> ";
         std::getline(std::cin, command);
