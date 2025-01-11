@@ -172,9 +172,9 @@ void Terminal::helpCommandPrompt() {
 }
 
 static std::string roundTo(double value, int precision) {
-    auto value_str = std::to_string(std::round(value * std::pow(10, (precision + 1))) / std::pow(10, (precision + 1)));
-    auto pos = value_str.find(".");
-    auto result = value_str.substr(0, pos) + ".";
+    std::string value_str = std::to_string(std::round(value * std::pow(10, (precision + 1))) / std::pow(10, (precision + 1)));
+    int pos = value_str.find(".");
+    std::string result = value_str.substr(0, pos) + ".";
     
     for (int i = (pos + 1); i < (pos + 1) + precision; i++) {
         result += value_str[i];
