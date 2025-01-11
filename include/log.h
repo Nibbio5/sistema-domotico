@@ -52,7 +52,3 @@ class logs {
     report::message *getFirstLogToDisplay();
 };
 }
-
-// static void report(const Time &currentTime, const std::string &message) {
-//     std::cout << "[" << currentTime << "]" << message << std::endl;
-// }

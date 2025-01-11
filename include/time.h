@@ -22,13 +22,13 @@ class Time {
      * @brief hour of the time
      *
      */
-    int hour;
+    int hour_;
 
     /**
      * @brief minute of the time
      *
      */
-    int minute;
+    int minute_;
 
   public:
     /**
@@ -63,12 +63,16 @@ class Time {
     /**
      * @return int the hour of the time
      */
-    int getHour() const;
+    int hour(void) const {
+        return hour_;
+    }
 
     /**
      * @return int the minute of the time
      */
-    int getMinute() const;
+    int minute() const {
+        return minute_;
+    }
 
     /**
      * @return std::string the hour of the time as string
@@ -83,57 +87,12 @@ class Time {
     /**
      * @param hour The hour of the time
      */
-    void setHour(int hour);
+    void set_hour(int hour);
 
     /**
      * @param minute The minute of the time
      */
-    void setMinute(int minute);
-
-
-    /**
-     * @brief Compare two Time objects
-     *
-     * @param time The time object
-     * @return true if the two Time objects are equal
-     * @return false if the two Time objects are not equal
-     */
-    bool operator==(const Time &time) const;
-
-    /**
-     * @brief Compare two Time objects
-     *
-     * @param time The time object
-     * @return true if the two Time objects are not equal
-     * @return false if the two Time objects are equal
-     */
-    bool operator!=(const Time &time) const;
-
-    /**
-     * @brief Compare two Time objects
-     *
-     * @param time The time object
-     * @return true if the first Time object is less than the second Time object
-     * @return false if the first Time object is not less than the second Time object
-     */
-    bool operator<(const Time &time) const;
-
-    /**
-     * @brief Compare two Time objects
-     *
-     * @param time The time object
-     * @return true if the first Time object is greater than the second Time object
-     * @return false if the first Time object is not greater than the second Time object
-     */
-    bool operator>(const Time &time) const;
-
-    /**
-     * @brief Add two Time objects
-     *
-     * @param time The time object
-     * @return Time object
-     */
-    Time operator+(const Time &time) const;
+    void set_minute(int minute);
 
     /**
      * @brief Assign a Time object to another Time object
@@ -151,49 +110,85 @@ class Time {
      */
     Time& operator+=(const Time &time);
 
-    /**
-     * @brief Subtract two Time objects
-     *
-     * @param time The time object
-     * @return Time object
-     */
-    Time operator-(const Time &time) const;
-
-    /**
-     * @brief Compare two Time objects
-     *
-     * @param time The Time object
-     * @return true if the first Time object is greater or equal to the second Time object
-     * @return false if the first Time object is not greater than the second Time object
-     */
-    bool operator>=(const Time &time) const;
-
-    /**
-     * @brief Compare two Time objects
-     *
-     * @param time The Time object
-     * @return true if the first Time object is not greater or equal to the second Time object
-     * @return false if the first Time object is greater than the second Time object
-     */
-    bool operator<=(const Time &time) const;
-
-    /**
-    * @brief Output the Time object to the output stream
-    *
-    * @param out The output stream
-    * @param time The Time object
-    * @return std::ostream& the output stream
-    */
-    friend std::ostream& operator<<(std::ostream &out, const Time &time);
-
-    /**
-     * @brief Input the Time object from the input stream
-     *
-     * @param in The input stream
-     * @param time The Time object
-     * @return std::istream& the input stream
-     */
-    friend std::istream& operator>>(std::istream &in, Time &time);
 };
+
+/**
+ * @brief Add two Time objects
+ *
+ * @param time The time object
+ * @return Time object
+ */
+Time operator+(const Time &a, const Time &b);
+
+/**
+* @brief Subtract two Time objects
+*
+* @param time The time object
+* @return Time object
+*/
+Time operator-(const Time &a, const Time &b);
+
+/**
+ * @brief Compare two Time objects
+ *
+ * @param time The time object
+ * @return true if the two Time objects are equal
+ * @return false if the two Time objects are not equal
+ */
+bool operator==(const Time &a, const Time &b);
+
+/**
+ * @brief Compare two Time objects
+ *
+ * @param time The time object
+ * @return true if the two Time objects are not equal
+ * @return false if the two Time objects are equal
+ */
+bool operator!=(const Time &a, const Time &b);
+
+/**
+ * @brief Compare two Time objects
+ *
+ * @param time The time object
+ * @return true if the first Time object is less than the second Time object
+ * @return false if the first Time object is not less than the second Time object
+ */
+bool operator<(const Time &a, const Time &b) ;
+
+/**
+ * @brief Compare two Time objects
+ *
+ * @param time The time object
+ * @return true if the first Time object is greater than the second Time object
+ * @return false if the first Time object is not greater than the second Time object
+ */
+bool operator>(const Time &a, const Time &b);
+
+/**
+ * @brief Compare two Time objects
+ *
+ * @param time The Time object
+ * @return true if the first Time object is greater or equal to the second Time object
+ * @return false if the first Time object is not greater than the second Time object
+ */
+bool operator>=(const Time &a, const Time &b);
+
+/**
+ * @brief Compare two Time objects
+ *
+ * @param time The Time object
+ * @return true if the first Time object is not greater or equal to the second Time object
+ * @return false if the first Time object is greater than the second Time object
+ */
+bool operator<=(const Time &a, const Time &b);
+
+/**
+* @brief Output the Time object to the output stream
+*
+* @param out The output stream
+* @param time The Time object
+* @return std::ostream& the output stream
+*/
+std::ostream& operator<<(std::ostream &out, const Time &time);
 
 #endif

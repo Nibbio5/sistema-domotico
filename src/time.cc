@@ -3,30 +3,22 @@
 #include <stdexcept>
 #include <string>
 
-Time::Time() : hour(0), minute(0) {}
+Time::Time() : hour_(0), minute_(0) {}
 
-Time::Time(int hour, int minute) : hour(hour), minute(minute) {}
+Time::Time(int hour, int minute) : hour_(hour), minute_(minute) {}
 
-Time::Time(const Time &time) : Time(time.hour, time.minute) {}
+Time::Time(const Time &time) : Time(time.hour(), time.minute()) {}
 
-int Time::getHour() const {
-    return hour;
+void Time::set_hour(int hour) {
+    this->hour_ = hour;
 }
 
-int Time::getMinute() const {
-    return minute;
-}
-
-void Time::setHour(int hour) {
-    this->hour = hour;
-}
-
-void Time::setMinute(int minute) {
-    this->minute = minute;
+void Time::set_minute(int minute) {
+    this->minute_ = minute;
 }
 
 std::string Time::getHourString() const {
-    std::string hourString = std::to_string(hour);
+    std::string hourString = std::to_string(hour_);
     if(hourString.length() == 1) {
         hourString = "0" + hourString;
     }
@@ -34,7 +26,7 @@ std::string Time::getHourString() const {
 }
 
 std::string Time::getMinuteString() const {
-    std::string minuteString = std::to_string(minute);
+    std::string minuteString = std::to_string(minute_);
     if(minuteString.length() == 1) {
         minuteString = "0" + minuteString;
     }
@@ -68,43 +60,43 @@ Time Time::fromString(const std::string &time) {
     }
 }
 
-bool Time::operator==(const Time &time) const {
-    return hour == time.hour && minute == time.minute;
+bool operator==(const Time &a, const Time &b) {
+    return  a.hour() == b.hour() && a.minute() == b.minute();
 }
 
-bool Time::operator!=(const Time &time) const {
-    return hour != time.hour || minute != time.minute;
+bool operator!=(const Time &a, const Time &b) {
+    return a.hour() != b.hour() || a.minute() != b.minute();
 }
 
-bool Time::operator<(const Time &time) const {
-    if(hour < time.hour) {
+bool operator<(const Time &a, const Time &b) {
+    if(a.hour() < b.hour()) {
         return true;
-    } else if(hour == time.hour) {
-        return minute < time.minute;
+    } else if(a.hour() == b.hour()) {
+        return a.minute() < b.minute();
     }
     return false;
 }
 
-bool Time::operator>(const Time &time) const {
-    if(hour > time.hour) {
+bool operator>(const Time &a, const Time &b) {
+    if(a.hour() > b.hour()) {
         return true;
-    } else if(hour == time.hour) {
-        return minute > time.minute;
+    } else if(a.hour() == b.hour()) {
+        return a.minute() > b.minute();
     }
     return false;
 }
 
-bool Time::operator<=(const Time &time) const {
-    return *this < time || *this == time;
+bool operator<=(const Time &a, const Time &b) {
+    return a < b || a == b;
 }
 
-bool Time::operator>=(const Time &time) const {
-    return *this > time || *this == time;
+bool operator>=(const Time &a, const Time &b) {
+    return a > b || a == b;
 }
 
-Time Time::operator+(const Time &time) const {
-    int newHour = hour + time.hour;
-    int newMinute = minute + time.minute;
+Time operator+(const Time &a, const Time &b) {
+    int newHour = a.hour() + b.hour();
+    int newMinute = a.minute() + b.minute();
     if(newMinute >= 60) {
         newHour++;
         newMinute -= 60;
@@ -115,12 +107,13 @@ Time Time::operator+(const Time &time) const {
     return Time(newHour, newMinute);
 }
 
-Time Time::operator-(const Time &time) const {
-    if(*this < time) {
+Time operator-(const Time &a, const Time &b) {
+    if(a < b) {
         throw std::invalid_argument("Invalid time subtraction");
     }
-    int newHour = hour - time.hour;
-    int newMinute = minute - time.minute;
+
+    int newHour = a.hour() - b.hour();
+    int newMinute = a.minute() - b.minute();
     if(newMinute < 0) {
         newHour--;
         newMinute += 60;
@@ -135,8 +128,8 @@ Time& Time::operator=(const Time &time) {
     if(this == &time) {
         return *this;
     }
-    hour = time.hour;
-    minute = time.minute;
+    hour_ = time.hour();
+    minute_ = time.minute();
     return *this;
 }
 
@@ -144,24 +137,18 @@ Time& Time::operator+=(const Time &time) {
     if(*this > time) {
         throw std::invalid_argument("Invalid time addition");
     }
-    hour += time.hour;
-    minute += time.minute;
-    if(minute >= 60) {
-        hour++;
-        minute -= 60;
+    hour_ += time.hour();
+    minute_ += time.minute();
+    if(minute_ >= 60) {
+        hour_++;
+        minute_ -= 60;
     }
-    if(hour >= 24) {
-        hour -= 24;
+    if(hour_ >= 24) {
+        hour_ -= 24;
     }
     return *this;
 }
 
-std::istream& operator>>(std::istream &in, Time &time) {
-    std::string tmpTime;
-    in >> tmpTime;
-    time = Time::fromString(tmpTime);
-    return in;
-}
 
 std::ostream& operator<<(std::ostream &out, const Time &time) {
     out << time.getHourString() << ":" << time.getMinuteString();
