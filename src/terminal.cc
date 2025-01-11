@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <string>
 
-Terminal::Terminal(double power_limit) : domotics_system(power_limit) {}
+Terminal::Terminal(double power_limit) : domotics_system_(power_limit) {}
 
 void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
     if(args.size() < 2) {
@@ -40,7 +40,7 @@ void Terminal::setDeviceCommandPrompt(
     Device *device
 ) {
     if(args.at(1) == "on" || args.at(1) == "off") {
-        domotics_system.changeDeviceStatus((args.at(1) == "on"), device->KName);
+        domotics_system_.changeDeviceStatus((args.at(1) == "on"), device->KName);
         // device->switch_on();// device->switch_off();
     } else {
         std::string start = args.at(1);
@@ -64,7 +64,7 @@ void Terminal::setDeviceTimer(
     if(device == nullptr) {
         throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
-    domotics_system.setDeviceTime(device->KName, start_time, stop_time);
+    domotics_system_.setDeviceTime(device->KName, start_time, stop_time);
 }
 
 void Terminal::rmCommandPrompt(const std::string &arg) {
@@ -77,7 +77,7 @@ void Terminal::rmCommandPrompt(const std::string &arg) {
         throw std::invalid_argument("Dispositivo sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
 
-    domotics_system.removeDeviceTimer(device->KName);
+    domotics_system_.removeDeviceTimer(device->KName);
 }
 
 void Terminal::showCommandPrompt(const std::string &arg) {
@@ -93,16 +93,16 @@ void Terminal::showCommandPrompt(const std::string &arg) {
     double consumed_power = 0.0;
     double produced_power = 0.0;
     std::string output = "Nello specifico:\n";
-    std::vector<Device *> devices = domotics_system.getDevices();
+    std::vector<Device *> devices = domotics_system_.getDevices();
     for(const Device *device : devices) {
         if(device->KPower >= 0) {
-            produced_power += device->get_total_power(domotics_system.getCurrentTime());
+            produced_power += device->get_total_power(domotics_system_.getCurrentTime());
         } else {
-            consumed_power += device->get_total_power(domotics_system.getCurrentTime());
+            consumed_power += device->get_total_power(domotics_system_.getCurrentTime());
         }
         output = output + showOneDevice(device, false);
     }
-    Time currentTime = domotics_system.getCurrentTime();
+    Time currentTime = domotics_system_.getCurrentTime();
     std::cout << "[" << currentTime << "] Attualmente il sistema ha prodotto " +
               std::to_string(roundTo(produced_power)) + "kWh e consumato " +
               std::to_string(roundTo(consumed_power)) + "kWh. " + output;
@@ -110,14 +110,14 @@ void Terminal::showCommandPrompt(const std::string &arg) {
 
 std::string Terminal::showOneDevice(const Device *device, const bool &show_time) {
 
-    Time currentTime = domotics_system.getCurrentTime();
+    Time currentTime = domotics_system_.getCurrentTime();
     std::string time = "- ";
     if(show_time) {
         time = "[" + currentTime.getHourString() + ":" + currentTime.getMinuteString() + "] " ;
     }
     return time + "Il dispositivo " + "(" + std::to_string(device->is_on()) + ") " + device->KName + " ha " + (show_time ? "attualmente " : "")
            + (device->KPower >= 0 ? "prodotto " : "consumato ")
-           + std::to_string(roundTo(device->get_total_power(domotics_system.getCurrentTime()))) + "kWh\n";
+           + std::to_string(roundTo(device->get_total_power(domotics_system_.getCurrentTime()))) + "kWh\n";
 }
 
 void Terminal::setTimeCommandPrompt(const std::string &arg) {
@@ -128,14 +128,14 @@ void Terminal::setTimeCommandPrompt(const std::string &arg) {
     try {
         Time time = Time::fromString(arg);
 
-        domotics_system.setCurrentTime(time);
+        domotics_system_.setCurrentTime(time);
     } catch(const std::invalid_argument &e) {
         throw std::invalid_argument(e.what());
     }
 }
 
 Device *Terminal::isDevice(const std::string &arg) {
-    for(Device *device : domotics_system.getDevices()) {
+    for(Device *device : domotics_system_.getDevices()) {
         if(device->KName == arg) {
             return device;
         }
@@ -149,11 +149,11 @@ void Terminal::resetCommandPrompt(const std::string &arg) {
     }
 
     if(arg == "time") {
-        domotics_system.resetTime();
+        domotics_system_.resetTime();
     } else if(arg == "timers") {
-        domotics_system.resetTimers();
+        domotics_system_.resetTimers();
     } else if(arg == "all") {
-        domotics_system.resetAll();
+        domotics_system_.resetAll();
     } else {
         throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }

@@ -20,7 +20,8 @@
 
 class Terminal {
   private:
-    DomoticsSystem domotics_system;
+    DomoticsSystem domotics_system_;
+    report::logs logList_;
 
     void setTimeCommandPrompt(const std::string &arg);
     Device *isDevice(const std::string &device_name);

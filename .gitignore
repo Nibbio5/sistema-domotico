@@ -37,13 +37,6 @@ Debug/
 
 # Custom
 ._*
-sistema-domotico.*
 build/
-CMakeFiles/
-x64/
 .cache/
-lab8.dir/
-CMakeCache.txt
-cmake_install.cmake
-*.vcxproj
-*.filters
+logs/*.txt

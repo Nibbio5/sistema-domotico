@@ -3,7 +3,7 @@
  * @author Francesco Dotoli (francesco.dotoli@studenti.unipd.it)
  * @brief part of implementation of the terminal class
  * @date 2024-12-27
- * 
+ *
  */
 #include "../include/terminal.h"
 #include <iostream>
@@ -22,7 +22,8 @@ void Terminal::run() {
         split(command, args, ' ');
         std::string arg = args.size() > 1 ? args.at(1) : "";
         try {
-            std::cout << "[" << domotics_system.getCurrentTime() << "]" << " L'orario attuale è  " << domotics_system.getCurrentTime() << std::endl;
+            logList_.addLog(report::message(domotics_system_.getCurrentTime(), command, false));
+            logList_.addLog(report::message(domotics_system_.getCurrentTime(), "L'orario attuale è " + domotics_system_.getCurrentTime().getHourString() + ":" + domotics_system_.getCurrentTime().getMinuteString()));
             if(args[0] == "set") {
                 args.erase(args.begin());
                 setCommandPrompt(args);
@@ -39,8 +40,9 @@ void Terminal::run() {
                     "Commando sbagliato. Scrivere 'help' per maggiori informazioni.");
             }
         } catch(const std::invalid_argument &e) {
-            std::cerr << "[!Error!]" << e.what() << std::endl;
+            logList_.addLog(report::message(domotics_system_.getCurrentTime(), std::string("[!Error!]") + e.what()));
         }
+        logList_.displayLogs();
     }
 }
 

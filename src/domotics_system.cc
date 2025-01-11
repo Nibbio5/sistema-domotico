@@ -116,57 +116,99 @@ bool DomoticsSystem::isPresent(std::string device) const {
 }
 
 void DomoticsSystem::checkSchedule() {
-    for(auto it = active_devices.begin(); it != active_devices.end(); it++) {
+    for(auto it = active_devices.begin(); it != active_devices.end();) {
         Device *device = *it;
-        auto startTime = device->get_start_time();
-        auto lastActivationTime = device->get_last_activation_time();
         ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(device);
         CPDevice *cpDevice = dynamic_cast<CPDevice *>(device);
-
+        auto startTime = device->get_start_time();
         if(manualDevice != nullptr) {
-            checkScheduleManualDevice(manualDevice, currentTime, startTime.get(), lastActivationTime.get(), powerLoad);
+            auto stopTime = manualDevice->get_stop_time();
+            auto lastActivationTime = manualDevice->get_last_activation_time();
+            if(startTime != nullptr && *startTime <= currentTime && stopTime != nullptr && *stopTime > currentTime && !device->is_on()) {
+                device->switch_on(*startTime);
+                powerLoad += device->KPower;
+                logList.addLog(report::message(*startTime, "Il dispositivo " + device->KName + " si é acceso"));
+                balancePower(device->KName);
+            } else if(stopTime != nullptr && (*stopTime <= currentTime && device->is_on() || lastActivationTime != nullptr && currentTime < *lastActivationTime && device->is_on())) {
+                logList.addLog(report::message(*stopTime, "Il dispositivo " + device->KName + " si é spento"));
+                device->switch_off(currentTime);
+                powerLoad -= device->KPower;
+            }
         } else if(cpDevice != nullptr) {
-            checkScheduleCpDevice(cpDevice, currentTime, startTime.get(), lastActivationTime.get(), powerLoad);
+            auto lastActivationTime = device->get_last_activation_time();
+            auto duration = cpDevice->KDuration;
+            if(lastActivationTime != nullptr && currentTime >= duration + *lastActivationTime && device->is_on() || startTime != nullptr && currentTime < *startTime && device->is_on()) {
+                logList.addLog(report::message(duration + *lastActivationTime, "Il dispositivo " + device->KName + " si é spento"));
+                device->switch_off(duration + *lastActivationTime);
+                powerLoad -= device->KPower;
+            } else if(startTime != nullptr && !device->is_on() && *startTime <= currentTime) {
+                device->switch_on(*startTime);
+                logList.addLog(report::message(*startTime, "Il dispositivo " + device->KName + " si é acceso"));
+                powerLoad += device->KPower;
+                if(*startTime + duration <= currentTime) {
+                    device->switch_off(*startTime + duration);
+                    logList.addLog(report::message(*startTime, "Il dispositivo " + device->KName + " si é spento"));
+                    powerLoad -= device->KPower;
+                }
+                balancePower(device->KName);
+            }
         }
-
-        balancePower(device->KName);
+        ++it;
     }
 }
 
-void checkScheduleManualDevice(ManualDevice *manualDevice, Time currentTime, const Time *startTime, const Time *lastActivationTime, double &powerLoad) {
-    auto stopTime = manualDevice->get_stop_time();
-    if(startTime != nullptr && *startTime <= currentTime && stopTime != nullptr && *stopTime > currentTime && !manualDevice->is_on()) {
-        manualDevice->switch_on(*startTime);
-        powerLoad += manualDevice->KPower;
-        log(*startTime, "Il dispositivo " + manualDevice->KName + " si é acceso");
-    } else if(stopTime != nullptr &&
-              (*stopTime <= currentTime
-               && manualDevice->is_on() || lastActivationTime != nullptr
-               && currentTime < *lastActivationTime
-               && manualDevice->is_on())) {
-        log(*stopTime, "Il dispositivo " + manualDevice->KName + " si é spento");
-        manualDevice->switch_off(currentTime);
-        powerLoad -= manualDevice->KPower;
-    }
-}
+// void DomoticsSystem::checkSchedule() {
+//     for(auto it = active_devices.begin(); it != active_devices.end(); it++) {
+//         Device *device = *it;
+//         auto startTime = device->get_start_time();
+//         auto lastActivationTime = device->get_last_activation_time();
+//         ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(device);
+//         CPDevice *cpDevice = dynamic_cast<CPDevice *>(device);
 
-void checkScheduleCpDevice(CPDevice *cpDevice, Time currentTime, const  Time *startTime, const  Time *lastActivationTime, double &powerLoad) {
-    auto duration = cpDevice->KDuration;
-    if(startTime != nullptr && !cpDevice->is_on() && *startTime <= currentTime) {
-        cpDevice->switch_on(*startTime);
-        powerLoad += cpDevice->KPower;
-        log(*startTime, "Il dispositivo " + cpDevice->KName + " si é acceso");
-    }
+//         if(manualDevice != nullptr) {
+//             checkScheduleManualDevice(manualDevice, currentTime, startTime.get(), lastActivationTime.get(), powerLoad, logList);
+//         } else if(cpDevice != nullptr) {
+//             checkScheduleCpDevice(cpDevice, currentTime, startTime.get(), lastActivationTime.get(), powerLoad, logList);
+//         }
 
-    if(lastActivationTime != nullptr
-            && currentTime >= duration + *lastActivationTime
-            && cpDevice->is_on() || startTime != nullptr
-            && currentTime < *startTime && cpDevice->is_on()) {
-        log(duration + *lastActivationTime, "Il dispositivo " + cpDevice->KName + " si é spento");
-        cpDevice->switch_off(duration + *lastActivationTime);
-        powerLoad -= cpDevice->KPower;
-    }
-}
+//         balancePower(device->KName);
+//     }
+// }
+
+// void checkScheduleManualDevice(ManualDevice *manualDevice, Time currentTime, const Time *startTime, const Time *lastActivationTime, double &powerLoad, report::logs &logList) {
+//     auto stopTime = manualDevice->get_stop_time();
+//     if(startTime != nullptr && *startTime <= currentTime && stopTime != nullptr && *stopTime > currentTime && !manualDevice->is_on()) {
+//         manualDevice->switch_on(*startTime);
+//         powerLoad += manualDevice->KPower;
+//         logList.addLog(*startTime, "Il dispositivo " + manualDevice->KName + " si é acceso");
+//     } else if(stopTime != nullptr &&
+//               (*stopTime <= currentTime
+//                && manualDevice->is_on() || lastActivationTime != nullptr
+//                && currentTime < *lastActivationTime
+//                && manualDevice->is_on())) {
+//         logList.addLog(*stopTime, "Il dispositivo " + manualDevice->KName + " si é spento");
+//         manualDevice->switch_off(currentTime);
+//         powerLoad -= manualDevice->KPower;
+//     }
+// }
+
+// void checkScheduleCpDevice(CPDevice *cpDevice, Time currentTime, const  Time *startTime, const  Time *lastActivationTime, double &powerLoad, report::logs &logList) {
+//     auto duration = cpDevice->KDuration;
+//     if(startTime != nullptr && !cpDevice->is_on() && *startTime <= currentTime) {
+//         cpDevice->switch_on(*startTime);
+//         powerLoad += cpDevice->KPower;
+//         logList.addLog(*startTime, "Il dispositivo " + cpDevice->KName + " si é acceso");
+//     }
+
+//     if(lastActivationTime != nullptr
+//             && currentTime >= duration + *lastActivationTime
+//             && cpDevice->is_on() || startTime != nullptr
+//             && currentTime < *startTime && cpDevice->is_on()) {
+//         logList.addLog(duration + *lastActivationTime, "Il dispositivo " + cpDevice->KName + " si é spento");
+//         cpDevice->switch_off(duration + *lastActivationTime);
+//         powerLoad -= cpDevice->KPower;
+//     }
+// }
 
 void DomoticsSystem::orderByStartTime() {
     std::sort(active_devices.begin(), active_devices.end(), [](Device * a, Device * b) {
@@ -199,17 +241,17 @@ void DomoticsSystem::changeDeviceStatus(bool status, std::string device) {
         active_devices.push_back(all_devices[index]);
         active_devices.back()->switch_on(currentTime);
         all_devices[index]->switch_on(currentTime);
-        log(currentTime, "Il dispositivo " + device + " si é acceso");
+        logList.addLog(report::message(currentTime, "Il dispositivo " + device + " si é acceso"));
         powerLoad += active_devices.back()->KPower;
         balancePower(device);
     } else if(activeIndex != -1 && !status) {
         active_devices[activeIndex]->switch_off(currentTime);
         powerLoad -= active_devices[activeIndex]->KPower;
-        log(currentTime, "Il dispositivo " + device + " si é spento");
+        logList.addLog(report::message(currentTime, "Il dispositivo " + device + " si é spento"));
     } else {
         active_devices[activeIndex]->switch_on(currentTime);
         powerLoad += active_devices[activeIndex]->KPower;
-        log(currentTime, "Il dispositivo " + device + " si é acceso");
+        logList.addLog(report::message(currentTime, "Il dispositivo " + device + " si é acceso"));
         balancePower(device);
     }
 }
@@ -218,7 +260,7 @@ void DomoticsSystem::balancePower(std::string last) {
     Time latestTime(0, 0);
     std::string name;
     while(-powerLoad > KPowerLimit) {
-        log(currentTime, "Il sistema è in sovraccarico energetico, gli ultimi dispositivi accesi verranno spenti");
+        logList.addLog(report::message(currentTime, "[Warning] Il sistema é in sovraccarico energetico, gli ultimi dispositivi accesi verranno spenti"));
         for(int i = 0; i < active_devices.size(); i++) {
             if(active_devices[i]->get_last_activation_time() != nullptr &&
                     !active_devices[i]->KIsOnWhiteList &&
@@ -231,7 +273,7 @@ void DomoticsSystem::balancePower(std::string last) {
         }
         int activeIndex = getIndex(name, true);
         if(activeIndex != -1) {
-            log(currentTime, "Il dispositivo " + name + " si é spento");
+            logList.addLog(report::message(currentTime, "Il dispositivo " + name + " si é spento"));
             active_devices[activeIndex]->switch_off(currentTime);
 
             powerLoad -= active_devices[activeIndex]->KPower;
