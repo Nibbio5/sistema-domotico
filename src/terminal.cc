@@ -173,3 +173,4 @@ void Terminal::helpCommandPrompt() {
 
 double roundTo(double value, double precision) {
     return std::round(value / precision) * precision;
+}

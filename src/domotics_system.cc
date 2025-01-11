@@ -124,25 +124,33 @@ void DomoticsSystem::checkSchedule() {
         CPDevice *cpDevice = dynamic_cast<CPDevice *>(device);
 
         if(manualDevice != nullptr) {
-            auto stopTime = manualDevice->get_stop_time();
-            if(startTime != nullptr && *startTime <= currentTime && stopTime != nullptr && *stopTime > currentTime && !device->is_on()) {
-                device->switch_on(*startTime);
-                powerLoad += device->KPower;
-                log(*startTime, "Il dispositivo " + device->KName + " si é acceso");
-            } else if(stopTime != nullptr && (*stopTime <= currentTime && device->is_on() || lastActivationTime != nullptr && currentTime < *lastActivationTime && device->is_on())) {
-                log(*stopTime, "Il dispositivo " + device->KName + " si é spento");
-                device->switch_off(currentTime);
-                powerLoad -= device->KPower;
-            }
+            checkScheduleManualDevice(manualDevice, currentTime, startTime.get(), lastActivationTime.get(), powerLoad);
         } else if(cpDevice != nullptr) {
-            // checkScheduleCpDevice(cpDevice, currentTime, startTime, lastActivationTime, powerLoad);
+            checkScheduleCpDevice(cpDevice, currentTime, startTime.get(), lastActivationTime.get(), powerLoad);
         }
 
         balancePower(device->KName);
     }
 }
 
-void checkScheduleCpDevice(CPDevice *cpDevice, Time currentTime, Time *startTime, Time *lastActivationTime, double &powerLoad) {
+void checkScheduleManualDevice(ManualDevice *manualDevice, Time currentTime, const Time *startTime, const Time *lastActivationTime, double &powerLoad) {
+    auto stopTime = manualDevice->get_stop_time();
+    if(startTime != nullptr && *startTime <= currentTime && stopTime != nullptr && *stopTime > currentTime && !manualDevice->is_on()) {
+        manualDevice->switch_on(*startTime);
+        powerLoad += manualDevice->KPower;
+        log(*startTime, "Il dispositivo " + manualDevice->KName + " si é acceso");
+    } else if(stopTime != nullptr &&
+              (*stopTime <= currentTime
+               && manualDevice->is_on() || lastActivationTime != nullptr
+               && currentTime < *lastActivationTime
+               && manualDevice->is_on())) {
+        log(*stopTime, "Il dispositivo " + manualDevice->KName + " si é spento");
+        manualDevice->switch_off(currentTime);
+        powerLoad -= manualDevice->KPower;
+    }
+}
+
+void checkScheduleCpDevice(CPDevice *cpDevice, Time currentTime, const  Time *startTime, const  Time *lastActivationTime, double &powerLoad) {
     auto duration = cpDevice->KDuration;
     if(startTime != nullptr && !cpDevice->is_on() && *startTime <= currentTime) {
         cpDevice->switch_on(*startTime);
