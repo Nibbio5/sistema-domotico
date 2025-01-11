@@ -20,8 +20,8 @@ void DomoticsSystem::setDevices() {
     std::string durataAccensione;
     std::string produzioneConsumo;
     bool isOnWhiteList = false;
-    auto orarioAccensione = std::shared_ptr<Time>(nullptr);
-    auto orarioSpegnimento = std::shared_ptr<Time>(nullptr);
+    std::shared_ptr<Time> orarioAccensione = std::shared_ptr<Time>(nullptr);
+    std::shared_ptr<Time> orarioSpegnimento = std::shared_ptr<Time>(nullptr);
 
     // manual parsing of the JSON (simple)
     while(std::getline(file, line)) {
@@ -120,10 +120,10 @@ void DomoticsSystem::checkSchedule() {
         Device *device = *it;
         ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(device);
         CPDevice *cpDevice = dynamic_cast<CPDevice *>(device);
-        auto startTime = device->get_start_time();
+        std::shared_ptr<const Time> startTime = device->get_start_time();
+        std::shared_ptr<const Time> lastActivationTime = manualDevice->get_last_activation_time();
         if(manualDevice != nullptr) {
-            auto stopTime = manualDevice->get_stop_time();
-            auto lastActivationTime = manualDevice->get_last_activation_time();
+            std::shared_ptr<const Time> stopTime = manualDevice->get_stop_time();
             if(startTime != nullptr && *startTime <= currentTime && stopTime != nullptr && *stopTime > currentTime && !device->is_on()) {
                 device->switch_on(*startTime);
                 powerLoad += device->KPower;
@@ -135,8 +135,7 @@ void DomoticsSystem::checkSchedule() {
                 powerLoad -= device->KPower;
             }
         } else if(cpDevice != nullptr) {
-            auto lastActivationTime = device->get_last_activation_time();
-            auto duration = cpDevice->KDuration;
+            Time duration = cpDevice->KDuration;
             if(lastActivationTime != nullptr && currentTime >= duration + *lastActivationTime && device->is_on() || startTime != nullptr && currentTime < *startTime && device->is_on()) {
                 logList.addLog(report::message(duration + *lastActivationTime, "Il dispositivo " + device->KName + " si é spento"));
                 device->switch_off(duration + *lastActivationTime);
@@ -212,8 +211,8 @@ void DomoticsSystem::checkSchedule() {
 
 void DomoticsSystem::orderByStartTime() {
     std::sort(active_devices.begin(), active_devices.end(), [](Device * a, Device * b) {
-        auto startTimeA = a->get_last_activation_time();
-        auto startTimeB = b->get_last_activation_time();
+        std::shared_ptr<const Time> startTimeA = a->get_last_activation_time();
+        std::shared_ptr<const Time> startTimeB = b->get_last_activation_time();
         if(startTimeA == nullptr && startTimeB == nullptr) return false;
         if(startTimeA == nullptr) return false;
         if(startTimeB == nullptr) return true;
@@ -297,9 +296,9 @@ void DomoticsSystem::setDeviceTime(const std::string &device, const Time & start
         targetDevice = active_devices[activeIndex];
     }
 
-    if(auto cpDevice = dynamic_cast<CPDevice *>(targetDevice)) {
+    if(CPDevice *cpDevice = dynamic_cast<CPDevice *>(targetDevice)) {
         cpDevice->set_start_time(start);
-    } else if(auto manualDevice = dynamic_cast<ManualDevice *>(targetDevice)) {
+    } else if(ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(targetDevice)) {
         manualDevice->set_new_timer(start, stop);
     }
 
@@ -308,9 +307,9 @@ void DomoticsSystem::setDeviceTime(const std::string &device, const Time & start
 
 std::ostream &operator<<(std::ostream & out, const DomoticsSystem & sys) {
     for(auto value : sys.getDevices()) {
-        if(auto cpDevice = dynamic_cast<CPDevice *>(value)) {
+        if(CPDevice *cpDevice = dynamic_cast<CPDevice *>(value)) {
             out << *cpDevice << std::endl;
-        } else if(auto manualDevice = dynamic_cast<ManualDevice *>(value)) {
+        } else if(ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(value)) {
             out << *manualDevice << std::endl;
         }
     }
@@ -338,7 +337,7 @@ void DomoticsSystem::resetTime() {
 
 void DomoticsSystem::resetTimers() {// to be finished
     for(auto *value : active_devices) {
-        if(auto manualDevice = dynamic_cast<ManualDevice *>(value)) {
+        if(ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(value)) {
             manualDevice->removeTimer();
         } else {
             value->removeTimer();

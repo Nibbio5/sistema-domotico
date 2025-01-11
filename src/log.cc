@@ -9,6 +9,8 @@
  */
 
 #include "../include/log.h"
+#include <chrono>
+#include <locale>
 #include <string>
 
 void report::logs::addLog(const report::message &newReport) {
@@ -30,7 +32,7 @@ void report::logs::insertionSort(report::message newMessage) {
 }
 
 void report::logs::displayLogs() {
-    auto now = std::chrono::system_clock::now();
+    std::chrono::time_point now = std::chrono::system_clock::now();
     std::string logFileName = "../logs/log_" + std::to_string(now.time_since_epoch().count()) + ".txt";
     std::ofstream logFile(logFileName);
     for(auto &value : logList_) {
