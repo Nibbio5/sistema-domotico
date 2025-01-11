@@ -52,6 +52,6 @@ class Terminal {
  * @param precision the decimal precision
  * @return double the rounded value
  */
-double roundTo(double value, double precision = 2.0);
+static std::string roundTo(double value, int precision = 2);
 
 #endif // #ifndef

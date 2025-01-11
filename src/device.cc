@@ -10,6 +10,8 @@ Device::Device(const std::string& name, const double power, const bool is_on_whi
 
 std::shared_ptr<const Time> Device::get_start_time() const {return start_time_;}
 
+void Device::set_start_time(const Time& new_time) {start_time_ = std::make_shared<Time>(new_time);}
+
 std::shared_ptr<const Time> Device::get_last_activation_time() const {return last_activation_time_;}
 
 bool Device::is_on() const {return is_on_;}
