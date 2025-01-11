@@ -163,6 +163,6 @@ void Terminal::helpCommandPrompt() {
               << " - exit: esci dalla casa\n";
 }
 
-double roundTo(double value, double precision = 1.0) {
+double roundTo(double value, double precision = 2.0) {
     return std::round(value / precision) * precision;
 }
