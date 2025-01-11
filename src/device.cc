@@ -79,5 +79,5 @@ static double calculateTimePeriodPower(const Time& start_time, const Time& stop_
         throw std::invalid_argument("Start time is higher than stop time");
 
     Time active_time = stop_time - start_time;
-    return ((active_time.getHour() * power) + ((power / 60) * active_time.getMinute()));
+    return ((active_time.hour() * power) + ((power / 60) * active_time.minute()));
 }
