@@ -3,6 +3,17 @@
 #include <string>
 
 /**
+ * @brief Prints a welcome string and starts the terminal using the given power
+ * 
+ * @param power the power limit of the domotic system
+ */
+void invokeTerminal(double power = 3.5){
+    std::cout << "\n\t\tBenvenuto a casa ;)\n" << std::endl;
+    Terminal terminal{power};
+    terminal.run();
+}
+
+/**
  * @brief Reads the first given parameters from the command line and uses it as the 
  * domotic system power. Than starts the system terminal.
  * 
@@ -14,12 +25,9 @@
  * (terminated with errors)
  */
 int main(int argc, char* argv[]) {
-
     if(argc < 2){
         std::cout << "Nessuna potenza fornita, il programma utilizzerà il valore di default 3.5kW\n\n";
-        std::cout << "\n\t\tBenvenuto a casa ;)\n" << std::endl;
-        Terminal terminal;
-        terminal.run();
+        invokeTerminal();
     }else{
         double power;
         
@@ -30,9 +38,7 @@ int main(int argc, char* argv[]) {
             return 1;
         }
         
-        std::cout << "\n\t\tBenvenuto a casa ;)\n" << std::endl;
-        Terminal terminal{power};
-        terminal.run();
+        invokeTerminal();
     }
 
     return 0;
