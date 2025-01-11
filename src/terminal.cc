@@ -11,7 +11,8 @@
 #include <stdexcept>
 #include <string>
 
-Terminal::Terminal(double power_limit) : domotics_system_(power_limit) {}
+Terminal::Terminal(double power_limit)
+    : domotics_system_(power_limit), log_(report::logs::getInstance())  {}
 
 void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
     if(args.size() < 2) {
@@ -175,8 +176,8 @@ static std::string roundTo(double value, int precision) {
     std::string value_str = std::to_string(std::round(value * std::pow(10, (precision + 1))) / std::pow(10, (precision + 1)));
     int pos = value_str.find(".");
     std::string result = value_str.substr(0, pos) + ".";
-    
-    for (int i = (pos + 1); i < (pos + 1) + precision; i++) {
+
+    for(int i = (pos + 1); i < (pos + 1) + precision; i++) {
         result += value_str[i];
     }
     return result;

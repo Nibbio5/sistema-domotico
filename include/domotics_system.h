@@ -46,12 +46,14 @@ class DomoticsSystem {
     const double KPowerLimit; ///< Maximum power limit for the system.
     double powerLoad; ///< Current power load of the system.
     Time currentTime; ///< Current time in the system.
-    report::logs logList; ///< List of log messages.
+    report::logs log; ///< List of log messages.
 
     /**
      * @brief Checks the schedule of devices and updates their status.
      */
     void checkSchedule();
+
+    void checkScheduleCpDevice(CPDevice *cpDevice, const Time *startTime, const Time *lastActivationTime, double &powerLoad);
 
     /**
      * @brief Sets the devices based on the current schedule.
@@ -182,8 +184,6 @@ class DomoticsSystem {
      */
     friend std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys);
 };
-
-void checkScheduleCpDevice(CPDevice *cpDevice, Time currentTime, const Time *startTime, const Time *lastActivationTime, double &powerLoad, report::logs &logList);
 
 void checkScheduleManualDevice(ManualDevice *manualDevice, Time currentTime, const Time *startTime, const Time *lastActivationTime, double &powerLoad, report::logs &logList);
 

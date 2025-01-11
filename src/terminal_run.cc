@@ -12,6 +12,7 @@
 void Terminal::run() {
     std::string command;
     std::vector<std::string> args;
+    log_.displayLogs();
 
     while(true) {
         std::cout << "\n>> ";
@@ -22,8 +23,8 @@ void Terminal::run() {
         split(command, args, ' ');
         std::string arg = args.size() > 1 ? args.at(1) : "";
         try {
-            logList_.addLog(report::message(domotics_system_.getCurrentTime(), command, false));
-            logList_.addLog(report::message(domotics_system_.getCurrentTime(), "L'orario attuale è " + domotics_system_.getCurrentTime().getHourString() + ":" + domotics_system_.getCurrentTime().getMinuteString()));
+            log_.addLog(report::message(domotics_system_.getCurrentTime(), command, false));
+            log_.addLog(report::message(domotics_system_.getCurrentTime(), "L'orario attuale è " + domotics_system_.getCurrentTime().getHourString() + ":" + domotics_system_.getCurrentTime().getMinuteString()));
             if(args[0] == "set") {
                 args.erase(args.begin());
                 setCommandPrompt(args);
@@ -40,9 +41,9 @@ void Terminal::run() {
                     "Commando sbagliato. Scrivere 'help' per maggiori informazioni.");
             }
         } catch(const std::invalid_argument &e) {
-            logList_.addLog(report::message(domotics_system_.getCurrentTime(), std::string("[!Error!]") + e.what()));
+            log_.addLog(report::message(domotics_system_.getCurrentTime(), std::string("[!Error!]") + e.what()));
         }
-        logList_.displayLogs();
+        log_.displayLogs();
     }
 }
 

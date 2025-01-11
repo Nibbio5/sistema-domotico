@@ -22,10 +22,14 @@ class message {
     bool display_ ;
 
   public:
-    message(const Time &currentTime, const std::string &messageString, const bool &display = true) : messageTime_{currentTime}, messageString_{messageString}, display_(display) {}
+    message(const Time &currentTime, const std::string &messageString, const bool &display = true);
 
     Time messageTime(void) const {
         return messageTime_;
+    }
+
+    std::string messageString(void) const {
+        return messageString_;
     }
 
     bool display(void) const {
@@ -33,22 +37,28 @@ class message {
     }
 
     friend std::ostream &operator<<(std::ostream &out, const message &msg) {
-        out << "[" << msg.messageTime_ << "] " << msg.messageString_;
-        return out;
+        if(!msg.display_) {
+            return out << "[Command] " << msg.messageString_;;
+        }
+        return  out << "[" << msg.messageTime_ << "] " << msg.messageString_;
     }
 };
 class logs {
   private:
-    std::vector<report::message> logList_;
+    static std::string log_file_name_;
+    static std::vector<message> logList_;
 
-    void insertionSort(report::message newMessage);
+    void insertionSort(message newMessage);
+
+    logs();
 
   public:
-    logs() = default;
+    static logs &getInstance() {
+        static logs instance;
+        return instance;
+    }
 
-    void addLog(const report::message &newReport);
+    void addLog(const report::message &newMessage);
     void displayLogs();
-    void setFirstLogToDisplay(report::message *logToDisplay);
-    report::message *getFirstLogToDisplay();
 };
 }
