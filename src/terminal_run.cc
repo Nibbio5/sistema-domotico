@@ -5,7 +5,7 @@
 void Terminal::run() {
     std::string command;
     std::vector<std::string> args;
-    
+
     while(true) {
         std::cout << "\n>> ";
         std::getline(std::cin, command);
@@ -15,7 +15,8 @@ void Terminal::run() {
         split(command, args, ' ');
         std::string arg = args.size() > 1 ? args.at(1) : "";
         try {
-            std::cout << "[" << domotics_system.getCurrentTime() << "]" << " L'orario attuale è  " << domotics_system.getCurrentTime() << std::endl;            if(args[0] == "set") {
+            std::cout << "[" << domotics_system.getCurrentTime() << "]" << " L'orario attuale è  " << domotics_system.getCurrentTime() << std::endl;
+            if(args[0] == "set") {
                 args.erase(args.begin());
                 setCommandPrompt(args);
             } else if(args[0] == "rm") {
