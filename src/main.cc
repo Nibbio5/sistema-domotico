@@ -2,6 +2,17 @@
 #include <iostream>
 #include <string>
 
+/**
+ * @brief Reads the first given parameters from the command line and uses it as the 
+ * domotic system power. Than starts the system terminal.
+ * 
+ * The given parameter must be a decimal or non decimal number.
+ * 
+ * @param argc the amount of given parameters
+ * @param argv the array containing the given parameters
+ * @return int: the state of the program, either 0 (terminated successfully) or 1 
+ * (terminated with errors)
+ */
 int main(int argc, char* argv[]) {
 
     if(argc < 2){
@@ -16,10 +27,9 @@ int main(int argc, char* argv[]) {
             return 1;
         }
         
-        // chiamata a terminal.run() a cui viene passata la potenza
+        Terminal terminal{power};
+        terminal.run();
     }
 
-    Terminal terminal;
-    terminal.run();
     return 0;
 }
