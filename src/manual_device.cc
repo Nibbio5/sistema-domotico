@@ -32,12 +32,12 @@ void ManualDevice::set_new_timer(const Time& new_start_time, const Time& new_sto
     stop_time_ = std::make_shared<Time>(new_stop_time);
 }
 
-void ManualDevice::removeTimer() {
-    start_time_.reset();
+void ManualDevice::removeStopTime() {
     stop_time_.reset();
 }
 
-void ManualDevice::removeStopTime() {
+void ManualDevice::removeTimer() {
+    start_time_.reset();
     stop_time_.reset();
 }
 
