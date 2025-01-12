@@ -20,8 +20,8 @@
 
 class Terminal {
   private:
-    DomoticsSystem domotics_system_;
-    report::logs log_;
+    DomoticsSystem domotics_system_; ///< The domotics system.
+    report::logs log_; ///< The log system.
 
     /**
      * @brief Sets the current time in the system.
