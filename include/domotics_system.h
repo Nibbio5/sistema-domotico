@@ -53,7 +53,8 @@ class DomoticsSystem {
      */
     void checkSchedule();
 
-    void checkScheduleCpDevice(CPDevice *cpDevice, const Time *startTime, const Time *lastActivationTime, double &powerLoad);
+    bool checkScheduleCpDevice(CPDevice *cpDevice, const Time nowTime, const Time *startTime);
+    bool checkScheduleManualDevice(ManualDevice *manualDevice,const Time nowTime, const Time *startTime, const Time *stopTime);
 
     /**
      * @brief Sets the devices based on the current schedule.
@@ -184,7 +185,5 @@ class DomoticsSystem {
      */
     friend std::ostream &operator<<(std::ostream &out, const DomoticsSystem &sys);
 };
-
-void checkScheduleManualDevice(ManualDevice *manualDevice, Time currentTime, const Time *startTime, const Time *lastActivationTime, double &powerLoad, report::logs &logList);
 
 #endif // #ifndef

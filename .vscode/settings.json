@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["domotic", "Domotics"]
+  "cSpell.words": [
+    "domotic",
+    "Domotics"
+  ],
+  "files.associations": {
+    "stdexcept": "cpp"
+  }
 }

@@ -38,8 +38,8 @@
         "DurataAccensione": "Manuale",
         "OrarioAccensione": "00:00",
         "OrarioSpegnimento": "23:59",
-        "ProduzioneConsumo": "-0.4 kW",
-        "WhiteList": "true"
+        "WhiteList": "true",
+        "ProduzioneConsumo": "-0.4 kW"
       },
       {
         "Nome": "Forno a microonde",
