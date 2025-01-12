@@ -41,8 +41,10 @@
  */
 class DomoticsSystem {
   private:
+
     std::vector<Device*> all_devices; ///< All devices in the system.
     std::vector<Device*> active_devices; ///< Currently active devices.
+    std::vector<Device*> switchedDevices; ///< Devices that have been switched on manually.
     const double KPowerLimit; ///< Maximum power limit for the system.
     double powerLoad; ///< Current power load of the system.
     Time currentTime; ///< Current time in the system.
@@ -66,6 +68,11 @@ class DomoticsSystem {
      */
     void orderByStartTime();
 
+    /**
+     * @brief Ends the day by turning off all devices.
+     */
+    void endDay();
+
   public:
     /**
      * @brief Default constructor for DomoticsSystem.
@@ -73,25 +80,20 @@ class DomoticsSystem {
     DomoticsSystem();
 
 
-    //~DomoticsSystem();
+    //destructors
+    ~DomoticsSystem();
 
     /**
      * @brief Constructor for DomoticsSystem with a specified power limit.
      * @param power The power limit for the system.
      */
-    DomoticsSystem(double power);
+    DomoticsSystem(const double& power);
 
     /**
      * @brief Gets the list of all devices.
      * @return A vector of pointers to all devices.
      */
     std::vector<Device*> getDevices() const;
-
-    /**
-     * @brief Gets the vector of all devices.
-     * @return A vector of pointers to all devices.
-     */
-    std::vector<Device *> getDevicesVector() const;
 
     /**
      * @brief Displays the list of all devices.
@@ -102,28 +104,21 @@ class DomoticsSystem {
      * @brief Gets the current time in the system.
      * @return The current time.
      */
-    Time getCurrentTime() const;
+    const Time& getCurrentTime() const;
 
     /**
      * @brief Gets the index of a device.
      * @param device The name of the device.
-     * @param prova A boolean flag.
+     * @param isActive A boolean flag.
      * @return The index of the device.
      */
-    int getIndex(std::string device, bool prova) const;
-
-    /**
-     * @brief Checks if a device is present in the system.
-     * @param device The name of the device.
-     * @return True if the device is present, false otherwise.
-     */
-    bool isPresent(std::string device) const;
+    int getIndex(const std::string& device, bool isActive) const;
 
     /**
      * @brief Gets the current power load of the system.
      * @return The current power load.
      */
-    double getPowerLoad() const;
+    const double& getPowerLoad() const;
 
     /**
      * @brief Sets the current time in the system.
@@ -144,7 +139,7 @@ class DomoticsSystem {
      * @param status The new status of the device.
      * @param device The name of the device.
      */
-    void changeDeviceStatus(bool status, std::string device);
+    void changeDeviceStatus(bool status,const std::string& device);
 
     /**
      * @brief Removes the timer for a device.
@@ -156,7 +151,7 @@ class DomoticsSystem {
      * @brief Balances the power load in the system.
      * @param last The name of the last device.
      */
-    void balancePower(std::string last, const Time &nowTime);
+    void balancePower(const std::string& last, const Time &nowTime);
 
     /**
      * @brief Displays the list of active devices.

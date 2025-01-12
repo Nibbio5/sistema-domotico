@@ -37,6 +37,10 @@ void ManualDevice::removeTimer() {
     stop_time_.reset();
 }
 
+void ManualDevice::removeStopTime() {
+    stop_time_.reset();
+}
+
 std::ostream& operator<<(std::ostream& out, const ManualDevice& device) {
     out << "ManualDevice{"
         << "id=" << device.KId

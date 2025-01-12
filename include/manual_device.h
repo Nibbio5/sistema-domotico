@@ -52,7 +52,7 @@ class ManualDevice : public Device {
          * @param power the power consumption (negative) or production (positive) of the device
          */
         ManualDevice(const std::string& name, const double power);
-
+        void removeStopTime();
         /**
          * @brief Return the Time object which defines the activty stop time
          *
