@@ -72,6 +72,9 @@ class DomoticsSystem {
      */
     DomoticsSystem();
 
+
+    //~DomoticsSystem();
+
     /**
      * @brief Constructor for DomoticsSystem with a specified power limit.
      * @param power The power limit for the system.
@@ -153,7 +156,7 @@ class DomoticsSystem {
      * @brief Balances the power load in the system.
      * @param last The name of the last device.
      */
-    void balancePower(std::string last);
+    void balancePower(std::string last, const Time &nowTime);
 
     /**
      * @brief Displays the list of active devices.
