@@ -104,9 +104,11 @@ void Terminal::showCommandPrompt(const std::string &arg) {
         output = output + showOneDevice(device, false);
     }
     Time currentTime = domotics_system_.getCurrentTime();
-    std::cout << "[" << currentTime << "] Attualmente il sistema ha prodotto " +
+    std::string currentTimeString = currentTime.getHourString() + ":" + currentTime.getMinuteString();
+    output  = "Attualmente il sistema ha prodotto " +
               roundTo(produced_power) + "kWh e consumato " +
               roundTo(consumed_power) + "kWh. " + output;
+    log_.addLog(report::message(currentTime, output));
 }
 
 std::string Terminal::showOneDevice(const Device *device, const bool &show_time) {

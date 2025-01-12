@@ -18,17 +18,8 @@
  */
 class Time {
   private:
-    /**
-     * @brief hour of the time
-     *
-     */
-    int hour_;
-
-    /**
-     * @brief minute of the time
-     *
-     */
-    int minute_;
+    int hour_; ///< The hour of the time
+    int minute_; ///< The minute of the time
 
   public:
     /**
