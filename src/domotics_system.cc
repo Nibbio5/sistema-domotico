@@ -39,7 +39,7 @@ DomoticsSystem::~DomoticsSystem() {
 void DomoticsSystem::setDevices() {
     std::ifstream file("./assets/devices.json");
     if(!file) {
-        throw std::invalid_argument("il file devices.json non esiste");
+        throw std::invalid_argument("Il file devices.json non esiste");
     }
     std::string line;
     std::string nome;
@@ -112,7 +112,6 @@ const Time& DomoticsSystem::getCurrentTime() const {
 }
 
 void DomoticsSystem::removeDeviceTimer(std::string device) {
-
     int index = getIndex(device, false);  // get the index of the device in the all devices
     int activeIndex = getIndex(device, true); //get the index of the device in the active devices
 
@@ -137,6 +136,8 @@ void DomoticsSystem::removeDeviceTimer(std::string device) {
             log.addLog(report::message(currentTime, "Rimosso il timer dal dispositivo " + manualDevice->KName));
             manualDevice->removeStopTime();
             switchedDevices.push_back(manualDevice);
+
+            //check if the device is not in switchedDevices
         } else  {
             log.addLog(report::message(currentTime, "Rimosso il timer dal dispositivo " + cpDevice->KName));
             switchedDevices.push_back(cpDevice);
@@ -169,7 +170,7 @@ void DomoticsSystem::checkSchedule() {
         bool deviceRemoved = false;
         size = active_devices.size();
         numberOfRemovedDevices = 0;
-        for(auto it = active_devices.begin(); it != active_devices.end() && active_devices.size()!=0;) { // iterate over the active devices and check if the active_devices is not empty
+        for(auto it = active_devices.begin(); it != active_devices.end() && active_devices.size()!=0;) { // iterate over the active devices
             Device *device = *it;
             std::shared_ptr<const Time> startTime = device->get_start_time(); // get the start time of the device
             if(ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(device)) { // check if the device is a ManualDevice
@@ -194,7 +195,7 @@ void DomoticsSystem::checkSchedule() {
         }
         if(size != active_devices.size()) { // check if the size of the active devices is different from the previous size (a device or more are/is removed)
             i -= size - active_devices.size();
-        }else{
+        } else {
             ++i;
         }
         if(!deviceRemoved) { // increment i if the device is not removed
@@ -251,7 +252,7 @@ void DomoticsSystem::orderByStartTime() { // sort the active devices by start ti
 
 void DomoticsSystem::setCurrentTime(const Time &newTime) {
     if(newTime < currentTime) {
-        throw std::invalid_argument("time is lower than current time") ;
+        throw std::invalid_argument("Il tempo fornito è minore del tempo corrente") ;
     } else {
         currentTime = newTime;
     }
@@ -270,7 +271,7 @@ void DomoticsSystem::setCurrentTime(const Time &newTime) {
 void DomoticsSystem::changeDeviceStatus(bool status, const std::string& device) {
     int index = getIndex(device, false);
     if(index == -1) { // check if the device is not in the all_devices
-        throw std::invalid_argument("Device not found");
+        throw std::invalid_argument("Dispositivo non trovato");
     }
     int activeIndex = getIndex(device, true); // get the index of the device in the active devices
 
@@ -289,6 +290,9 @@ void DomoticsSystem::changeDeviceStatus(bool status, const std::string& device) 
         } 
         else  throw std::invalid_argument("Device is already active");
 
+        } else {
+            throw std::invalid_argument("Il dispositivo è già attivo");
+        }
     } else { // else turn off the device
 
         if(activeIndex != -1) { // if the device is in the active devices
@@ -298,6 +302,9 @@ void DomoticsSystem::changeDeviceStatus(bool status, const std::string& device) 
             active_devices.erase(active_devices.begin() + activeIndex); // remove the device from the active devices
         } 
         else throw std::invalid_argument("Device is not active");
+        } else {
+            throw std::invalid_argument("Il dispositivo è già attivo");
+        }
     }
     orderByStartTime(); // order the devices by start time
 }
@@ -312,6 +319,9 @@ void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) 
     if(KPowerLimit == 0) {
         log.addLog(report::message(nowTime, "Il sistema non ha corrente disponibile, il dispositivo acceso verrà spento"));
         Device *device = active_devices[activeIndex]; 
+    if(KPowerLimit == 0 && powerLoad < 0) {
+        log.addLog(report::message(nowTime, "Il sistema è in sovraccarico energetico, gli ultimi dispositivi accesi verranno spenti"));
+        Device *device = active_devices[getIndex(last, true)];
         device->switch_off(nowTime);
         log.addLog(report::message(nowTime, "Il dispositivo " + last + " si é spento"));
         powerLoad -= device->KPower;
@@ -363,9 +373,9 @@ void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) 
 void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start, const Time &stop) {
     int index = getIndex(device, false);
     if(index == -1 || start > stop || start < currentTime || stop <= currentTime) {
-        throw std::invalid_argument("Invalid input data, please check the device name and the time");
+        throw std::invalid_argument("Dispositivo inesistente o tempo errato");
     } else if(start == currentTime && stop > currentTime) {
-        throw std::invalid_argument("usa il comando 'set ${DEVICENAME} on' per accendere il dispositivo al momento attuale");
+        throw std::invalid_argument("Usa il comando 'set \"${DEVICENAME}\" on' per accendere il dispositivo al momento attuale");
     }
     int activeIndex = getIndex(device, true);
     Device *targetDevice = all_devices[index];
@@ -379,11 +389,11 @@ void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start,
 
     if(CPDevice *cpDevice = dynamic_cast<CPDevice *>(targetDevice)) {
         cpDevice->set_start_time(start);
-        log.addLog(report::message(currentTime, "Impostato un time per il dispositivo  " + cpDevice->KName 
-        + " dalle " + start.getHourString() + ":" + start.getMinuteString() + " alle " + (start + cpDevice->KDuration).getHourString() + ":" + (start + cpDevice->KDuration).getMinuteString()));
+        log.addLog(report::message(currentTime, "Impostato un time per il dispositivo " + cpDevice->KName
+                                   + " dalle " + start.getHourString() + ":" + start.getMinuteString() + " alle " + (start + cpDevice->KDuration).getHourString() + ":" + (start + cpDevice->KDuration).getMinuteString()));
     } else if(ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(targetDevice)) {
         manualDevice->set_new_timer(start, stop);
-        log.addLog(report::message(currentTime, "Impostato un time per il dispositivo  " + manualDevice->KName + " dalle " + start.getHourString() + ":" + start.getMinuteString() + " alle " + stop.getHourString() + ":" + stop.getMinuteString()));
+        log.addLog(report::message(currentTime, "Impostato un time per il dispositivo " + manualDevice->KName + " dalle " + start.getHourString() + ":" + start.getMinuteString() + " alle " + stop.getHourString() + ":" + stop.getMinuteString()));
     }
     orderByStartTime();
     checkSchedule();
@@ -417,13 +427,12 @@ void DomoticsSystem::resetTime() {
     currentTime = Time(0, 0);
     orderByStartTime();
     powerLoad = 0;
-    checkSchedule();
     log.addLog(report::message(currentTime, "L'orario attuale è stato resettato"));
+    checkSchedule();
     log.addLog(report::message(currentTime, "L'orario attuale è " + currentTime.getHourString() + ":" + currentTime.getMinuteString()));
 }
 
 void DomoticsSystem::resetTimers() {
-    // to be finished
     for(auto *value : active_devices) {
         if(ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(value)) {
             manualDevice->removeTimer();
@@ -431,8 +440,8 @@ void DomoticsSystem::resetTimers() {
             value->removeTimer();
         }
     }
-    checkSchedule();
     log.addLog(report::message(currentTime, "Tutti i timer dei dispositivi sono stati resettati"));
+    checkSchedule();
 }
 
 void DomoticsSystem::resetAll() {
@@ -443,8 +452,8 @@ void DomoticsSystem::resetAll() {
     switchedDevices.clear();
     active_devices.clear();
     powerLoad = 0;
-    checkSchedule();
     log.addLog(report::message(currentTime, "Il sistema è stato resettato"));
+    checkSchedule();
     log.addLog(report::message(currentTime, "L'orario attuale è " + currentTime.getHourString() + ":" + currentTime.getMinuteString()));
 }
 
