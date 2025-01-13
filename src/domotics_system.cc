@@ -114,7 +114,7 @@ const Time& DomoticsSystem::getCurrentTime() const {
 void DomoticsSystem::removeDeviceTimer(std::string device) {
     int index = getIndex(device, false);
     int activeIndex = getIndex(device, true);
-    if((activeIndex == -1  || index == -1)  || index == -1) {
+    if((activeIndex == -1  || index == -1)  || index == -1 || switchedDevices.end() == std::find(switchedDevices.begin(), switchedDevices.end(), active_devices[activeIndex])) {
         throw std::invalid_argument("Dispositivo non trovato o senza timer");
     }
     auto manualDevice = dynamic_cast<ManualDevice *>(all_devices[index]);
@@ -130,13 +130,13 @@ void DomoticsSystem::removeDeviceTimer(std::string device) {
                 cpDevice->removeTimer();
                 active_devices.erase(active_devices.begin() + activeIndex);
             }
-        } else if(manualDevice != nullptr &&  switchedDevices.end() == std::find(switchedDevices.begin(), switchedDevices.end(), manualDevice)) {
+        } else if(manualDevice != nullptr) {
             log.addLog(report::message(currentTime, "Rimosso il timer dal dispositivo " + manualDevice->KName));
             manualDevice->removeStopTime();
             switchedDevices.push_back(manualDevice);
 
             //check if the device is not in switchedDevices
-        } else if( switchedDevices.end() == std::find(switchedDevices.begin(), switchedDevices.end(), cpDevice)) {
+        } else  {
             log.addLog(report::message(currentTime, "Rimosso il timer dal dispositivo " + cpDevice->KName));
             switchedDevices.push_back(cpDevice);
         }
