@@ -7,9 +7,6 @@
  */
 
 #include "../include/terminal.h"
-#include <iostream>
-#include <stdexcept>
-#include <string>
 
 Terminal::Terminal(double power_limit)
     : domotics_system_(power_limit), log_(report::logs::getInstance())  {}

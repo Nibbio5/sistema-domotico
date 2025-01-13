@@ -15,8 +15,6 @@
  */
 
 #include "../include/domotics_system.h"
-#include <memory>
-#include <vector>
 
 DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5}, currentTime{Time(0, 0)}, powerLoad{0}, log{report::logs::getInstance()} {
     setDevices();
@@ -306,7 +304,7 @@ void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) 
         powerLoad -= device->KPower;
         active_devices.erase(active_devices.begin() + getIndex(last, true));
     }
-    
+
     while(-powerLoad > KPowerLimit) {
         log.addLog(report::message(nowTime, "Il sistema è in sovraccarico energetico, gli ultimi dispositivi accesi verranno spenti"));
 
@@ -331,7 +329,7 @@ void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) 
                     active_devices.erase(active_devices.begin() + activeIndex);
                 }
             } else {
-                int lastIndex= getIndex(last, true);
+                int lastIndex = getIndex(last, true);
                 log.addLog(report::message(nowTime, "Tutti i dispositivi attivi sono nella white list, il dispositivo " + last + " verrà spento dato che non è nella white list"));
                 powerLoad -= active_devices[lastIndex]->KPower;
                 active_devices.erase(active_devices.begin() + lastIndex);
@@ -405,6 +403,8 @@ void DomoticsSystem::resetTime() {
     orderByStartTime();
     powerLoad = 0;
     checkSchedule();
+    log.addLog(report::message(currentTime, "L'orario attuale è stato resettato"));
+    log.addLog(report::message(currentTime, "L'orario attuale è " + currentTime.getHourString() + ":" + currentTime.getMinuteString()));
 }
 
 void DomoticsSystem::resetTimers() {
@@ -417,6 +417,7 @@ void DomoticsSystem::resetTimers() {
         }
     }
     checkSchedule();
+    log.addLog(report::message(currentTime, "Tutti i timer dei dispositivi sono stati resettati"));
 }
 
 void DomoticsSystem::resetAll() {
@@ -428,6 +429,8 @@ void DomoticsSystem::resetAll() {
     active_devices.clear();
     powerLoad = 0;
     checkSchedule();
+    log.addLog(report::message(currentTime, "Il sistema è stato resettato"));
+    log.addLog(report::message(currentTime, "L'orario attuale è " + currentTime.getHourString() + ":" + currentTime.getMinuteString()));
 }
 
 void DomoticsSystem::endDay() {

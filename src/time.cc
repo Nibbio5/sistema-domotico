@@ -1,7 +1,4 @@
 #include "../include/time.h"
-#include <iostream>
-#include <stdexcept>
-#include <string>
 
 Time::Time() : hour_(0), minute_(0) {}
 
