@@ -300,7 +300,7 @@ void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) 
     std::string name;
     bool onlyWhiteListDevices = true;
 
-    if(KPowerLimit == 0) {
+    if(KPowerLimit == 0 && powerLoad < 0) {
         log.addLog(report::message(nowTime, "Il sistema è in sovraccarico energetico, gli ultimi dispositivi accesi verranno spenti"));
         Device *device = active_devices[getIndex(last, true)];
         device->switch_off(nowTime);
