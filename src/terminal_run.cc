@@ -14,28 +14,33 @@ void Terminal::run() {
     log_.displayLogs();
 
     while(true) {
-        std::cout << "\n>> ";
-        std::getline(std::cin, line);
-        std::string command = findCommand(line);
-        if(command == "exit") {
-            break;
-        }
-        if(command == "help") {
-            helpCommandPrompt();
-            continue;
-        }
-        line.erase(0, command.length() + 1);
-        std::string device_name = "";
-        if(line.front() == '"') {
-            device_name = findDeviceName(line);
-            line.erase(0, device_name.length() + 3);
-        }
-        split(line, args, ' ');
-        if(!device_name.empty()) {
-            args.insert(args.begin(), device_name);
-        }
-        std::string arg = args.size() > 1 ? args.at(0) : "";
         try {
+            std::cout << "\n>> ";
+            std::getline(std::cin, line);
+            std::string command = findCommand(line);
+
+            if(command == "exit") {
+                break;
+            }
+            if(command == "help") {
+                helpCommandPrompt();
+                continue;
+            }
+            
+            line.erase(0, command.length() + 1);
+            std::string device_name = "";
+
+            if(line.front() == '"') {
+                device_name = findDeviceName(line);
+                line.erase(0, device_name.length() + 3);
+            }
+            split(line, args, ' ');
+
+            if(!device_name.empty()) {
+                args.insert(args.begin(), device_name);
+            }
+            std::string arg = args.size() > 1 ? args.at(0) : "";
+
             log_.addLog(report::message(domotics_system_.getCurrentTime(), command, false));
             log_.addLog(report::message(domotics_system_.getCurrentTime(), "L'orario attuale è " + domotics_system_.getCurrentTime().getHourString() + ":" + domotics_system_.getCurrentTime().getMinuteString()));
             if(command == "set") {
