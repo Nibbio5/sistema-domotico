@@ -39,7 +39,7 @@ void Terminal::run() {
             if(!device_name.empty()) {
                 args.insert(args.begin(), device_name);
             }
-            std::string arg = args.size() > 1 ? args.at(0) : "";
+            std::string arg = args.size() >= 1 ? args.at(0) : "";
 
             log_.addLog(report::message(domotics_system_.getCurrentTime(), command, false));
             log_.addLog(report::message(domotics_system_.getCurrentTime(), "L'orario attuale è " + domotics_system_.getCurrentTime().getHourString() + ":" + domotics_system_.getCurrentTime().getMinuteString()));
