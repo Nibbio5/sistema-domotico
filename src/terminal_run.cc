@@ -17,7 +17,7 @@ void Terminal::run() {
             std::cout << "\n>> ";
             std::getline(std::cin, line);
             std::string command = findCommand(line);
-
+            std::string full_command = line;
             if(command == "exit") {
                 break;
             }
@@ -40,7 +40,7 @@ void Terminal::run() {
             }
             std::string arg = args.size() >= 1 ? args.at(0) : "";
 
-            log_.addLog(report::message(domotics_system_.getCurrentTime(), command, false));
+            log_.addLog(report::message(domotics_system_.getCurrentTime(), full_command, false));
             log_.addLog(report::message(domotics_system_.getCurrentTime(), "L'orario attuale è " + domotics_system_.getCurrentTime().getHourString() + ":" + domotics_system_.getCurrentTime().getMinuteString()));
             if(command == "set") {
                 setCommandPrompt(args);

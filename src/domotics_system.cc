@@ -114,8 +114,8 @@ const Time& DomoticsSystem::getCurrentTime() const {
 void DomoticsSystem::removeDeviceTimer(std::string device) {
     int index = getIndex(device, false);
     int activeIndex = getIndex(device, true);
-    if((activeIndex == -1  || index == -1)  && index == -1) {
-        throw std::invalid_argument("device not found or already without timer");
+    if((activeIndex == -1  || index == -1)  || index == -1) {
+        throw std::invalid_argument("Dispositivo non trovato o senza timer");
     }
     auto manualDevice = dynamic_cast<ManualDevice *>(all_devices[index]);
     auto cpDevice = dynamic_cast<CPDevice *>(all_devices[index]);
