@@ -43,13 +43,13 @@ void report::logs::insertionSort(report::message newMessage) {
 }
 
 void report::logs::displayLogs() {
-    // std::ofstream logFile(log_file_name_, std::ios::app);
+    std::ofstream logFile(log_file_name_, std::ios::app);
     for(auto &value : logList_) {
-        // logFile << value << std::endl;
+        logFile << value << std::endl;
         if(value.display()) {
             std::cout << value << std::endl;
         }
     }
     logList_.clear();
-    // logFile.close();
+    logFile.close();
 }
