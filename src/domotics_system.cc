@@ -371,11 +371,11 @@ void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start,
 
     if(CPDevice *cpDevice = dynamic_cast<CPDevice *>(targetDevice)) {
         cpDevice->set_start_time(start);
-        log.addLog(report::message(currentTime, "Impostato un time per il dispositivo  " + cpDevice->KName
+        log.addLog(report::message(currentTime, "Impostato un time per il dispositivo " + cpDevice->KName
                                    + " dalle " + start.getHourString() + ":" + start.getMinuteString() + " alle " + (start + cpDevice->KDuration).getHourString() + ":" + (start + cpDevice->KDuration).getMinuteString()));
     } else if(ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(targetDevice)) {
         manualDevice->set_new_timer(start, stop);
-        log.addLog(report::message(currentTime, "Impostato un time per il dispositivo  " + manualDevice->KName + " dalle " + start.getHourString() + ":" + start.getMinuteString() + " alle " + stop.getHourString() + ":" + stop.getMinuteString()));
+        log.addLog(report::message(currentTime, "Impostato un time per il dispositivo " + manualDevice->KName + " dalle " + start.getHourString() + ":" + start.getMinuteString() + " alle " + stop.getHourString() + ":" + stop.getMinuteString()));
     }
     orderByStartTime();
     checkSchedule();
