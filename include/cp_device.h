@@ -1,4 +1,10 @@
-// Eros Menin
+/**
+ * @file cp_device.h
+ * @brief Header file for the CPDevice class.
+ *
+ * @author Eros Menin
+ *
+ */
 
 #ifndef CPDEVICE_H
 #define CPDEVICE_H

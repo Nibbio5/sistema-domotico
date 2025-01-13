@@ -1,4 +1,10 @@
-// Eros Menin
+/**
+ * @file manual_device.cc
+ * @brief Implementation file for the ManualDevice class.
+ *
+ * @author Eros Menin
+ *
+ */
 
 #include "../include/manual_device.h"
 

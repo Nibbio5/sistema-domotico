@@ -1,4 +1,10 @@
-// Eros Menin
+/**
+ * @file manual_device.h
+ * @brief Header file for the ManualDevice class.
+ *
+ * @author Eros Menin
+ *
+ */
 
 #ifndef MANUALDEVICE_H
 #define MANUALDEVICE_H

@@ -1,4 +1,10 @@
-// Eros Menin
+/**
+ * @file device.h
+ * @brief Header file for the Device abstract class.
+ *
+ * @author Eros Menin
+ *
+ */
 
 #ifndef DEVICE_H
 #define DEVICE_H

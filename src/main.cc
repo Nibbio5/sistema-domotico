@@ -1,3 +1,11 @@
+/**
+ * @file main.cc
+ * @brief Main file for the "sistema domotico" project.
+ *
+ * @author Eros Menin
+ *
+ */
+
 #include "../include/terminal.h"
 #include <iostream>
 #include <string>
@@ -7,7 +15,7 @@
  *
  * @param power the power limit of the domotic system
  */
-void invokeTerminal(double power = 0.0) {
+void invokeTerminal(double power = 3.5) {
     std::cout << "\n\t\tBenvenuto a casa ;)\n" << std::endl;
     Terminal terminal{power};
     terminal.run();
