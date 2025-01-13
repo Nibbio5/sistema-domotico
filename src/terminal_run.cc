@@ -6,42 +6,49 @@
  *
  */
 #include "../include/terminal.h"
-#include <iostream>
 #include <string>
 
 void Terminal::run() {
-    std::string command;
+    std::string line;
     std::vector<std::string> args;
     log_.displayLogs();
 
     while(true) {
         std::cout << "\n>> ";
-        std::getline(std::cin, command);
+        std::getline(std::cin, line);
+        std::string command = findCommand(line);
         if(command == "exit") {
             break;
         }
-        split(command, args, ' ');
-        std::string arg = args.size() > 1 ? args.at(1) : "";
+        line.erase(0, command.length() + 1);
+        std::string device_name = "";
+        if(line.front() == '"') {
+            device_name = findDeviceName(line);
+            line.erase(0, device_name.length() + 3);
+        }
+        split(line, args, ' ');
+        if(!device_name.empty()) {
+            args.insert(args.begin(), device_name);
+        }
+        std::string arg = args.size() > 1 ? args.at(0) : "";
         try {
             log_.addLog(report::message(domotics_system_.getCurrentTime(), command, false));
             log_.addLog(report::message(domotics_system_.getCurrentTime(), "L'orario attuale è " + domotics_system_.getCurrentTime().getHourString() + ":" + domotics_system_.getCurrentTime().getMinuteString()));
-            if(args[0] == "set") {
-                args.erase(args.begin());
+            if(command == "set") {
                 setCommandPrompt(args);
-            } else if(args[0] == "rm") {
+            } else if(command == "rm") {
                 rmCommandPrompt(arg);
-            } else if(args[0] == "show") {
+            } else if(command == "show") {
                 showCommandPrompt(arg);
-            } else if(args[0] == "reset") {
+            } else if(command == "reset") {
                 resetCommandPrompt(arg);
-            } else if(args[0] == "help") {
+            } else if(command == "help") {
                 helpCommandPrompt();
             } else {
-                throw std::invalid_argument(
-                    "Commando sbagliato. Scrivere 'help' per maggiori informazioni.");
+                throw std::invalid_argument("Commando sbagliato. Scrivere 'help' per maggiori informazioni.");
             }
         } catch(const std::invalid_argument &e) {
-            log_.addLog(report::message(domotics_system_.getCurrentTime(), std::string("[!Error!]") + e.what()));
+            log_.addLog(report::message(domotics_system_.getCurrentTime(), std::string("[!Error!] ") + e.what()));
         }
         log_.displayLogs();
     }
@@ -65,3 +72,19 @@ size_t split(const std::string &txt, std::vector<std::string> &strs, char ch) {
 
     return strs.size();
 }
+
+std::string findCommand(std::string line) {
+    size_t pos = line.find(" ");
+    if(pos == std::string::npos) {
+        return line;
+    }
+    return line.substr(0, pos);;
+};
+
+std::string findDeviceName(std::string line) {
+    size_t pos = line.find('"', 1);
+    if(pos == std::string::npos) {
+        throw std::invalid_argument("Nome del dispositivo non valido. Scrivere 'help' per maggiori informazioni.");
+    }
+    return line.substr(1, pos - 1);
+};

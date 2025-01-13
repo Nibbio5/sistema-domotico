@@ -48,7 +48,7 @@ class Terminal {
      * @param show_time The flag to show the time at the start.
      * @return The string of the device status.
      */
-    std::string showOneDevice(const Device *device, const bool &show_time = true);
+    std::string showOneDevice(const Device *device, const bool &isSigle = true);
 
     /**
      * @brief Sets command prompt based on the arguments.
@@ -111,5 +111,21 @@ static size_t split(const std::string &txt, std::vector<std::string> &strs, char
  * @return double the rounded value
  */
 static std::string roundTo(double value, int precision = 2);
+
+/**
+ * @brief Helper function that finds the command in a given string
+ *
+ * @param line the string to search the command in
+ * @return std::string the command found
+ */
+std::string findCommand(std::string line);
+
+/**
+ * @brief Helper function that finds the device name in a given string
+ *
+ * @param line the string to search the device name in
+ * @return std::string the device name found
+ */
+std::string findDeviceName(std::string line);
 
 #endif // #ifndef

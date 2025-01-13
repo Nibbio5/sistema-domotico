@@ -40,7 +40,7 @@ Time Time::fromString(const std::string &time) {
     size_t pos = tmpTime.find(delimiter);
 
     if(pos == std::string::npos) {
-        throw std::invalid_argument("Invalid time format (hh:mm)");
+        throw std::invalid_argument("Formato del tempo non valido (hh:mm)");
     }
 
     try {
@@ -49,14 +49,14 @@ Time Time::fromString(const std::string &time) {
         int hour = std::stoi(hour_str);
         int minute = std::stoi(minute_str);
         if(hour < 0 || hour > 23 || minute < 0 || minute > 59) {
-            throw std::invalid_argument("Invalid time format (hh:mm)");
+            throw std::invalid_argument("Formato del tempo non valido (hh:mm)");
         }
         return Time(hour, minute);
 
     } catch(const std::invalid_argument &e) {
-        throw std::invalid_argument("Invalid time format (hh:mm)");
+        throw std::invalid_argument("Formato del tempo non valido (hh:mm)");
     } catch(const std::out_of_range &e) {
-        throw std::invalid_argument("Invalid time format (hh:mm)");
+        throw std::invalid_argument("Formato del tempo non valido (hh:mm)");
     }
 }
 
@@ -109,7 +109,7 @@ Time operator+(const Time &a, const Time &b) {
 
 Time operator-(const Time &a, const Time &b) {
     if(a < b) {
-        throw std::invalid_argument("Invalid time subtraction");
+        throw std::invalid_argument("Sottrazione di tempi non valida");
     }
 
     int newHour = a.hour() - b.hour();
@@ -135,7 +135,7 @@ Time& Time::operator=(const Time &time) {
 
 Time& Time::operator+=(const Time &time) {
     if(*this > time) {
-        throw std::invalid_argument("Invalid time addition");
+        throw std::invalid_argument("Addizione di tempi non valida");
     }
     hour_ += time.hour();
     minute_ += time.minute();

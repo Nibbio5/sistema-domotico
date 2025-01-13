@@ -15,13 +15,18 @@ Terminal::Terminal(double power_limit)
     : domotics_system_(power_limit), log_(report::logs::getInstance())  {}
 
 void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
+    // std::string joinArgs;
+    // for(auto arg : args) {
+    //     joinArgs += arg + " ";
+    // }
+    // std::vector<std::string> newArgs;
+    // split(joinArgs, newArgs, '"');
     if(args.size() < 2) {
         throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
 
     try {
         if(args[0] == "time") {
-
             setTimeCommandPrompt(args[1]);
             return;
         }
@@ -87,7 +92,8 @@ void Terminal::showCommandPrompt(const std::string &arg) {
         if(device == nullptr) {
             throw std::invalid_argument("Dispositivo sbagliato. Scrivere 'help' per maggiori informazioni.");
         }
-        showOneDevice(device);
+        std::string output = showOneDevice(device);
+        log_.addLog(report::message(domotics_system_.getCurrentTime(), output));
         return;
     }
 
@@ -111,14 +117,13 @@ void Terminal::showCommandPrompt(const std::string &arg) {
     log_.addLog(report::message(currentTime, output));
 }
 
-std::string Terminal::showOneDevice(const Device *device, const bool &show_time) {
+std::string Terminal::showOneDevice(const Device *device, const bool &isSigle) {
 
     Time currentTime = domotics_system_.getCurrentTime();
-    std::string time = "- ";
-    if(show_time) {
-        time = "[" + currentTime.getHourString() + ":" + currentTime.getMinuteString() + "] " ;
-    }
-    return time + "Il dispositivo " + "(" + std::to_string(device->is_on()) + ") " + device->KName + " ha " + (show_time ? "attualmente " : "")
+    std::string startPhrase = isSigle ? "" : "- ";
+    std::string powerStatus = device->is_on() ? "on" : "off";
+
+    return startPhrase + "Il dispositivo " + device->KName + " (" + powerStatus + ")" + " ha " + (isSigle ? "attualmente " : "")
            + (device->KPower >= 0 ? "prodotto " : "consumato ")
            + roundTo(device->get_total_power(domotics_system_.getCurrentTime())) + "kWh\n";
 }
@@ -164,10 +169,10 @@ void Terminal::resetCommandPrompt(const std::string &arg) {
 
 void Terminal::helpCommandPrompt() {
     std::cout << "Commands:\n"
-              << " - set {device} {start} [{stop}]: Imposta l'orario di accensione [ e spegnimento(solo M)] per il dispositivo.\n"
-              << " - set {device} on/off: accende/spegne il dispositivo\n"
-              << " - rm {device}: rimuove il timer del dispositivo\n"
-              << " - show {device}: mostra lo stato del dispositivo, se non è specificato il dispositivo li mostra tutti\n"
+              << " - set \"{device}\" {start} [{stop}]: Imposta l'orario di accensione [e spegnimento(solo M)] per il dispositivo.\n"
+              << " - set \"{device}\" on/off: accende/spegne il dispositivo\n"
+              << " - rm \"{device}\": rimuove il timer del dispositivo\n"
+              << " - show \"{device}\": mostra lo stato del dispositivo, se non è specificato il dispositivo li mostra tutti\n"
               << " - reset time: riporta il tempo a 00:00 spegnendo i dispositivi ma mantenendo i timer\n"
               << " - reset timers: rimuove i timer dai dispositivi (mantengono lo stato)\n"
               << " - reset all: riporta il sistema allo stato iniziale\n"
