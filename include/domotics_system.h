@@ -55,11 +55,28 @@ class DomoticsSystem {
      */
     void checkSchedule();
 
+    /**
+     * @brief Checks the schedule of a CPDevice.
+     * @param cpDevice The CPDevice to check.
+     * @param nowTime The current time.
+     * @param startTime The start time of the device.
+     * @return True if the device is scheduled to be on, false otherwise.
+     */
     bool checkScheduleCpDevice(CPDevice *cpDevice, const Time nowTime, const Time *startTime);
+
+    /**
+     * @brief Checks the schedule of a ManualDevice.
+     * @param manualDevice The ManualDevice to check.
+     * @param nowTime The current time.
+     * @param startTime The start time of the device.
+     * @param stopTime The stop time of the device.
+     * @return True if the device is scheduled to be on, false otherwise.
+     */
     bool checkScheduleManualDevice(ManualDevice *manualDevice,const Time nowTime, const Time *startTime, const Time *stopTime);
 
     /**
-     * @brief Sets the devices based on the current schedule.
+     * @brief Sets the devices based on a json file parsing
+     * @note The file must be in the assets folder and named devices.json
      */
     void setDevices();
 
@@ -79,8 +96,9 @@ class DomoticsSystem {
      */
     DomoticsSystem();
 
-
-    //destructors
+    /**
+     * @brief Destructor for DomoticsSystem.
+     */
     ~DomoticsSystem();
 
     /**
@@ -127,7 +145,7 @@ class DomoticsSystem {
     void setCurrentTime(const Time& newTime);
 
     /**
-     * @brief Sets the start and stop time for a device.
+     * @brief Sets the start for a device, if the device is a manual device it also sets stop time.
      * @param device The name of the device.
      * @param start The start time.
      * @param stop The stop time.
@@ -135,7 +153,7 @@ class DomoticsSystem {
     void setDeviceTime(const std::string& device, const Time& start, const Time& stop);
 
     /**
-     * @brief Changes the status of a device.
+     * @brief Changes the status of a device by turning it on or off.
      * @param status The new status of the device.
      * @param device The name of the device.
      */
@@ -148,15 +166,11 @@ class DomoticsSystem {
     void removeDeviceTimer(std::string device);
 
     /**
-     * @brief Balances the power load in the system.
+     * @brief Balances the power load in the system, by turning off the needed devices to respect the power limit.
+     * the devices are turned off in the inverse order of activation.
      * @param last The name of the last device.
      */
     void balancePower(const std::string& last, const Time &nowTime);
-
-    /**
-     * @brief Displays the list of active devices.
-     */
-    void showActiveDevices() const;
 
     // DEBUG section
 
