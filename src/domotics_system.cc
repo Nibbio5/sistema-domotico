@@ -583,6 +583,7 @@ void DomoticsSystem::resetAll()
 void DomoticsSystem::endDay()
 { // turn off all the devices
     currentTime = Time(23, 59);
+    checkSchedule();
     for (auto *value : active_devices)
     {
         value->switch_off(currentTime);
