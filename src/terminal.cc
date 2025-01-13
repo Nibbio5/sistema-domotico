@@ -15,12 +15,6 @@ Terminal::Terminal(double power_limit)
     : domotics_system_(power_limit), log_(report::logs::getInstance())  {}
 
 void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
-    // std::string joinArgs;
-    // for(auto arg : args) {
-    //     joinArgs += arg + " ";
-    // }
-    // std::vector<std::string> newArgs;
-    // split(joinArgs, newArgs, '"');
     if(args.size() < 2) {
         throw std::invalid_argument("Argomento sbagliato. Scrivere 'help' per maggiori informazioni.");
     }
@@ -38,7 +32,6 @@ void Terminal::setCommandPrompt(const std::vector<std::string> &args) {
     } catch(const std::out_of_range &e) {
         throw std::invalid_argument(e.what());
     }
-
 }
 
 void Terminal::setDeviceCommandPrompt(
