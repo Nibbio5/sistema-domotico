@@ -276,41 +276,46 @@ void DomoticsSystem::changeDeviceStatus(bool status, const std::string& device) 
 
     if(status) { // if the status is true (turn on the device)
         if(activeIndex == -1) { // if the device is not already active
+
             active_devices.push_back(all_devices[index]);  // add the device to the active devices
             switchedDevices.push_back(all_devices[index]); // add the device to the switched devices
+
             active_devices.back()->switch_on(currentTime);
             active_devices.back()->set_start_time(currentTime);
+
             log.addLog(report::message(currentTime, "Il dispositivo " + device + " si è acceso")); 
             powerLoad += active_devices.back()->KPower; 
             balancePower(device, currentTime);
-        } else {
-            throw std::invalid_argument("Device is already active");
-        }
+        } 
+        else  throw std::invalid_argument("Device is already active");
+
     } else { // else turn off the device
+
         if(activeIndex != -1) { // if the device is in the active devices
             log.addLog(report::message(currentTime, "Il dispositivo " + device + " si è spento"));
             active_devices[activeIndex]->switch_off(currentTime);
             powerLoad -= active_devices[activeIndex]->KPower;
             active_devices.erase(active_devices.begin() + activeIndex); // remove the device from the active devices
-        } else {
-            throw std::invalid_argument("Device is not active");
-        }
+        } 
+        else throw std::invalid_argument("Device is not active");
     }
     orderByStartTime(); // order the devices by start time
 }
 
 void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) {
+
     Time latestTime(0, 0);
     std::string name;
     bool onlyWhiteListDevices = true;
+    int activeIndex = getIndex(last, true);
 
     if(KPowerLimit == 0) {
-        log.addLog(report::message(nowTime, "Il sistema è in sovraccarico energetico, gli ultimi dispositivi accesi verranno spenti"));
-        Device *device = active_devices[getIndex(last, true)];
+        log.addLog(report::message(nowTime, "Il sistema non ha corrente disponibile, il dispositivo acceso verrà spento"));
+        Device *device = active_devices[activeIndex]; 
         device->switch_off(nowTime);
         log.addLog(report::message(nowTime, "Il dispositivo " + last + " si é spento"));
         powerLoad -= device->KPower;
-        active_devices.erase(active_devices.begin() + getIndex(last, true));
+        active_devices.erase(active_devices.begin() + activeIndex);
     }
 
     while(-powerLoad > KPowerLimit) {
@@ -329,7 +334,7 @@ void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) 
                 return device->KName == last && device->KIsOnWhiteList;
             });
             if(it != active_devices.end()) {
-                int activeIndex = getIndex(name, true);
+                activeIndex = getIndex(name, true);
                 if(activeIndex != -1) {
                     log.addLog(report::message(nowTime, "Il dispositivo " + name + " si é spento"));
                     active_devices[activeIndex]->switch_off(currentTime);
@@ -337,13 +342,12 @@ void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) 
                     active_devices.erase(active_devices.begin() + activeIndex);
                 }
             } else {
-                int lastIndex = getIndex(last, true);
                 log.addLog(report::message(nowTime, "Tutti i dispositivi attivi sono nella white list, il dispositivo " + last + " verrà spento dato che non è nella white list"));
-                powerLoad -= active_devices[lastIndex]->KPower;
-                active_devices.erase(active_devices.begin() + lastIndex);
+                powerLoad -= active_devices[activeIndex]->KPower;
+                active_devices.erase(active_devices.begin() + activeIndex);
             }
         } else {
-            int activeIndex = getIndex(name, true);
+            activeIndex = getIndex(name, true);
             if(activeIndex != -1) {
                 log.addLog(report::message(nowTime, "Il dispositivo " + name + " si é spento"));
                 active_devices[activeIndex]->switch_off(currentTime);
