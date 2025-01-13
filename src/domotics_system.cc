@@ -193,7 +193,6 @@ void DomoticsSystem::checkSchedule() {
     } while(tempo < currentTime);
 }
 
-
 bool DomoticsSystem::checkScheduleManualDevice(ManualDevice *manualDevice, const Time nowTime, const Time *startTime, const Time *stopTime) {
 
     if(startTime && *startTime <= nowTime && stopTime && *stopTime > nowTime && !manualDevice->is_on()) { // check if start time is before current time and stop time is after current time and the device is off
@@ -342,6 +341,7 @@ void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) 
         latestTime = Time(0, 0); // Reset latestTime for the next iteration
     }
 }
+
 void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start, const Time &stop) {
     int index = getIndex(device, false);
     if(index == -1 || start > stop || start < currentTime || stop <= currentTime) {
