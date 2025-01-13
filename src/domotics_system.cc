@@ -16,6 +16,7 @@
 
 #include "../include/domotics_system.h"
 #include <memory>
+#include <vector>
 
 DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5}, currentTime{Time(0, 0)}, powerLoad{0}, log{report::logs::getInstance()} {
     setDevices();
@@ -140,7 +141,7 @@ void DomoticsSystem::removeDeviceTimer(std::string device) {
 }
 
 int DomoticsSystem::getIndex(const std::string& device, bool isActive) const {
-    const auto& devices = isActive ? active_devices : all_devices;
+    const std::vector<Device *>& devices = isActive ? active_devices : all_devices;
     for(size_t i = 0; i < devices.size(); ++i) {
         if(devices[i]->KName == device) {
             return static_cast<int>(i);
@@ -293,29 +294,31 @@ void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) 
     std::string name;
     bool onlyWhiteListDevices = true;
 
+    if(KPowerLimit == 0) {
+        log.addLog(report::message(nowTime, "Il sistema è in sovraccarico energetico, gli ultimi dispositivi accesi verranno spenti"));
+        Device *device = active_devices[getIndex(last, true)];
+        device->switch_off(nowTime);
+        log.addLog(report::message(nowTime, "Il dispositivo " + last + " si é spento"));
+        powerLoad -= device->KPower;
+        active_devices.erase(active_devices.begin() + getIndex(last, true));
+    }
+    
     while(-powerLoad > KPowerLimit) {
         log.addLog(report::message(nowTime, "Il sistema è in sovraccarico energetico, gli ultimi dispositivi accesi verranno spenti"));
 
         for(int i = 0; i < active_devices.size(); i++) {
-            if(active_devices[i]->get_start_time() != nullptr &&
-                    *active_devices[i]->get_start_time() >= latestTime &&
-                    active_devices[i]->KName != last &&
-                    active_devices[i]->is_on()) {
-                if(!active_devices[i]->KIsOnWhiteList) {
-                    onlyWhiteListDevices = false;
-                    latestTime = *active_devices[i]->get_start_time();
-                    name = active_devices[i]->KName;
-                } else if(onlyWhiteListDevices) {
-                    latestTime = *active_devices[i]->get_start_time();
-                    name = active_devices[i]->KName;
-                }
+            if(active_devices[i]->get_start_time() != nullptr && *active_devices[i]->get_start_time() >= latestTime && active_devices[i]->KName != last && active_devices[i]->is_on()) {
+                if(!active_devices[i]->KIsOnWhiteList) onlyWhiteListDevices = false;
+                latestTime = *active_devices[i]->get_start_time();
+                name = active_devices[i]->KName;
             }
         }
 
         if(onlyWhiteListDevices) {
-            if(std::find_if(active_devices.begin(), active_devices.end(), [&](Device * device) {
-            return device->KName == last && device->KIsOnWhiteList;
-        }) != active_devices.end()) {
+            auto it = std::find_if(active_devices.begin(), active_devices.end(), [&](Device * device) {
+                return device->KName == last && device->KIsOnWhiteList;
+            });
+            if(it != active_devices.end()) {
                 int activeIndex = getIndex(name, true);
                 if(activeIndex != -1) {
                     log.addLog(report::message(nowTime, "Il dispositivo " + name + " si é spento"));
