@@ -327,7 +327,10 @@ void DomoticsSystem::balancePower(const std::string &last, const Time &nowTime) 
                     active_devices.erase(active_devices.begin() + activeIndex);
                 }
             } else {
-                log.addLog(report::message(nowTime, "tutti i dispositivi attivi sono nella white list, il dispositivo " + name + " verrà spento dato che non è nella white list"));
+                int lastIndex= getIndex(last, true);
+                log.addLog(report::message(nowTime, "Tutti i dispositivi attivi sono nella white list, il dispositivo " + last + " verrà spento dato che non è nella white list"));
+                powerLoad -= active_devices[lastIndex]->KPower;
+                active_devices.erase(active_devices.begin() + lastIndex);
             }
         } else {
             int activeIndex = getIndex(name, true);

@@ -7,7 +7,7 @@
  *
  * @param power the power limit of the domotic system
  */
-void invokeTerminal(double power = 3.5) {
+void invokeTerminal(double power = 0.5) {
     std::cout << "\n\t\tBenvenuto a casa ;)\n" << std::endl;
     Terminal terminal{power};
     terminal.run();
