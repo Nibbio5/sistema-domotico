@@ -1,4 +1,10 @@
-// Eros Menin
+/**
+ * @file cp_device.cc
+ * @brief Implementation file for the CPDevice class.
+ *
+ * @author Eros Menin
+ *
+ */
 
 #include "../include/cp_device.h"
 

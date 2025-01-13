@@ -1,4 +1,10 @@
-// Eros Menin
+/**
+ * @file device.cc
+ * @brief Implementation file for the Device class.
+ *
+ * @author Eros Menin
+ *
+ */
 
 #include "../include/device.h"
 

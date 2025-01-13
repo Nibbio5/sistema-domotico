@@ -105,10 +105,11 @@ static size_t split(const std::string &txt, std::vector<std::string> &strs, char
 
 /**
  * @brief Helper function that rounds a given double value to the desired precision
+ * and converts it into a std::string
  *
- * @param value the double value to round
- * @param precision the decimal precision
- * @return double the rounded value
+ * @param value The double value to round
+ * @param precision The decimal precision
+ * @return std::string The rounded value
  */
 static std::string roundTo(double value, int precision = 2);
 
