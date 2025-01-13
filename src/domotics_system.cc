@@ -153,7 +153,7 @@ int DomoticsSystem::getIndex(const std::string& device, bool isActive) const {
 void DomoticsSystem::checkSchedule() {
     Time tempo = Time(0, 0);
     int numberOfRemovedDevices = 0;
-    int i = 0;
+    int i = 0, size = 0;
     do { // iterate over the active devices
         if(i < active_devices.size()) { // check if the index is in the range of the active devices
             if(*active_devices[i]->get_start_time() <= currentTime)  // check if the start time of the device is before the current time
@@ -162,6 +162,7 @@ void DomoticsSystem::checkSchedule() {
             tempo = currentTime;
 
         bool deviceRemoved = false;
+        size = active_devices.size();
         numberOfRemovedDevices = 0;
         for(auto it = active_devices.begin(); it != active_devices.end();) { // iterate over the active devices
             Device *device = *it;
@@ -186,7 +187,11 @@ void DomoticsSystem::checkSchedule() {
             }
             ++it;
         }
-        ++i;
+        if(size != active_devices.size()) {
+            i -= size - active_devices.size();
+        }else{
+            ++i;
+        }
         if(!deviceRemoved) { // increment i if the device is not removed
             i = i - numberOfRemovedDevices;
         }
