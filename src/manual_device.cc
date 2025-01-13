@@ -5,7 +5,7 @@
 ManualDevice::ManualDevice(const std::string& name, const double power, const Time& start_time, const Time& stop_time, const bool is_on_white_list) 
     : Device(name, power, start_time, is_on_white_list) {
     if(start_time > stop_time)
-        throw std::invalid_argument("Start time is higher than stop time");
+        throw std::invalid_argument("Il tempo di start è successivo al tempo di stop");
 
     this->stop_time_ = std::make_shared<Time>(stop_time);
 }
@@ -19,14 +19,14 @@ std::shared_ptr<const Time> ManualDevice::get_stop_time() const { return stop_ti
 
 void ManualDevice::set_start_time(const Time& new_time) {
     if(stop_time_ && *stop_time_ < new_time)
-        throw std::invalid_argument("Start time is higher than stop time");
+        throw std::invalid_argument("Il tempo di start è successivo al tempo di stop");
 
     start_time_ = std::make_shared<Time>(new_time);
 }
 
 void ManualDevice::set_new_timer(const Time& new_start_time, const Time& new_stop_time) {
     if(new_start_time > new_stop_time)
-        throw std::invalid_argument("Start time is higher than stop time");
+        throw std::invalid_argument("Il tempo di start è successivo al tempo di stop");
 
     start_time_ = std::make_shared<Time>(new_start_time);
     stop_time_ = std::make_shared<Time>(new_stop_time);

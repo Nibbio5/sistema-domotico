@@ -76,7 +76,7 @@ std::ostream& operator<<(std::ostream& out, const Device& device) {
 
 static double calculateTimePeriodPower(const Time& start_time, const Time& stop_time, const double power){
     if(start_time > stop_time)
-        throw std::invalid_argument("Start time is higher than stop time");
+        throw std::invalid_argument("Il tempo di start è successivo al tempo di stop");
 
     Time active_time = stop_time - start_time;
     return ((active_time.hour() * power) + ((power / 60) * active_time.minute()));
