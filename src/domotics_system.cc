@@ -130,11 +130,13 @@ void DomoticsSystem::removeDeviceTimer(std::string device) {
                 cpDevice->removeTimer();
                 active_devices.erase(active_devices.begin() + activeIndex);
             }
-        } else if(manualDevice != nullptr) {
+        } else if(manualDevice != nullptr &&  switchedDevices.end() == std::find(switchedDevices.begin(), switchedDevices.end(), manualDevice)) {
             log.addLog(report::message(currentTime, "Rimosso il timer dal dispositivo " + manualDevice->KName));
             manualDevice->removeStopTime();
             switchedDevices.push_back(manualDevice);
-        } else {
+
+            //check if the device is not in switchedDevices
+        } else if( switchedDevices.end() == std::find(switchedDevices.begin(), switchedDevices.end(), cpDevice)) {
             log.addLog(report::message(currentTime, "Rimosso il timer dal dispositivo " + cpDevice->KName));
             switchedDevices.push_back(cpDevice);
         }
