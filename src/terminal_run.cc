@@ -20,6 +20,10 @@ void Terminal::run() {
         if(command == "exit") {
             break;
         }
+        if(command == "help") {
+            helpCommandPrompt();
+            continue;
+        }
         line.erase(0, command.length() + 1);
         std::string device_name = "";
         if(line.front() == '"') {
@@ -42,8 +46,6 @@ void Terminal::run() {
                 showCommandPrompt(arg);
             } else if(command == "reset") {
                 resetCommandPrompt(arg);
-            } else if(command == "help") {
-                helpCommandPrompt();
             } else {
                 throw std::invalid_argument("Commando sbagliato. Scrivere 'help' per maggiori informazioni.");
             }
