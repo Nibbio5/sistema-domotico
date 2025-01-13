@@ -112,44 +112,48 @@ const Time& DomoticsSystem::getCurrentTime() const {
 }
 
 void DomoticsSystem::removeDeviceTimer(std::string device) {
-    int index = getIndex(device, false);
-    int activeIndex = getIndex(device, true);
-    if((activeIndex == -1  || index == -1)  || index == -1 || switchedDevices.end() != std::find(switchedDevices.begin(), switchedDevices.end(), active_devices[activeIndex])) {
+    int index = getIndex(device, false);  // get the index of the device in the all devices
+    int activeIndex = getIndex(device, true); //get the index of the device in the active devices
+
+    if((activeIndex == -1  || index == -1)  || index == -1  // check if the device is not in the all_devices or in the active_devices and if the device is not in switchedDevices
+    || switchedDevices.end() != std::find(switchedDevices.begin(), switchedDevices.end(), active_devices[activeIndex])) {
         throw std::invalid_argument("Dispositivo non trovato o senza timer");
     }
-    auto manualDevice = dynamic_cast<ManualDevice *>(all_devices[index]);
+    auto manualDevice = dynamic_cast<ManualDevice *>(all_devices[index]); 
     auto cpDevice = dynamic_cast<CPDevice *>(all_devices[index]);
-    if(activeIndex != -1) {
-        if(!active_devices[activeIndex]->is_on()) {
-            if(manualDevice != nullptr) {
+    if(activeIndex != -1) { // check if the device is in the active devices
+        if(!active_devices[activeIndex]->is_on()) { // check if the device is off
+            if(manualDevice != nullptr) { 
                 log.addLog(report::message(currentTime, "Rimosso il timer dal dispositivo " + manualDevice->KName));
                 manualDevice->removeTimer();
                 active_devices.erase(active_devices.begin() + activeIndex);
-            } else if(cpDevice != nullptr) {
+            } else{
                 log.addLog(report::message(currentTime, "Rimosso il timer dal dispositivo " + cpDevice->KName));
                 cpDevice->removeTimer();
                 active_devices.erase(active_devices.begin() + activeIndex);
             }
-        } else if(manualDevice != nullptr) {
+        } else if(manualDevice != nullptr) { 
             log.addLog(report::message(currentTime, "Rimosso il timer dal dispositivo " + manualDevice->KName));
             manualDevice->removeStopTime();
             switchedDevices.push_back(manualDevice);
-        } else {
+
+            //check if the device is not in switchedDevices
+        } else  {
             log.addLog(report::message(currentTime, "Rimosso il timer dal dispositivo " + cpDevice->KName));
             switchedDevices.push_back(cpDevice);
         }
     }
-    checkSchedule();
+    checkSchedule(); 
 }
 
 int DomoticsSystem::getIndex(const std::string& device, bool isActive) const {
-    const std::vector<Device *>& devices = isActive ? active_devices : all_devices;
-    for(size_t i = 0; i < devices.size(); ++i) {
+    const std::vector<Device *>& devices = isActive ? active_devices : all_devices;  //set the vector to search in
+    for(size_t i = 0; i < devices.size(); ++i) { 
         if(devices[i]->KName == device) {
             return static_cast<int>(i);
         }
     }
-    return -1;
+    return -1; // return -1 if the device is not found
 }
 
 void DomoticsSystem::checkSchedule() {
@@ -166,7 +170,7 @@ void DomoticsSystem::checkSchedule() {
         bool deviceRemoved = false;
         size = active_devices.size();
         numberOfRemovedDevices = 0;
-        for(auto it = active_devices.begin(); it != active_devices.end();) { // iterate over the active devices
+        for(auto it = active_devices.begin(); it != active_devices.end() && active_devices.size()!=0;) { // iterate over the active devices
             Device *device = *it;
             std::shared_ptr<const Time> startTime = device->get_start_time(); // get the start time of the device
             if(ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(device)) { // check if the device is a ManualDevice
@@ -189,7 +193,7 @@ void DomoticsSystem::checkSchedule() {
             }
             ++it;
         }
-        if(size != active_devices.size()) {
+        if(size != active_devices.size()) { // check if the size of the active devices is different from the previous size (a device or more are/is removed)
             i -= size - active_devices.size();
         } else {
             ++i;
@@ -242,7 +246,7 @@ bool DomoticsSystem::checkScheduleCpDevice(CPDevice *cpDevice, const Time nowTim
 
 void DomoticsSystem::orderByStartTime() { // sort the active devices by start time, the first device is the one with the earliest start time
     std::sort(active_devices.begin(), active_devices.end(), [](Device * a, Device * b) {
-        return *a->get_start_time() < *b->get_start_time();
+        return *a->get_start_time() < *b->get_start_time(); // compare the start time of the devices
     });
 }
 
@@ -254,6 +258,7 @@ void DomoticsSystem::setCurrentTime(const Time &newTime) {
     }
 
     orderByStartTime();  // order the devices by start time
+
     if(newTime == Time(23, 59)) { // check if the new time is the end of the day
         endDay(); // turn off all devices
         log.addLog(report::message(currentTime, "Il giorno è finito, tutti i dispositivi sono stati spenti"));
@@ -276,14 +281,14 @@ void DomoticsSystem::changeDeviceStatus(bool status, const std::string& device) 
             switchedDevices.push_back(all_devices[index]); // add the device to the switched devices
             active_devices.back()->switch_on(currentTime);
             active_devices.back()->set_start_time(currentTime);
-            log.addLog(report::message(currentTime, "Il dispositivo " + device + " si è acceso"));
-            powerLoad += active_devices.back()->KPower;
+            log.addLog(report::message(currentTime, "Il dispositivo " + device + " si è acceso")); 
+            powerLoad += active_devices.back()->KPower; 
             balancePower(device, currentTime);
         } else {
             throw std::invalid_argument("Il dispositivo è già attivo");
         }
-    } else { // if the status is false (turn off the device)
-        if(activeIndex != -1) { // if the device is active
+    } else { // else turn off the device
+        if(activeIndex != -1) { // if the device is in the active devices
             log.addLog(report::message(currentTime, "Il dispositivo " + device + " si è spento"));
             active_devices[activeIndex]->switch_off(currentTime);
             powerLoad -= active_devices[activeIndex]->KPower;
