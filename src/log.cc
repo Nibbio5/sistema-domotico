@@ -9,7 +9,6 @@
  */
 
 #include "../include/log.h"
-#include <string>
 
 std::string report::logs::log_file_name_;
 std::vector<report::message> report::logs::logList_;

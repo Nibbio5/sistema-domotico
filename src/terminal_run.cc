@@ -6,7 +6,6 @@
  *
  */
 #include "../include/terminal.h"
-#include <string>
 
 void Terminal::run() {
     std::string line;

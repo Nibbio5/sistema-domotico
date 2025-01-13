@@ -15,8 +15,6 @@
  */
 
 #include "../include/domotics_system.h"
-#include <memory>
-#include <vector>
 
 DomoticsSystem::DomoticsSystem() : KPowerLimit{3.5}, currentTime{Time(0, 0)}, powerLoad{0}, log{report::logs::getInstance()} {
     setDevices();

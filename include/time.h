@@ -11,6 +11,7 @@
 #define TIME_H
 
 #include <iostream>
+#include <string>
 
 /**
  * @brief Manage time with hour and minute
