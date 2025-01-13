@@ -83,7 +83,7 @@ void Terminal::showCommandPrompt(const std::string &arg) {
             throw std::invalid_argument("Dispositivo sbagliato. Scrivere 'help' per maggiori informazioni.");
         }
         std::string output = showOneDevice(device);
-        log_.addLog(report::message(domotics_system_.getCurrentTime(), output));
+        log_.addLog(report::message(domotics_system_.getCurrentTime(), output.substr(0, output.length() - 2)));
         return;
     }
 
@@ -103,7 +103,7 @@ void Terminal::showCommandPrompt(const std::string &arg) {
     std::string currentTimeString = currentTime.getHourString() + ":" + currentTime.getMinuteString();
     output  = "Attualmente il sistema ha prodotto " +
               roundTo(produced_power) + "kWh e consumato " +
-              roundTo(consumed_power) + "kWh. " + output;
+              roundTo(consumed_power) + "kWh. " + output.substr(0, output.length() - 2);
     log_.addLog(report::message(currentTime, output));
 }
 
