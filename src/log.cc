@@ -9,6 +9,7 @@
  */
 
 #include "../include/log.h"
+#include <vector>
 
 std::string report::logs::log_file_name_;
 std::vector<report::message> report::logs::logList_;
@@ -43,10 +44,13 @@ void report::logs::insertionSort(report::message newMessage) {
 }
 
 void report::logs::displayLogs() {
-    std::string command = logList_.begin()->messageString();
+    bool multipleLogs = logList_.size() > 1;
+    std::string command = multipleLogs ? (logList_.end() - 2)->messageString() : "" ;
     if(command == "reset time" || command == "reset all") {
-        logList_.insert(logList_.begin(), *(logList_.end() - 1));
-        logList_.erase(logList_.end() - 1);
+        std::vector<report::message> tmpList;
+        tmpList.insert(tmpList.end(), (logList_.end() - 2), logList_.end());
+        logList_.insert(logList_.begin(), tmpList.begin(), tmpList.end());
+        logList_.erase(logList_.end() - 2, logList_.end());
     }
     std::ofstream logFile(log_file_name_, std::ios::app);
     for(auto &value : logList_) {

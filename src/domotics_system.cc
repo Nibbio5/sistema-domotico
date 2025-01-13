@@ -193,7 +193,7 @@ void DomoticsSystem::checkSchedule() {
         }
         if(size != active_devices.size()) {
             i -= size - active_devices.size();
-        }else{
+        } else {
             ++i;
         }
         if(!deviceRemoved) { // increment i if the device is not removed
@@ -373,8 +373,8 @@ void DomoticsSystem::setDeviceTime(const std::string &device, const Time &start,
 
     if(CPDevice *cpDevice = dynamic_cast<CPDevice *>(targetDevice)) {
         cpDevice->set_start_time(start);
-        log.addLog(report::message(currentTime, "Impostato un time per il dispositivo  " + cpDevice->KName 
-        + " dalle " + start.getHourString() + ":" + start.getMinuteString() + " alle " + (start + cpDevice->KDuration).getHourString() + ":" + (start + cpDevice->KDuration).getMinuteString()));
+        log.addLog(report::message(currentTime, "Impostato un time per il dispositivo  " + cpDevice->KName
+                                   + " dalle " + start.getHourString() + ":" + start.getMinuteString() + " alle " + (start + cpDevice->KDuration).getHourString() + ":" + (start + cpDevice->KDuration).getMinuteString()));
     } else if(ManualDevice *manualDevice = dynamic_cast<ManualDevice *>(targetDevice)) {
         manualDevice->set_new_timer(start, stop);
         log.addLog(report::message(currentTime, "Impostato un time per il dispositivo  " + manualDevice->KName + " dalle " + start.getHourString() + ":" + start.getMinuteString() + " alle " + stop.getHourString() + ":" + stop.getMinuteString()));
@@ -411,8 +411,8 @@ void DomoticsSystem::resetTime() {
     currentTime = Time(0, 0);
     orderByStartTime();
     powerLoad = 0;
-    checkSchedule();
     log.addLog(report::message(currentTime, "L'orario attuale è stato resettato"));
+    checkSchedule();
     log.addLog(report::message(currentTime, "L'orario attuale è " + currentTime.getHourString() + ":" + currentTime.getMinuteString()));
 }
 
@@ -425,8 +425,8 @@ void DomoticsSystem::resetTimers() {
             value->removeTimer();
         }
     }
-    checkSchedule();
     log.addLog(report::message(currentTime, "Tutti i timer dei dispositivi sono stati resettati"));
+    checkSchedule();
 }
 
 void DomoticsSystem::resetAll() {
@@ -437,8 +437,8 @@ void DomoticsSystem::resetAll() {
     switchedDevices.clear();
     active_devices.clear();
     powerLoad = 0;
-    checkSchedule();
     log.addLog(report::message(currentTime, "Il sistema è stato resettato"));
+    checkSchedule();
     log.addLog(report::message(currentTime, "L'orario attuale è " + currentTime.getHourString() + ":" + currentTime.getMinuteString()));
 }
 
