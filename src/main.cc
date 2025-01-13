@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
             return 1;
         }
         
-        invokeTerminal();
+        invokeTerminal(power);
     }
 
     return 0;
