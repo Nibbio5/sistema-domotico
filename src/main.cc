@@ -1,9 +1,9 @@
 /**
  * @file main.cc
+ * @author Eros Menin (eros.menin@studenti.unipd.it)
  * @brief Main file for the "sistema domotico" project.
- *
- * @author Eros Menin
- *
+ * @date 2025-01-13
+ * 
  */
 
 #include "../include/terminal.h"

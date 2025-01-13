@@ -1,7 +1,7 @@
 /**
  * @file log.cc
  * @author Francesco Dotoli (francesco.dotoli@studenti.unipd.it)
- * @brief implementation of the log classes methods
+ * @brief Implementation of the log classes methods
  * @date 2025-01-11
  *
  * @copyright Copyright (c) 2025

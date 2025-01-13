@@ -1,9 +1,9 @@
 /**
  * @file cp_device.h
+ * @author Eros Menin (eros.menin@studenti.unipd.it)
  * @brief Header file for the CPDevice class.
- *
- * @author Eros Menin
- *
+ * @date 2025-01-13
+ * 
  */
 
 #ifndef CPDEVICE_H

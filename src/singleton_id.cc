@@ -1,4 +1,10 @@
-// Eros Menin
+/**
+ * @file singleton_id.cc
+ * @author Eros Menin (eros.menin@studenti.unipd.it)
+ * @brief Implementation of SingletonId class.
+ * @date 2025-01-13
+ * 
+ */
 
 #include "../include/singleton_id.h"
 

@@ -1,3 +1,10 @@
+/**
+ * @file time.cc
+ * @author Francesco Dotoli (francesco.dotoli@studenti.unipd.it)
+ * @brief Implementation of time class
+ * @date 2025-01-13
+ * 
+ */
 #include "../include/time.h"
 
 Time::Time() : hour_(0), minute_(0) {}

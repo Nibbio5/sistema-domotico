@@ -1,9 +1,9 @@
 /**
  * @file manual_device.h
+ * @author Eros Menin (eros.menin@studenti.unipd.it)
  * @brief Header file for the ManualDevice class.
- *
- * @author Eros Menin
- *
+ * @date 2025-01-13
+ * 
  */
 
 #ifndef MANUALDEVICE_H

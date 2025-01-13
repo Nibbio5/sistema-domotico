@@ -1,10 +1,11 @@
 /**
  * @file terminal_run.cc
  * @author Francesco Dotoli (francesco.dotoli@studenti.unipd.it)
- * @brief part of implementation of the terminal class
+ * @brief Part of implementation of the terminal class
  * @date 2024-12-27
  *
  */
+
 #include "../include/terminal.h"
 
 void Terminal::run() {

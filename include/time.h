@@ -1,12 +1,13 @@
 /**
  * @file time.h
  * @author Francesco Dotoli (francesco.dotoli@studenti.unipd.it)
- * @brief
- * @date 2024-12-22
- *
+ * @brief Header of Time class.
+ * @date 2025-01-13
+ * 
  * @copyright Copyright (c) 2025
- *
+ * 
  */
+
 #ifndef TIME_H
 #define TIME_H
 

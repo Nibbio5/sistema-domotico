@@ -1,9 +1,9 @@
 /**
  * @file cp_device.cc
+ * @author Eros Menin (eros.menin@studenti.unipd.it)
  * @brief Implementation file for the CPDevice class.
- *
- * @author Eros Menin
- *
+ * @date 2025-01-13
+ * 
  */
 
 #include "../include/cp_device.h"

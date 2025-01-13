@@ -1,9 +1,9 @@
 /**
  * @file device.cc
+ * @author Eros Menin (eros.menin@studenti.unipd.it)
  * @brief Implementation file for the Device class.
- *
- * @author Eros Menin
- *
+ * @date 2025-01-13
+ * 
  */
 
 #include "../include/device.h"

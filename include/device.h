@@ -1,9 +1,9 @@
 /**
  * @file device.h
+ * @author Eros Menin (eros.menin@studenti.unipd.it)
  * @brief Header file for the Device abstract class.
- *
- * @author Eros Menin
- *
+ * @date 2025-01-13
+ * 
  */
 
 #ifndef DEVICE_H

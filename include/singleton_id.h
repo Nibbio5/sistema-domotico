@@ -1,4 +1,10 @@
-// Eros Menin
+/**
+ * @file singleton_id.h
+ * @author Eros Menin (eros.menin@studenti.unipd.it)
+ * @brief Header file of SingleonId class.
+ * @date 2025-01-13
+ * 
+ */
 
 #ifndef SINGLETONID_H
 #define SINGLETONID_H

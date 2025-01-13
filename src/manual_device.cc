@@ -1,9 +1,9 @@
 /**
  * @file manual_device.cc
+ * @author Eros Menin (eros.menin@studenti.unipd.it)
  * @brief Implementation file for the ManualDevice class.
- *
- * @author Eros Menin
- *
+ * @date 2025-01-13
+ * 
  */
 
 #include "../include/manual_device.h"

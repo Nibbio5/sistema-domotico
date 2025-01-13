@@ -1,7 +1,7 @@
 /**
  * @file terminal.h
  * @author Francesco Dotoli (francesco.dotoli@studenti.unipd.it)
- * @brief
+ * @brief Header for Terminal class
  * @date 2024-12-27
  *
  * @copyright Copyright (c) 2025
@@ -17,7 +17,10 @@
 #include "domotics_system.h"
 #include "device.h"
 
-
+/**
+ * @brief Class used to manage the terminal instance.
+ * 
+ */
 class Terminal {
   private:
     DomoticsSystem domotics_system_; ///< The domotics system.
@@ -88,8 +91,17 @@ class Terminal {
     void helpCommandPrompt();
 
   public:
+    /**
+     * @brief Construct a new Terminal object
+     * 
+     * @param power_limit the basic power delivered by the system
+     */
     Terminal(double power_limit = 3.5);
 
+    /**
+     * @brief Runs the terminal instance until the user decide to manually exit.
+     * 
+     */
     void run();
 };
 
