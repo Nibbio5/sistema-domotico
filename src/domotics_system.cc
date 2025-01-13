@@ -384,7 +384,7 @@ void DomoticsSystem::changeDeviceStatus(bool status, const std::string &device)
         }
         else
         {
-            throw std::invalid_argument("Il dispositivo è già attivo");
+            throw std::invalid_argument("Il dispositivo è già spento");
         }
     }
     orderByStartTime(); // order the devices by start time
