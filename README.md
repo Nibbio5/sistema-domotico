@@ -17,6 +17,8 @@ Esempio: Se nel momento in cui si esegue il comando `set time xx:xx` si accende 
 In aggiunta è stata implementata una "white list" che contiene i dispositivi che non vengono spenti in caso di sovraccarico (se possibile), poiché considerati importanti. I dispositivi appartenenti a tale lista sono contrassegnati da un flag booleano "WhiteList" all'interno del file "devices.json".
 Se un dispositivo viene acceso e si ha un sovraccarico, pittosto che spegnere un dispositivo in white list, il programma spegne il dispositivo appena acceso (informando con un apposito messaggio).
 
+Inoltre il comando `set {Device} {start} [{stop}]` se il dispositivo è già acceso ignora l'orario di accesione e, nel caso sia un dispositivo manuale, aggiunge solo l'orario di spegnimento.
+
 ## Modifiche ai dispositivi
 
 Il numero dei dispositivi utilizzati ed il tipo non variano rispetto a quanto definito dal testo del progetto, tuttavia sono state apportate modifiche legate a priorità e orari. Tali modifiche sono state apportate tramite apposite voci nel file "devices.json".
